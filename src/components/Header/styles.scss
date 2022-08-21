@@ -1,0 +1,16 @@
+.header {
+    height: 6.2rem;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0 , 0.1);
+    font-family: 'Aboreto', cursive;
+    font-size: 2.6rem;
+    // color: rgb(118, 54, 191);
+}
+
+.wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    height: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

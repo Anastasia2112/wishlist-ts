@@ -1,0 +1,59 @@
+
+.card-wrapper {
+    border: 1px solid rgba(0,0,0,.06);
+    padding: 24px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-content {
+    display: flex;
+}
+
+.card-img {
+    height: 120px;
+    width: 120px;
+    background: rgba(0,0,0,.1);
+    margin-right: 24px;
+    cursor: pointer;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.card-info * {
+    display: block;
+}
+
+.card-name {
+    font-size: 1.8rem;
+}
+
+.card-link {
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: #000;
+}
+
+.card-price {
+    font-weight: 600;
+    font-size: 2.3rem;
+}
+
+// .card-btns {
+//     width: 100px;
+// }
+
+.card-btn-edit {
+    margin-right: 6px;
+}
+
+.card-btn-delete:hover {
+    color: #ff4d4f !important;
+    border-color: #ff4d4f !important;
+}
