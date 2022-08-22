@@ -1,17 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { FC, createContext } from 'react';
+import {Routes, Route, Navigate} from 'react-router-dom';
 import Header from './components/Header';
 import Homepage from './pages/Homepage';
+import Registration from './pages/Registration';
+import Login from './pages/Login';
 import Footer from './components/Footer';
 import './default.scss';
+import logo from './logo.svg';
 
-function App() {
+interface IFirebaseContext {
+  firebase: any;
+  auth: any;
+  firestore: any;
+}
+
+const FirebaseContext = createContext<IFirebaseContext | null>(null);
+
+const App: FC = () => {
   return (
     <div className="App">
       <Header />
       <div className="main">
-        <Homepage />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+              path="*"
+              element={<Navigate to="/" replace/>}
+          />
+        </Routes>
+        
       </div>
       <Footer />
     </div>

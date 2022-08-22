@@ -1,7 +1,6 @@
 .header {
-    height: 6.2rem;
+    height: 62px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0 , 0.1);
-    font-family: 'Aboreto', cursive;
     font-size: 2.6rem;
     // color: rgb(118, 54, 191);
 }
@@ -13,4 +12,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.header-logo {
+    font-family: 'Aboreto', cursive;
+    text-decoration: none;
+    color: #000;
 }

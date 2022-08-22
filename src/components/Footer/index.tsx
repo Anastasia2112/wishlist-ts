@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import './styles.scss';
 import { HeartOutlined } from '@ant-design/icons';
 

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import CardItem from '../CardItem';
-import mock from '../mock.json';
+import mock from '../../mock.json';
 
 // import './styles.scss';
 
@@ -11,6 +11,8 @@ const CardsList: FC = () => {
     console.log(a);
     
   }
+
+  // console.log(mock.wishes[0].price);
 
   return (
     <section>

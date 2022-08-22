@@ -1,22 +1,15 @@
 import { FC } from 'react';
 import './styles.scss';
-import { Button } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Space } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-import { WishType } from '../../interfaces';
-
-
-interface ICardItem  { 
-  wishType : WishType,
-  func : (a: string) => void
-}
+import { ICardItem } from '../../models';
+// import CardWrapper from '../UI/CardWrapper';
 
 const CardItem: FC<ICardItem> = ({ wishType, func }) => {
 
   const test = (): void => {
     console.log('test');
-    
   }
   
   return (
@@ -26,14 +19,18 @@ const CardItem: FC<ICardItem> = ({ wishType, func }) => {
         <div className='card-info'>
             <span className='card-name'>{wishType.name}</span>
             <a className='card-link'>{wishType.link}</a>
-            <span className='card-price'>{wishType.price} ₽</span>
+            {/* <span className='card-price'>{wishType.price} ₽</span> */}
         </div>
       </div>
-      <div className='card-btns'>
-        <Button className='card-btn-edit' icon={<EditOutlined />} onClick={() => func('click') }/>
-        <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={() => test() }/>
+      <div>
+        <Space align="center" size={100}>
+          <span className='card-price'>{wishType.price} ₽</span>
+          <Space>
+            <Button icon={<EditOutlined />} onClick={() => func('click') }/>
+            <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={() => test() }/>
+          </Space> 
+        </Space>
       </div>
-        
     </div>
 
   );
