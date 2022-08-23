@@ -1,16 +1,18 @@
-import { FC, useState } from 'react';
+import { FC, useState, useContext } from 'react';
 import {Link, useNavigate} from "react-router-dom";
 
 import { Button, Checkbox, Form, Input, Typography, Divider } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import './styles.scss';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import { FirebaseContext } from '../context/FirebaseContext';
 
 const SignIn: FC = () => {
 
     const [isHaveAccount, setIsHaveAccount] = useState<boolean>(true);
 
-    const auth = getAuth();
+    // const auth = getAuth();
+    const auth = useContext(FirebaseContext);
     const navigate = useNavigate();
     const [authing, setAuthing] = useState<boolean>(false);
 

@@ -1,11 +1,14 @@
+
+import { FC, useContext } from 'react';
 import { Button, Space } from 'antd';
-import { FC } from 'react';
 import {Link} from "react-router-dom";
 import { getAuth, signOut } from 'firebase/auth';
+import { FirebaseContext } from '../context/FirebaseContext';
 import './styles.scss'
 
 const Header: FC = () => {
-  const auth = getAuth();
+  // const auth = getAuth();
+  const auth = useContext(FirebaseContext);
 
   return (
     <header className='header'>

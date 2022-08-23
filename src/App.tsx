@@ -20,8 +20,8 @@ import FirebaseContextProvider from '../src/components/context/FirebaseContext'
 //   // firestore: any;
 // }
 
-initializeApp(config.firebaseConfig);
-const auth = getAuth();
+// initializeApp(config.firebaseConfig);
+// const auth = getAuth();
 
 // const FirebaseContext = createContext(auth);
 

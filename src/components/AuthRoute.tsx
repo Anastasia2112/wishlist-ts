@@ -10,8 +10,8 @@ interface IAuthRouteProps {
 const AuthRoute: FC<IAuthRouteProps> = props => {
 
     const { children } = props;
-    // const auth = useContext(FirebaseContext);
-    const auth = getAuth();
+    const auth = useContext(FirebaseContext);
+    // const auth = getAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState<boolean>(false);
 
