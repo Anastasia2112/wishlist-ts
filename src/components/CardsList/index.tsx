@@ -9,15 +9,12 @@ const CardsList: FC = () => {
 
   const func = (a: string): void => {
     console.log(a);
-    
   }
-
-  // console.log(mock.wishes[0].price);
-
+  
   return (
     <section>
         {mock.wishes.map((item, index) => 
-            <CardItem key={index} wishType={item} func={func} />
+            <CardItem key={index} wishItem={item} func={func} />
         )}
     </section>
   );

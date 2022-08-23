@@ -4,15 +4,17 @@ export type WishType = {
     name: string,
     link: string,
     price: number,
-    img: string
+    img: string,
+    category: string
 }
 
 export interface ICardItem  { 
-    wishType : WishType,
+    wishItem : WishType,
     func : (a: string) => void,
     key? : number
 }
 
 export interface IDropdownBtn {
-    btnText: string
+    btnText: string,
+    menuItems: string[]
 }

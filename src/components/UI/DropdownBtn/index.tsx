@@ -17,30 +17,30 @@ const handleMenuClick: MenuProps['onClick'] = e => {
   console.log('click', e);
 };
 
-const menu = (
-  <Menu
-    onClick={handleMenuClick}
-    items={[
-      {
-        label: '1st menu item',
-        key: '1',
-        icon: <UserOutlined />,
-      },
-      {
-        label: '2nd menu item',
-        key: '2',
-        icon: <UserOutlined />,
-      },
-      {
-        label: '3rd menu item',
-        key: '3',
-        icon: <UserOutlined />,
-      },
-    ]}
-  />
-);
 
-const DropdownBtn: FC<IDropdownBtn> = ({ btnText }) => (
+const DropdownBtn: FC<IDropdownBtn> = ({ btnText, menuItems }) =>  {
+
+  type TMenyItem = {
+    label: string,
+    key: number
+  }
+
+  let k: number = 0;
+  let items2: TMenyItem[] = [];
+
+  menuItems.forEach((item) => {
+    k++;
+    items2.push({ label: item, key: k });
+  });
+
+  const menu = (
+    <Menu 
+      onClick={handleMenuClick}
+      items={items2}
+    />
+  )
+
+  return (
   <>
     {/* <Dropdown overlay={menu} className={style.dropdown}> */}
     <Dropdown overlay={menu}>
@@ -54,5 +54,5 @@ const DropdownBtn: FC<IDropdownBtn> = ({ btnText }) => (
   </>
   
 );
-
+}
 export default DropdownBtn;

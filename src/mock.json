@@ -1,10 +1,10 @@
 {
     "wishes" : [
-    { "id": "1", "name": "Пылесос Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci reiciendis magnam nisi vero voluptatem pariatur neque ratione? Labore cumque fugit amet praesentium modi! Earum ab corporis ratione quae itaque amet!", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 18000, "img": "допустим, картинка"},
-    { "id": "2", "name": "Кроссовки", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 5000, "img": "допустим, картинка"},
-    { "id": "3", "name": "Машина", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 350000, "img": "допустим, картинка"},
-    { "id": "4", "name": "Сумка", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 4000, "img": "допустим, картинка"},
-    { "id": "5", "name": "Дрель", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 8000, "img": "допустим, картинка"}
+    { "id": "1", "name": "Пылесос Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci reiciendis magnam nisi vero voluptatem pariatur neque ratione? Labore cumque fugit amet praesentium modi! Earum ab corporis ratione quae itaque amet!", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 18000, "img": "допустим, картинка", "category": "Техника" },
+    { "id": "2", "name": "Кроссовки", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 5000, "img": "допустим, картинка", "category": "Обувь" },
+    { "id": "3", "name": "Машина", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 350000, "img": "допустим, картинка", "category": "Авто" },
+    { "id": "4", "name": "Ботинки", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 4000, "img": "допустим, картинка", "category": "Обувь" },
+    { "id": "5", "name": "Мультипекарь", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 8000, "img": "допустим, картинка", "category": "Техника" }
     ],
 
     "categories" : [
