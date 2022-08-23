@@ -12,3 +12,7 @@ export interface ICardItem  {
     func : (a: string) => void,
     key? : number
 }
+
+export interface IDropdownBtn {
+    btnText: string
+}

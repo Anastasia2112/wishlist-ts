@@ -18,21 +18,18 @@ const CardItem: FC<ICardItem> = ({ wishType, func }) => {
         <div className='card-img'></div>
         <div className='card-info'>
             <span className='card-name'>{wishType.name}</span>
-            <a className='card-link'>{wishType.link}</a>
+            <a className='card-link' href={wishType.link} target="_blank">{wishType.link}</a>
             {/* <span className='card-price'>{wishType.price} ₽</span> */}
         </div>
       </div>
-      <div>
-        <Space align="center" size={100}>
+      <div className='card-price-btns'>
           <span className='card-price'>{wishType.price} ₽</span>
           <Space>
             <Button icon={<EditOutlined />} onClick={() => func('click') }/>
             <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={() => test() }/>
           </Space> 
-        </Space>
       </div>
     </div>
-
   );
 };
 

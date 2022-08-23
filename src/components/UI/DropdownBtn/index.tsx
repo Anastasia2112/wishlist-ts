@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, Menu, message, Space, Tooltip } from 'antd';
+import { IDropdownBtn } from '../../../models';
 
 import style from './DropdownBtn.module.scss';
 
@@ -39,13 +40,13 @@ const menu = (
   />
 );
 
-const DropdownBtn: FC = () => (
+const DropdownBtn: FC<IDropdownBtn> = ({ btnText }) => (
   <>
     {/* <Dropdown overlay={menu} className={style.dropdown}> */}
     <Dropdown overlay={menu}>
       <Button>
         <Space>
-          Button
+          {btnText}
           <DownOutlined />
         </Space>
       </Button>

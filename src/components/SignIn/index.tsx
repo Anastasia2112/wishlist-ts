@@ -16,11 +16,15 @@ const SignIn: FC = () => {
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
+
+    // const haveAccountHandler = (event: React.MouseEvent<HTMLImageElement>) => {
+
+    // }
     
     return (
         <section className='signin-wrap' >
             <h2 className='signin-title'>Авторизация</h2>
-            {/* <p className='signin-signup-text'>Нет аккаунта? <Link to="/login" onClick={setIsHaveAccount}>Зарегистрируйтесь!</Link></p> */}
+            {/* <p className='signin-signup-text'>Нет аккаунта? <Link to="/login" onClick={haveAccountHandler}>Зарегистрируйтесь!</Link></p> */}
             <Form
                 name="auth"
                 initialValues={{ remember: true }}

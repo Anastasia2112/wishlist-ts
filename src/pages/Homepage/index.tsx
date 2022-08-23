@@ -10,25 +10,25 @@ import './styles.scss';
 
 const Homepage: FC  = () => {
 
-  let total = 0;
-  
-  mock.wishes.forEach(item => {
-    total += item.price;
-  })
+  const wishesAmount = mock.wishes.reduce(
+    function (sum, current) {
+      return sum + current.price
+    },0
+  );
 
   return (
     <section className='homepage'>
       <div className='homepage-nav'>
         <Space>
-          <DropdownBtn />
-          <DropdownBtn />
+          <DropdownBtn btnText={'Категория'} />
+          <DropdownBtn btnText={'Сортировка'} />
         </Space>
         <Button icon={<PlusOutlined />}></Button>
       </div>
       <CardsList />
-      <div className='homepage-total'>
+      <div className='homepage-amount'>
         <span className='card-price'>Итого: </span>
-        <span className='card-price'>{total} ₽</span>
+        <span className='card-price'>{wishesAmount} ₽</span>
       </div>
     </section>
   );
