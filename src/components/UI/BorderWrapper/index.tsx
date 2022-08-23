@@ -4,11 +4,15 @@ import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, Menu, message, Space, Tooltip } from 'antd';
 
-import style from './CardWrapper.module.scss';
+import style from './BorderWrapper.module.scss';
 
-const CardWrapper = ( props: {children: ReactNode} ) => (
+interface ICardWrapper {
+  children: ReactNode
+}
+
+const CardWrapper = ({ children }: ICardWrapper) => (
   <div className={style.cardWrapper}>
-    {props.children}
+    { children }
   </div>
 );
 

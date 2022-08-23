@@ -1,13 +1,31 @@
 import { FC, useState } from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 import { Button, Checkbox, Form, Input, Typography, Divider } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import './styles.scss';
+import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 
 const SignIn: FC = () => {
 
     const [isHaveAccount, setIsHaveAccount] = useState<boolean>(true);
+
+    const auth = getAuth();
+    const navigate = useNavigate();
+    const [authing, setAuthing] = useState<boolean>(false);
+
+    const signInWithGoogle = async () => {
+        setAuthing(true);
+
+        signInWithPopup(auth, new GoogleAuthProvider())
+        .then(response => {
+            console.log(response.user.uid);
+            navigate('/');
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
@@ -17,14 +35,11 @@ const SignIn: FC = () => {
         console.log('Failed:', errorInfo);
     };
 
-    // const haveAccountHandler = (event: React.MouseEvent<HTMLImageElement>) => {
-
-    // }
+    
     
     return (
         <section className='signin-wrap' >
             <h2 className='signin-title'>Авторизация</h2>
-            {/* <p className='signin-signup-text'>Нет аккаунта? <Link to="/login" onClick={haveAccountHandler}>Зарегистрируйтесь!</Link></p> */}
             <Form
                 name="auth"
                 initialValues={{ remember: true }}
@@ -59,9 +74,10 @@ const SignIn: FC = () => {
                 </Form.Item>
                 
                 <Divider plain></Divider>
-                <Button block icon={<GoogleOutlined />} id='login' >Google Account</Button>
+
+                <Button block icon={<GoogleOutlined />} onClick={() => signInWithGoogle()} disabled={authing} >With Google Account</Button>
             </Form>
-            
+            <span className='signin-signup-text'>Нет аккаунта? <Link to="/login" onClick={() => console.log('gg')}>Зарегистрируйтесь!</Link></span>
         </section>
     );
 };

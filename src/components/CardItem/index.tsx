@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import './styles.scss';
+
 import { Button, Space } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-
 import { ICardItem } from '../../models';
-// import CardWrapper from '../UI/CardWrapper';
+import BorderWrapper from '../UI/BorderWrapper';
+import './styles.scss';
 
 const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
 
@@ -13,7 +13,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
   }
   
   return (
-    <div className='card-wrapper'>
+    <BorderWrapper >
       <div className='card-content'>
         <div className='card-img'></div>
         <div className='card-info'>
@@ -30,7 +30,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
             <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={() => test() }/>
           </Space> 
       </div>
-    </div>
+    </BorderWrapper>
   );
 };
 
