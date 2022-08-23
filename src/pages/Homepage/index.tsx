@@ -1,15 +1,21 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Space, Button, Checkbox, Form, Input  } from 'antd';
 
 import CardsList from '../../components/CardsList';
 import DropdownBtn from '../../components/UI/DropdownBtn';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import mock from '../../mock.json';
 
 import './styles.scss';
 import { format } from 'path';
 
 const Homepage: FC  = () => {
+
+  const [isAddActive, setIsAddActive] = useState<boolean>(false);
+
+  const handleAddClick = (e: any) => {
+    setIsAddActive(!isAddActive);
+  };
 
   const wishesAmount = mock.wishes.reduce(
     function (sum, current) {
@@ -24,33 +30,6 @@ const Homepage: FC  = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-
-  //-------------
-  const users = [
-    { id: "1", name: "John" },
-    { id: "2", name: "Anna" },
-    { id: "3", name: "Kate" },
-  ]
-  
-  const usernamesById = users.reduce(function (result, user) {
-    return {
-      ...result,
-      [user.id]: user.name,
-    }
-  }, {})
-  //-------------
-
-  // let key = 0;
-  // const getUnicCategories = mock.wishes.reduce(function (result, wish) {
-  //   return {
-  //     ...result,
-  //     [key++]: wish.category
-  //   }
-  // });
-
-  // console.log(getUnicCategories);
-  
-
 
   let categs: string[] = [];
 
@@ -69,13 +48,13 @@ const Homepage: FC  = () => {
           <DropdownBtn btnText={'Категория'} menuItems={unicCategs}/>
           <DropdownBtn btnText={'Сортировка'} menuItems={sorts}/>
         </Space>
-        <Button icon={<PlusOutlined />}></Button>
+        <Button icon={isAddActive ? <CloseOutlined /> : <PlusOutlined />} onClick={(e) => handleAddClick(e)} ></Button>
       </div>
 
-      <div className='homepage-amount'>
+      {/* <div className='homepage-amount' style={isAddActive ? {display: 'block'} : {display: 'none'}}> */}
+      {isAddActive && <div className='homepage-amount' >
         <Form
           name="basic"
-          layout="inline"
           initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -122,12 +101,12 @@ const Homepage: FC  = () => {
         </Form.Item>
 
         <Form.Item >
-          <Button htmlType="submit" icon={<PlusOutlined />}>
+          <Button type='primary' htmlType="submit" icon={<PlusOutlined />}>
             Добавить
           </Button>
         </Form.Item>
       </Form>
-      </div>
+      </div>}
 
 
       <CardsList />
