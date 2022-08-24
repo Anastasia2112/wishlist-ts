@@ -8,13 +8,13 @@ export type WishType = {
     category: string
 }
 
+export interface ICardList {
+    wishesArr : WishType[]
+}
+
 export interface ICardItem  { 
     wishItem : WishType,
     func : (a: string) => void,
-    key? : number
-}
-
-export interface IDropdownBtn {
-    btnText: string,
-    menuItems: string[]
+    key? : number,
+    addCheck : (newCheck: any) => any,
 }

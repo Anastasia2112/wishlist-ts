@@ -5,7 +5,7 @@ import { initializeApp } from 'firebase/app';
 
 type FirebaseContextProviderProps = {
     // firebase: any;
-    children: any
+    children: ReactNode
     // firestore: any;
 }
 

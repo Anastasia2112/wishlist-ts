@@ -1,17 +1,27 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
-import { Button, Space } from 'antd';
+import { Button, Checkbox, Space } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ICardItem } from '../../models';
 import BorderWrapper from '../UI/BorderWrapper';
 import './styles.scss';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
-const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
+const CardItem: FC<ICardItem> = ({ wishItem, func, addCheck }) => {
+
+  const [check, setCheck] = useState<any>({ev: '', id: ''});
 
   const test = (): void => {
     console.log('test');
   }
-  
+
+  const onChange = (e: CheckboxChangeEvent, id: string) => {
+    console.log(e.target.checked, id);
+    // const newCheck = () => {
+    //   setCheck(...check, ev: e.target.checked)
+    // }
+  };
+   
   return (
     <BorderWrapper >
       <div className='card-content'>
@@ -20,7 +30,6 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
             <span className='card-name'>{wishItem.name}</span>
             <a className='card-link' href={wishItem.link} target="_blank">{wishItem.link}</a>
             <span className='card-category'>{wishItem.category}</span>
-            {/* <span className='card-price'>{wishType.price} ₽</span> */}
         </div>
       </div>
       <div className='card-price-btns'>
@@ -29,6 +38,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
             <Button icon={<EditOutlined />} onClick={() => func('click') }/>
             <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={() => test() }/>
           </Space> 
+          <Checkbox onChange={(e) => onChange(e, wishItem.id)}></Checkbox>
       </div>
     </BorderWrapper>
   );

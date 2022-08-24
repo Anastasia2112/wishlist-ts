@@ -1,23 +1,24 @@
 
-import { FC, useContext } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { Button, Space } from 'antd';
-import {Link} from "react-router-dom";
-import { getAuth, signOut } from 'firebase/auth';
+import {Link, useNavigate} from "react-router-dom";
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { FirebaseContext } from '../context/FirebaseContext';
 import './styles.scss'
 
 const Header: FC = () => {
-  // const auth = getAuth();
+
   const auth = useContext(FirebaseContext);
 
   return (
     <header className='header'>
       <div className='wrap'>
-        <Link to="/" className={'header-logo'}>Your Wishlist</Link>
+        <span className={'header-logo'}>Your Wishlist</span>
         {/* <Button><Link to="/registration">Войти</Link></Button> */}
         <Space>
+          {/* <span>{isAuth ? 'Авторизован' : 'Не авт'}</span> */}
           <Button><Link to="/login">Войти</Link></Button>
-          <Button onClick={() => signOut(auth)}>Выйти</Button>
+          <Link to="/login"><Button onClick={() => {signOut(auth)}}>Выйти</Button></Link>
         </Space>
       </div>
     </header>

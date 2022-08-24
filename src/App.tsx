@@ -1,4 +1,4 @@
-import { FC, ReactNode, createContext } from 'react';
+import { FC, useContext, ReactNode, createContext } from 'react';
 import {Routes, Route, Navigate} from 'react-router-dom';
 
 import Header from './components/Header';
@@ -6,13 +6,15 @@ import Homepage from './pages/Homepage';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Footer from './components/Footer';
+import TestPage from '../src/pages/TestPage';
 import { initializeApp } from 'firebase/app';
 import { config } from './firebase/config';
 import './default.scss';
 import logo from './logo.svg';
 import AuthRoute from './components/AuthRoute';
 import { getAuth } from 'firebase/auth';
-import FirebaseContextProvider from '../src/components/context/FirebaseContext'
+import FirebaseContextProvider from '../src/components/context/FirebaseContext';
+import FirebaseContext from '../src/components/context/FirebaseContext'
 
 // type FirebaseContextProviderProps = {
 //   // firebase: any;
@@ -28,6 +30,8 @@ import FirebaseContextProvider from '../src/components/context/FirebaseContext'
 // export const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => {
 //   return <FirebaseContext.Provider value={auth}>{children}</FirebaseContext.Provider>
 // }
+
+
 
 const App: FC = () => {
   return (
