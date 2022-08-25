@@ -20,7 +20,7 @@ const CardsList: FC<ICardList> = ({ wishesArr }) => {
   return (
     <section>
         {wishesArr.map((item, index) => 
-            <CardItem key={index} wishItem={item} func={func} addCheck={addCheckedWish}/>
+            <CardItem key={index} wishItem={item} func={func} />
         )}
     </section>
   );

@@ -1,27 +1,26 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 
-import { Button, Checkbox, Space } from 'antd';
+import { Button, Checkbox, Space, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ICardItem } from '../../models';
 import BorderWrapper from '../UI/BorderWrapper';
 import './styles.scss';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { CheckContext } from '../context/CheckContext';
+import { CheckContextType } from '../../models';
 
-const CardItem: FC<ICardItem> = ({ wishItem, func, addCheck }) => {
+const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
 
-  const [check, setCheck] = useState<any>({ev: '', id: ''});
+  const { checkedWishes, updateCheck } = useContext(CheckContext) as CheckContextType;
 
   const test = (): void => {
     console.log('test');
   }
 
-  const onChange = (e: CheckboxChangeEvent, id: string) => {
-    console.log(e.target.checked, id);
-    // const newCheck = () => {
-    //   setCheck(...check, ev: e.target.checked)
-    // }
+  const onChange = (e: CheckboxChangeEvent, id: string) => {  // первое нажатие - id нет в массиве - добавить
+    updateCheck(id);                   // второе нажание - id есть в массиве - удалить
   };
-   
+
   return (
     <BorderWrapper >
       <div className='card-content'>
@@ -32,13 +31,17 @@ const CardItem: FC<ICardItem> = ({ wishItem, func, addCheck }) => {
             <span className='card-category'>{wishItem.category}</span>
         </div>
       </div>
+      <span className='card-price'>{wishItem.price} ₽</span>
       <div className='card-price-btns'>
-          <span className='card-price'>{wishItem.price} ₽</span>
-          <Space>
+        <Checkbox onChange={(e) => onChange(e, wishItem.id)}></Checkbox>
+        <Space>
+          <Tooltip title="Изменить">
             <Button icon={<EditOutlined />} onClick={() => func('click') }/>
+          </Tooltip>
+          <Tooltip title="Добавить">
             <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={() => test() }/>
-          </Space> 
-          <Checkbox onChange={(e) => onChange(e, wishItem.id)}></Checkbox>
+          </Tooltip>
+        </Space> 
       </div>
     </BorderWrapper>
   );

@@ -7,29 +7,11 @@ import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Footer from './components/Footer';
 import TestPage from '../src/pages/TestPage';
-import { initializeApp } from 'firebase/app';
-import { config } from './firebase/config';
 import './default.scss';
 import logo from './logo.svg';
 import AuthRoute from './components/AuthRoute';
-import { getAuth } from 'firebase/auth';
 import FirebaseContextProvider from '../src/components/context/FirebaseContext';
-import FirebaseContext from '../src/components/context/FirebaseContext'
-
-// type FirebaseContextProviderProps = {
-//   // firebase: any;
-//   children: ReactNode
-//   // firestore: any;
-// }
-
-// initializeApp(config.firebaseConfig);
-// const auth = getAuth();
-
-// const FirebaseContext = createContext(auth);
-
-// export const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => {
-//   return <FirebaseContext.Provider value={auth}>{children}</FirebaseContext.Provider>
-// }
+import CheckContextProvider from '../src/components/context/CheckContext';
 
 
 
@@ -44,7 +26,9 @@ const App: FC = () => {
               path="/" 
               element={
                 <AuthRoute>
-                  <Homepage />
+                  <CheckContextProvider >
+                    <Homepage />
+                  </CheckContextProvider>
                 </AuthRoute>} 
             />
             <Route path="/registration" element={<Registration />} />

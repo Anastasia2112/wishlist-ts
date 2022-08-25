@@ -1,11 +1,13 @@
-import { FC, useMemo, useState } from 'react';
-import { Space, Button, Checkbox, Form, Input, Select, Modal  } from 'antd';
+import { FC, useContext, useEffect, useMemo, useState } from 'react';
+import { Space, Button, Checkbox, Form, Input, Select, Modal, Tooltip  } from 'antd';
 
 import CardsList from '../../components/CardsList';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import BorderWrapper from '../../components/UI/BorderWrapper';
 import mock from '../../mock.json';
 import { WishType } from '../../models';
+import { CheckContext } from '../../components/context/CheckContext';
+import { CheckContextType } from '../../models';
 
 import './styles.scss';
 
@@ -13,13 +15,17 @@ const { Option } = Select;
 
 const Homepage: FC  = () => {
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { checkedWishes, wishCount } = useContext(CheckContext) as CheckContextType;
 
-  const [isAddActive, setIsAddActive] = useState<boolean>(false);
   const [wishesArr, setWishesArr] = useState<WishType[]>(mock.wishes);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>('');
   const [selectedFilter, setSelectedFilter] = useState<string>('');
-  const [checkedWishes, setCheckedWishes] = useState<any>([]);
+
+
+//   useEffect(() => {
+//     console.log(wishCount);
+// }, [wishCount]);
 
   const sortedWishes = useMemo(() => {
     if (selectedSort) {
@@ -41,6 +47,7 @@ const Homepage: FC  = () => {
     if (selectedFilter) {
       return sortedWishes.filter(wish => wish.category == selectedFilter);
     }
+    
     return sortedWishes;
   }, [selectedFilter, sortedWishes]);
 
@@ -57,12 +64,8 @@ const Homepage: FC  = () => {
     setIsModalVisible(false);
   };
   //=------
-  
-  const handleAddClick = (e: any) => {
-    setIsAddActive(!isAddActive);
-  };
 
-  const wishesAmount = mock.wishes.reduce(
+  const wishesAmount = sortedAndFilteredWishes.reduce(
     function (sum, current) {
       return sum + current.price
     },0
@@ -101,7 +104,16 @@ const Homepage: FC  = () => {
             })}
           </Select>
         </Space>
-        <Button icon={<PlusOutlined />} onClick={showModal} ></Button>
+        <Space>
+          <Tooltip title="Добавить желание">
+            <Button icon={<PlusOutlined />} onClick={showModal} ></Button>
+          </Tooltip>
+          { checkedWishes.length > 0 && 
+          <Tooltip title="Удалить выбранные">
+            <Button className='card-btn-delete' icon={<DeleteOutlined />}/>
+          </Tooltip>
+          }
+        </Space>
       </div>
 
       <Modal
@@ -168,66 +180,13 @@ const Homepage: FC  = () => {
         </Form>
       </Modal>
 
-      {/* <Form
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="Название"
-            name="name"
-            rules={[{ required: true, message: 'Введите название!' }]}
-            >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Ссылка"
-            name="link"
-            rules={[{ required: true, message: 'Введите ссылку!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Цена"
-            name="price"
-            rules={[{ required: true, message: 'Введите цену!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Изображение"
-            name="img"
-            rules={[{ required: true, message: 'Введите цену!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Категория"
-            name="category"
-            rules={[{ required: true, message: 'Введите цену!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item >
-            <Button type='primary' htmlType="submit" icon={<PlusOutlined />}>
-              Добавить
-            </Button>
-          </Form.Item>
-        </Form> */}
-
       <CardsList wishesArr={sortedAndFilteredWishes}/>
 
       <BorderWrapper>
-        <span className='card-price'>Итого: </span>
-        <span className='card-price'>{wishesAmount} ₽</span>
+        <span className='card-name'>Итого: </span>
+        <span className='card-name'>{wishesAmount} ₽</span>
       </BorderWrapper>
+      
     </section>
   );
 };

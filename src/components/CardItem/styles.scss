@@ -7,9 +7,10 @@
 
 .card-price-btns {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: start;
-    flex: 1 2 100px;
+    align-items: end;
+    flex: 1 1 50px;
     flex-wrap: wrap;
 }
 
@@ -56,9 +57,11 @@
 }
 
 .card-price {
+    text-align: center;
     font-weight: 500;
     font-size: 2.3rem;
     white-space: nowrap;
+    flex: 1 2 100px;
 }
 
 .card-btn-delete:hover {

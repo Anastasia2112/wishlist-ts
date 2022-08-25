@@ -16,5 +16,14 @@ export interface ICardItem  {
     wishItem : WishType,
     func : (a: string) => void,
     key? : number,
-    addCheck : (newCheck: any) => any,
+}
+
+export interface ICheck {
+    wishId: string
+}
+
+export type CheckContextType = {
+    checkedWishes: string[],
+    wishCount: number,
+    updateCheck : (id: string) => void
 }
