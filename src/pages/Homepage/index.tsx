@@ -167,12 +167,19 @@ const Homepage: FC  = () => {
           <Form.Item
             label="Категория"
             name="category"
-            rules={[{ required: true, message: 'Введите цену!' }]}
+            rules={[{ required: true, message: 'Введите категорию!' }]}
           >
             <Input />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 17, span: 2 }}>
+          <Form.Item
+            label="Описание"
+            name="desc"
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item wrapperCol={{ offset: 17, span: 2 }} style={{marginBottom: 0}}>
             <Button type="primary" htmlType="submit">
               Добавить
             </Button>

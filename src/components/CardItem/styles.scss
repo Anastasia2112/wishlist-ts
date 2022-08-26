@@ -41,6 +41,7 @@
 .card-name {
     font-weight: 500;
     font-size: 2.3rem;
+    cursor: pointer;
 }
 
 .card-link {
@@ -68,3 +69,35 @@
     color: #ff4d4f !important;
     border-color: #ff4d4f !important;
 }
+
+.card-about-img {
+    height: 472px;
+    background: rgba(0,0,0,.1);
+    margin-bottom: 20px;
+}
+
+.card-about-name {
+    font-weight: 500;
+    font-size: 2.3rem;
+    display: block;
+    margin: 10px 0;
+}
+
+.card-about-link {
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: #000;
+    display: block;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    margin-bottom: 10px;
+}
+
+.card-about-desc {
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: #000;
+    display: block;
+} 

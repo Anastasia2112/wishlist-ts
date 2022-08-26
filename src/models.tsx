@@ -5,7 +5,8 @@ export type WishType = {
     link: string,
     price: number,
     img: string,
-    category: string
+    category: string,
+    desc: string
 }
 
 export interface ICardList {
@@ -18,8 +19,9 @@ export interface ICardItem  {
     key? : number,
 }
 
-export interface ICheck {
-    wishId: string
+export type FirebaseContextType = {
+    auth : any
+
 }
 
 export type CheckContextType = {

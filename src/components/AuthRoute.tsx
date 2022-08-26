@@ -2,6 +2,7 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { FirebaseContext } from '../components/context/FirebaseContext';
+import { FirebaseContextType } from '../models';
 
 interface IAuthRouteProps {
     children: any
@@ -10,7 +11,7 @@ interface IAuthRouteProps {
 const AuthRoute: FC<IAuthRouteProps> = props => {
 
     const { children } = props;
-    const auth = useContext(FirebaseContext);
+    const { auth } = useContext(FirebaseContext) as FirebaseContextType;
     // const auth = getAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState<boolean>(false);

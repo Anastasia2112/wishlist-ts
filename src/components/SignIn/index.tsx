@@ -6,13 +6,14 @@ import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import './styles.scss';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { FirebaseContext } from '../context/FirebaseContext';
+import { FirebaseContextType } from '../../models';
 
 const SignIn: FC = () => {
 
     const [isHaveAccount, setIsHaveAccount] = useState<boolean>(true);
 
     // const auth = getAuth();
-    const auth = useContext(FirebaseContext);
+    const { auth } = useContext(FirebaseContext) as FirebaseContextType;
     const navigate = useNavigate();
     const [authing, setAuthing] = useState<boolean>(false);
 

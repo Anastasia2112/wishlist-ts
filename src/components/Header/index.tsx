@@ -5,10 +5,11 @@ import {Link, useNavigate} from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { FirebaseContext } from '../context/FirebaseContext';
 import './styles.scss'
+import { FirebaseContextType } from '../../models';
 
 const Header: FC = () => {
 
-  const auth = useContext(FirebaseContext);
+  const { auth } = useContext(FirebaseContext) as FirebaseContextType;
 
   return (
     <header className='header'>
