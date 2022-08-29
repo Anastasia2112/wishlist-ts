@@ -9,17 +9,28 @@ import { FirebaseContextType } from '../../models';
 
 const Header: FC = () => {
 
-  const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+  const auth = getAuth();
+
+  const [isUser, setIsUser] = useState<any>(false)
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setIsUser(true)
+    } else {
+      setIsUser(false)
+    }
+  });
+  
+  const signOutHandler = () => {
+    signOut(auth);
+  }
 
   return (
     <header className='header'>
       <div className='wrap'>
         <span className={'header-logo'}>Your Wishlist</span>
-        {/* <Button><Link to="/registration">Войти</Link></Button> */}
         <Space>
-          {/* <span>{isAuth ? 'Авторизован' : 'Не авт'}</span> */}
-          <Button><Link to="/login">Войти</Link></Button>
-          <Link to="/login"><Button onClick={() => {signOut(auth)}}>Выйти</Button></Link>
+          {isUser && <Link to="/login"><Button onClick={signOutHandler}>Выйти</Button></Link>}
         </Space>
       </div>
     </header>
@@ -27,3 +38,7 @@ const Header: FC = () => {
 };
 
 export default Header;
+function useAuthState(auth: any): [any] {
+  throw new Error('Function not implemented.');
+}
+

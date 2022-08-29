@@ -31,26 +31,32 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
   };
 
   return (
-    <BorderWrapper >
-      <div className='card-content'>
-        <div className='card-img' onClick={showModal}></div>
-        <div className='card-info'>
-            <span className='card-name' onClick={showModal}>{wishItem.name}</span>
-            <a className='card-link' href={wishItem.link} target="_blank">{wishItem.link}</a>
-            <span className='card-category'>{wishItem.category}</span>
+    <BorderWrapper clName={'cardHeight'}>
+      <div className='card-wrapper'>
+        <div className='card-img-and-text'>
+          <div className='card-img' onClick={showModal}></div>
+          <div className='card-info'>
+              <span className='card-name' onClick={showModal}>{wishItem.name}</span>
+              <a className='card-link' href={wishItem.link} target="_blank">{wishItem.link}</a>
+              <span className='card-category'>{wishItem.category}</span>
+          </div>
         </div>
-      </div>
-      <span className='card-price'>{wishItem.price} ₽</span>
-      <div className='card-price-btns'>
-        <Checkbox onChange={(e) => onChange(e, wishItem.id)}></Checkbox>
-        <Space>
-          <Tooltip title="Изменить">
-            <Button icon={<EditOutlined />} onClick={() => func('click') }/>
-          </Tooltip>
-          <Tooltip title="Добавить">
-            <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={() => test() }/>
-          </Tooltip>
-        </Space> 
+        <div className='card-price-and-btns'>
+          <div  className='card-price-and-check'>
+            <span className='card-price'>{wishItem.price} ₽</span>
+            <Checkbox className='card-check' onChange={(e) => onChange(e, wishItem.id)}></Checkbox>
+          </div>
+          <div className='card-btns'>
+            <Space>
+              <Tooltip title="Изменить">
+                <Button icon={<EditOutlined />} onClick={() => func('click') }/>
+              </Tooltip>
+              <Tooltip title="Добавить">
+                <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={() => test() }/>
+              </Tooltip>
+            </Space> 
+          </div>
+        </div>
       </div>
       <Modal
         visible={visible}

@@ -10,10 +10,9 @@ import { FirebaseContextType } from '../../models';
 
 const SignIn: FC = () => {
 
-    const [isHaveAccount, setIsHaveAccount] = useState<boolean>(true);
 
-    // const auth = getAuth();
-    const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+    const auth = getAuth();
+    // const { auth } = useContext(FirebaseContext) as FirebaseContextType;
     const navigate = useNavigate();
     const [authing, setAuthing] = useState<boolean>(false);
 
@@ -71,7 +70,7 @@ const SignIn: FC = () => {
                 </Form.Item>
 
                 <Form.Item >
-                    <Button block htmlType="submit" icon={<LoginOutlined />}>
+                    <Button block disabled htmlType="submit" icon={<LoginOutlined />}>
                         Войти
                     </Button>
                 </Form.Item>

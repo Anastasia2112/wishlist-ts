@@ -1,19 +1,20 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, CSSProperties } from 'react';
 
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, Menu, message, Space, Tooltip } from 'antd';
 
-import style from './BorderWrapper.module.scss';
+import styles from './BorderWrapper.module.scss';
 
 interface ICardWrapper {
-  children: ReactNode
+  children: ReactNode,
+  clName?: string
 }
 
-const CardWrapper = ({ children }: ICardWrapper) => (
-  <div className={style.cardWrapper}>
+const BorderWrapper = ({ children, clName }: ICardWrapper) => (
+  <div className={styles.cardWrapper + ' ' + clName}>
     { children }
   </div>
 );
 
-export default CardWrapper;
+export default BorderWrapper;

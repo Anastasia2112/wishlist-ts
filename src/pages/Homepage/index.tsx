@@ -92,28 +92,28 @@ const Homepage: FC  = () => {
   return (
     <section className='homepage'>
       <div className='homepage-nav'>
-        <Space>
-          <Select onChange={filter => setSelectedFilter(filter)} placeholder="Категория" style={{ width: 160 }} allowClear >
+        <div className='homepage-nav-selects'>
+          <Select className='homepage-nav-select' onChange={filter => setSelectedFilter(filter)} placeholder="Категория" style={{ width: 160 }} allowClear >
             {unicCategs.map((sort, index) => {
               return <Option key={index} value={sort}>{sort}</Option>
             })}
           </Select>
-          <Select onChange={sort => setSelectedSort(sort)} placeholder="Сортировка" style={{ width: 160 }} >{/*  allowClear */}
+          <Select className='homepage-nav-select' onChange={sort => setSelectedSort(sort)} placeholder="Сортировка" style={{ width: 160 }} >{/*  allowClear */}
             {sorts.map((sort, index) => {
               return <Option key={index} value={sort}>{sort}</Option>
             })}
           </Select>
-        </Space>
-        <Space>
+        </div>
+        <div className='homepage-nav-btns'>
           <Tooltip title="Добавить желание">
-            <Button icon={<PlusOutlined />} onClick={showModal} ></Button>
+            <Button className='homepage-nav-btn' icon={<PlusOutlined />} onClick={showModal} ></Button>
           </Tooltip>
           { checkedWishes.length > 0 && 
           <Tooltip title="Удалить выбранные">
-            <Button className='card-btn-delete' icon={<DeleteOutlined />}/>
+            <Button className='homepage-nav-btn card-btn-delete' icon={<DeleteOutlined />}/>
           </Tooltip>
           }
-        </Space>
+        </div>
       </div>
 
       <Modal
