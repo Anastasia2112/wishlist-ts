@@ -1,14 +1,10 @@
 import { FC } from 'react';
 
-import mock from '../../mock.json';
-
-// import './styles.scss';
-
 const TestPage: FC = () => {
 
   return (
     <section>
-        Test page
+        <h1>Test page</h1>
     </section>
   );
 };

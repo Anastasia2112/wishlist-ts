@@ -1,11 +1,12 @@
 
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { Button, Space } from 'antd';
-import {Link, useNavigate} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { FirebaseContext } from '../context/FirebaseContext';
+import TestPage from '../../pages/TestPage';
+
 import './styles.scss'
-import { FirebaseContextType } from '../../models';
+
 
 const Header: FC = () => {
 
@@ -28,8 +29,9 @@ const Header: FC = () => {
   return (
     <header className='header'>
       <div className='wrap'>
-        <span className={'header-logo'}>Your Wishlist</span>
+        <Link to="/" className={'header-logo'}>Your Wishlist</Link>
         <Space>
+          {/* <Link to="/test">TestPage</Link> */}
           {isUser && <Link to="/login"><Button onClick={signOutHandler}>Выйти</Button></Link>}
         </Space>
       </div>

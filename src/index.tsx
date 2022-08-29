@@ -7,6 +7,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import './index.css';
+import FirebaseContextProvider from './components/context/FirebaseContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,7 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <FirebaseContextProvider >
+        <App />
+      </FirebaseContextProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
