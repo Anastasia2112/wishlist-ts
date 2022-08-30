@@ -1,30 +1,57 @@
 
-import { FC, useState } from 'react';
-import { Button, Space } from 'antd';
-import { Link } from "react-router-dom";
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { FC, useContext, useState } from 'react';
+import { Button, Space, Menu, Dropdown, message } from 'antd';
+import { MenuUnfoldOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import type { MenuProps } from 'antd';
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from 'firebase/auth';
 import TestPage from '../../pages/TestPage';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-import './styles.scss'
-
+import './styles.scss';
+import { FirebaseContext } from '../context/FirebaseContext';
+import { FirebaseContextType } from '../../models';
 
 const Header: FC = () => {
 
-  const auth = getAuth();
+  const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
 
-  const [isUser, setIsUser] = useState<any>(false)
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setIsUser(true)
-    } else {
-      setIsUser(false)
-    }
-  });
-  
   const signOutHandler = () => {
     signOut(auth);
   }
+
+  const onClick: MenuProps['onClick'] = ({ key }) => {
+    switch (key) {
+      case '1':
+        message.info(`Ссылка перейти в профиль`);
+        break;
+  
+      case '2':
+        signOut(auth);
+        navigate('/login');
+        break;
+    }
+  };
+  
+  const menu = (
+    <Menu
+      onClick={onClick}
+      items={[
+        {
+          label: 'Профиль',
+          key: '1',
+          icon: <UserOutlined />,
+        },
+        {
+          label: 'Выйти',
+          key: '2',
+          icon: <LogoutOutlined />,
+        },
+      ]}
+    />
+  );
 
   return (
     <header className='header'>
@@ -32,7 +59,18 @@ const Header: FC = () => {
         <Link to="/" className={'header-logo'}>Your Wishlist</Link>
         <Space>
           {/* <Link to="/test">TestPage</Link> */}
-          {isUser && <Link to="/login"><Button onClick={signOutHandler}>Выйти</Button></Link>}
+          {/* {user && <Link to="/login"><Button onClick={signOutHandler}>Выйти</Button></Link>} */}
+          {user &&
+            <Dropdown overlay={menu}>
+              <a onClick={e => e.preventDefault()}>
+                <Space>
+                  <span className='header-username'>{user?.displayName}</span>
+                  <MenuUnfoldOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+          }
+          
         </Space>
       </div>
     </header>
@@ -40,7 +78,4 @@ const Header: FC = () => {
 };
 
 export default Header;
-function useAuthState(auth: any): [any] {
-  throw new Error('Function not implemented.');
-}
 

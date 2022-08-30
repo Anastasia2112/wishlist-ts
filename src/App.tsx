@@ -10,39 +10,32 @@ import TestPage from '../src/pages/TestPage';
 import './default.scss';
 import logo from './logo.svg';
 import AuthRoute from './components/AuthRoute';
-import FirebaseContextProvider from '../src/components/context/FirebaseContext';
+import { FirebaseContext } from '../src/components/context/FirebaseContext';
 import CheckContextProvider from '../src/components/context/CheckContext';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
-
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { FirebaseContextType } from './models';
+import Loader from './components/Loader';
 
 const App: FC = () => {
 
-  const auth = getAuth();
+  // const auth = getAuth();
+  const { auth } = useContext(FirebaseContext) as FirebaseContextType;
 
-  const [isUser, setIsUser] = useState<any>(true)
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setIsUser(true)
-    } else {
-      setIsUser(false)
-    }
-  });
-
+  const [user, loading, error] = useAuthState(auth);
+  
   return (
 
       <div className="App">
         <Header />
         <div className="main">
-        {isUser ?
+        {user ?
           <Routes>
             <Route path="/" element={
               <CheckContextProvider >
                 <Homepage />
               </CheckContextProvider> } 
             />
-            {/* <Route path="/test" element={<TestPage />} /> */}
+            <Route path="/test" element={<TestPage />} />
             <Route
                 path="*"
                 element={<Navigate to="/" replace/>}

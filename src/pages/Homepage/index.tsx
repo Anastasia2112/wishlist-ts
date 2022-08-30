@@ -5,15 +5,18 @@ import CardsList from '../../components/CardsList';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import BorderWrapper from '../../components/UI/BorderWrapper';
 import mock from '../../mock.json';
-import { WishType } from '../../models';
+import { FirebaseContextType, WishType } from '../../models';
 import { CheckContext } from '../../components/context/CheckContext';
 import { CheckContextType } from '../../models';
 
 import './styles.scss';
+import { FirebaseContext } from '../../components/context/FirebaseContext';
 
 const { Option } = Select;
 
 const Homepage: FC  = () => {
+
+  const { firestore } = useContext(FirebaseContext) as FirebaseContextType;
 
   const { checkedWishes, wishCount } = useContext(CheckContext) as CheckContextType;
 
@@ -108,7 +111,7 @@ const Homepage: FC  = () => {
           <Tooltip title="Добавить желание">
             <Button className='homepage-nav-btn' icon={<PlusOutlined />} onClick={showModal} ></Button>
           </Tooltip>
-          { checkedWishes.length > 0 && 
+          { wishCount > 0 && 
           <Tooltip title="Удалить выбранные">
             <Button className='homepage-nav-btn card-btn-delete' icon={<DeleteOutlined />}/>
           </Tooltip>

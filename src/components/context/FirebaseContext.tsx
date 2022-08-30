@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useState } from 'react';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from "firebase/firestore";
 import { config } from '../../firebase/config';
 import { initializeApp } from 'firebase/app';
 import { FirebaseContextType } from '../../models';
@@ -11,10 +12,11 @@ type FirebaseContextProviderProps = {
 export const FirebaseContext = createContext<FirebaseContextType | null>(null);
 
 const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => {
-    initializeApp(config.firebaseConfig);
+    const app = initializeApp(config.firebaseConfig);
     const auth = getAuth();
+    const firestore = getFirestore(app);
 
-    return <FirebaseContext.Provider value={{auth }}>{ children }</FirebaseContext.Provider>
+    return <FirebaseContext.Provider value={{auth, firestore}}>{ children }</FirebaseContext.Provider>
 }
 
 export default FirebaseContextProvider;

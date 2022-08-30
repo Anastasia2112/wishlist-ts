@@ -11,8 +11,8 @@ import { FirebaseContextType } from '../../models';
 const SignIn: FC = () => {
 
 
-    const auth = getAuth();
-    // const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+    // const auth = getAuth();
+    const { auth } = useContext(FirebaseContext) as FirebaseContextType;
     const navigate = useNavigate();
     const [authing, setAuthing] = useState<boolean>(false);
 

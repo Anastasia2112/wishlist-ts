@@ -21,7 +21,7 @@ export interface ICardItem  {
 
 export type FirebaseContextType = {
     auth : any
-
+    firestore: any
 }
 
 export type CheckContextType = {

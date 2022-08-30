@@ -1,0 +1,42 @@
+.loader {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-50%);
+}
+
+@keyframes ldio-ab7u61mvvkl {
+  0% { transform: rotate(0deg) }
+  50% { transform: rotate(180deg) }
+  100% { transform: rotate(360deg) }
+}
+.ldio-ab7u61mvvkl div {
+  position: absolute;
+  animation: ldio-ab7u61mvvkl 1s linear infinite;
+  width: 80px;
+  height: 80px;
+  top: 10px;
+  left: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 0 0 #9b9b9b;
+  transform-origin: 40px 41px;
+}
+.loadingio-spinner-eclipse-nckzmxj8zm {
+  width: 71px;
+  height: 71px;
+  display: inline-block;
+  overflow: hidden;
+}
+.ldio-ab7u61mvvkl {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(0.71);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.ldio-ab7u61mvvkl div { box-sizing: content-box; }

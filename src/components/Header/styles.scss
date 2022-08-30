@@ -13,12 +13,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    align-self: center;
 }
 
 .header-logo {
     font-family: 'Aboreto', cursive;
     text-decoration: none;
     color: #000;
+}
+
+.header .ant-dropdown-trigger {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 1.6rem;;
+}
+
+.header .ant-space {
+    margin-bottom: 4px;
 }
 
 @media (max-width: 490px) {
@@ -28,5 +38,9 @@
 
     .wrap {
         padding: 0 10px;
+    }
+
+    .header-username {
+        display: none;
     }
 }
