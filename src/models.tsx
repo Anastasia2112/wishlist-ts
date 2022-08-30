@@ -6,7 +6,8 @@ export type WishType = {
     price: number,
     img: string,
     category: string,
-    desc: string
+    desc: string,
+    userId: string
 }
 
 export interface ICardList {

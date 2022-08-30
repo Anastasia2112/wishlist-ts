@@ -8,15 +8,29 @@ import mock from '../../mock.json';
 import { FirebaseContextType, WishType } from '../../models';
 import { CheckContext } from '../../components/context/CheckContext';
 import { CheckContextType } from '../../models';
+import { db } from '../../firebase/config';
 
 import './styles.scss';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
+import { collection, getDocs } from 'firebase/firestore';
 
 const { Option } = Select;
 
 const Homepage: FC  = () => {
 
-  const { firestore } = useContext(FirebaseContext) as FirebaseContextType;
+  // const { firestore } = useContext(FirebaseContext) as FirebaseContextType;
+
+  const [wishesDB, setWishes] = useState<any>(null);
+  const wishesCollectionRef = collection(db, "wishes");
+
+  useEffect(() => {
+    const getWishes = async () => {
+      const data = await getDocs(wishesCollectionRef);
+      setWishes(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
+    };
+
+    getWishes();
+  }, [])
 
   const { checkedWishes, wishCount } = useContext(CheckContext) as CheckContextType;
 
@@ -25,10 +39,11 @@ const Homepage: FC  = () => {
   const [selectedSort, setSelectedSort] = useState<string>('');
   const [selectedFilter, setSelectedFilter] = useState<string>('');
 
-
-//   useEffect(() => {
-//     console.log(wishCount);
-// }, [wishCount]);
+  console.log('*** wishesDB ***');
+  console.log(wishesDB);
+  
+  console.log('*** wishesArr ***');
+  console.log(wishesArr);
 
   const sortedWishes = useMemo(() => {
     if (selectedSort) {

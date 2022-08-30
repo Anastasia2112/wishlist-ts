@@ -7,12 +7,14 @@ import './styles.scss';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { FirebaseContext } from '../context/FirebaseContext';
 import { FirebaseContextType } from '../../models';
+import { auth } from '../../firebase/config'
 
 const SignIn: FC = () => {
 
 
     // const auth = getAuth();
-    const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+    // const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+
     const navigate = useNavigate();
     const [authing, setAuthing] = useState<boolean>(false);
 

@@ -11,10 +11,11 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import './styles.scss';
 import { FirebaseContext } from '../context/FirebaseContext';
 import { FirebaseContextType } from '../../models';
+import { auth } from '../../firebase/config';
 
 const Header: FC = () => {
 
-  const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+  // const { auth } = useContext(FirebaseContext) as FirebaseContextType;
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
 
