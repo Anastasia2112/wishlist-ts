@@ -1,7 +1,7 @@
 
 import { FC, useContext, useState } from 'react';
 import { Button, Space, Menu, Dropdown, message } from 'antd';
-import { MenuUnfoldOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { MenuOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from 'firebase/auth';
@@ -65,7 +65,7 @@ const Header: FC = () => {
               <a onClick={e => e.preventDefault()}>
                 <Space>
                   <span className='header-username'>{user?.email}</span>
-                  <MenuUnfoldOutlined />
+                  <MenuOutlined />
                 </Space>
               </a>
             </Dropdown>
