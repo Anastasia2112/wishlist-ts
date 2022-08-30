@@ -64,7 +64,7 @@ const Header: FC = () => {
             <Dropdown overlay={menu}>
               <a onClick={e => e.preventDefault()}>
                 <Space>
-                  <span className='header-username'>{user?.displayName}</span>
+                  <span className='header-username'>{user?.email}</span>
                   <MenuUnfoldOutlined />
                 </Space>
               </a>
