@@ -2,11 +2,11 @@
 export type WishType = {
     id: string,
     name: string,
-    link: string,
+    link?: string,
     price: number,
     img: string,
     category: string,
-    desc: string,
+    desc?: string,
     userId: string
 }
 

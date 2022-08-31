@@ -100,6 +100,7 @@ const Homepage: FC  = () => {
 
   const onFinish = (values: WishType) => {
     createWish(values);
+    console.log(values);
     handleCancel();
   };
 
@@ -156,7 +157,10 @@ const Homepage: FC  = () => {
           name="basic"
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 16 }}
-          initialValues={{ remember: true }}
+          initialValues={{
+             'link': "",
+             'desc': "",
+            }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
@@ -172,9 +176,8 @@ const Homepage: FC  = () => {
           <Form.Item
             label="Ссылка"
             name="link"
-            rules={[{ required: true, message: 'Введите ссылку!' }]}
           >
-            <Input />
+            <Input placeholder="" />
           </Form.Item>
 
           <Form.Item
@@ -188,7 +191,7 @@ const Homepage: FC  = () => {
           <Form.Item
             label="Изображение"
             name="img"
-            rules={[{ required: true, message: 'Введите цену!' }]}
+            rules={[{ required: true, message: 'Добавьте изображение!' }]}
           >
             <Input />
           </Form.Item>
@@ -205,7 +208,7 @@ const Homepage: FC  = () => {
             label="Описание"
             name="desc"
           >
-            <Input />
+            <Input placeholder="" />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 17, span: 2 }} style={{marginBottom: 0}}>
