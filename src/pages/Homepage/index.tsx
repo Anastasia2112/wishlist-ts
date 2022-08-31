@@ -2,7 +2,7 @@ import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Button, Form, Input, Select, Modal, Tooltip, message  } from 'antd';
 
 import CardsList from '../../components/CardsList';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, HeartOutlined } from '@ant-design/icons';
 import BorderWrapper from '../../components/UI/BorderWrapper';
 // import mock from '../../mock.json';
 import { FirebaseContextType, WishType } from '../../models';
@@ -145,7 +145,7 @@ const Homepage: FC  = () => {
         title="Добавьте новое желание"
         onOk={handleOk}
         onCancel={handleCancel}
-        footer={[]}
+        footer={[<div className="homepage-add-form-footer"><HeartOutlined /></div>]}
       >
         <Form
           name="basic"
