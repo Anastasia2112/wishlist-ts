@@ -9,10 +9,11 @@ import { FirebaseContextType, WishType } from '../../models';
 import { CheckContext } from '../../components/context/CheckContext';
 import { CheckContextType } from '../../models';
 import { db } from '../../firebase/config';
+import { ref, onValue} from "firebase/database";
 
 import './styles.scss';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDocs } from 'firebase/firestore';
 
 const { Option } = Select;
 
@@ -20,46 +21,40 @@ const Homepage: FC  = () => {
 
   // const { firestore } = useContext(FirebaseContext) as FirebaseContextType;
 
-  const [wishesDB, setWishes] = useState<any>(null);
+  const [wishesDB, setWishesDB] = useState<WishType[]>([]);
   const wishesCollectionRef = collection(db, "wishes");
 
-  useEffect(() => {
+  useEffect(() => { 
     const getWishes = async () => {
       const data = await getDocs(wishesCollectionRef);
-      setWishes(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
+      setWishesDB(data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType));
     };
 
     getWishes();
   }, [])
 
-  const { checkedWishes, wishCount } = useContext(CheckContext) as CheckContextType;
+  const { wishCount } = useContext(CheckContext) as CheckContextType;
 
-  const [wishesArr, setWishesArr] = useState<WishType[]>(mock.wishes);
+  // const [wishesArr, setWishesArr] = useState<WishType[]>(mock.wishes);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>('');
   const [selectedFilter, setSelectedFilter] = useState<string>('');
-
-  console.log('*** wishesDB ***');
-  console.log(wishesDB);
-  
-  console.log('*** wishesArr ***');
-  console.log(wishesArr);
 
   const sortedWishes = useMemo(() => {
     if (selectedSort) {
       switch (selectedSort) {
         case 'Цена по возрастанию':
-          return [...wishesArr.sort((a, b) => a.price - b.price)]
+          return [...wishesDB.sort((a, b) => a.price - b.price)]
         case 'Цена по убыванию':
-          return [...wishesArr.sort((a, b) => b.price - a.price)]
+          return [...wishesDB.sort((a, b) => b.price - a.price)]
         case 'От "А" до "Я"':
-          return [...wishesArr.sort((a, b) => a.name.localeCompare(b.name))]
+          return [...wishesDB.sort((a, b) => a.name.localeCompare(b.name))]
         case 'От "Я" до "А"':
-          return [...wishesArr.sort((a, b) => b.name.localeCompare(a.name))]
+          return [...wishesDB.sort((a, b) => b.name.localeCompare(a.name))]
       }
     }
-    return wishesArr;
-  }, [selectedSort, wishesArr]);
+    return wishesDB;
+  }, [selectedSort, wishesDB]);
 
   const sortedAndFilteredWishes = useMemo(() => {
     if (selectedFilter) {
@@ -81,12 +76,12 @@ const Homepage: FC  = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-  //=------
+  //------
 
   const wishesAmount = sortedAndFilteredWishes.reduce(
     function (sum, current) {
-      return sum + current.price
-    },0
+      return sum + current.price;
+    }, 0
   );
 
   const onFinish = (values: any) => {
@@ -99,7 +94,7 @@ const Homepage: FC  = () => {
 
   let categs: string[] = [];
 
-  mock.wishes.forEach((item) => {
+  wishesDB.forEach((item) => {
     categs.push(item.category)
   });
 

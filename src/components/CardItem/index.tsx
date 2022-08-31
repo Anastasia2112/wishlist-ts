@@ -51,7 +51,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
               <Tooltip title="Изменить">
                 <Button icon={<EditOutlined />} onClick={() => func('click') }/>
               </Tooltip>
-              <Tooltip title="Добавить">
+              <Tooltip title="Удалить">
                 <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={() => test() }/>
               </Tooltip>
             </Space> 
