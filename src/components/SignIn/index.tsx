@@ -1,12 +1,12 @@
 import { FC, useState, useContext } from 'react';
 import {Link, useNavigate} from "react-router-dom";
 
-import { Button, Checkbox, Form, Input, Typography, Divider } from 'antd';
+import { Button, Checkbox, Form, Input, Divider } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import './styles.scss';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
-import { FirebaseContext } from '../context/FirebaseContext';
-import { FirebaseContextType } from '../../models';
+// import { FirebaseContext } from '../context/FirebaseContext';
+// import { FirebaseContextType } from '../../models';
 import { auth } from '../../firebase/config'
 
 const SignIn: FC = () => {
@@ -38,8 +38,6 @@ const SignIn: FC = () => {
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-
-    
     
     return (
         <section className='signin-wrap' >

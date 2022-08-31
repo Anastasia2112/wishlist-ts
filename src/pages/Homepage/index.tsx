@@ -1,24 +1,27 @@
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { Button, Form, Input, Select, Modal, Tooltip  } from 'antd';
+import { Button, Form, Input, Select, Modal, Tooltip, message  } from 'antd';
 
 import CardsList from '../../components/CardsList';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import BorderWrapper from '../../components/UI/BorderWrapper';
 // import mock from '../../mock.json';
-import { WishType } from '../../models';
+import { FirebaseContextType, WishType } from '../../models';
 import { CheckContext } from '../../components/context/CheckContext';
 import { CheckContextType } from '../../models';
 import { db } from '../../firebase/config';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { FirebaseContext } from '../../components/context/FirebaseContext';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 import './styles.scss';
-// import { FirebaseContext } from '../../components/context/FirebaseContext';
-import { collection, getDocs } from 'firebase/firestore';
 
 const { Option } = Select;
 
 const Homepage: FC  = () => {
 
-  // const { firestore } = useContext(FirebaseContext) as FirebaseContextType;
+  const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+
+  const [user] = useAuthState(auth);
 
   const [wishesDB, setWishesDB] = useState<WishType[]>([]);
   const wishesCollectionRef = collection(db, "wishes");
@@ -30,7 +33,7 @@ const Homepage: FC  = () => {
     };
 
     getWishes();
-  }, [wishesCollectionRef])
+  }, [])
 
   const { wishCount } = useContext(CheckContext) as CheckContextType;
 
@@ -57,7 +60,7 @@ const Homepage: FC  = () => {
 
   const sortedAndFilteredWishes = useMemo(() => {
     if (selectedFilter) {
-      return sortedWishes.filter(wish => wish.category === selectedFilter);
+      return sortedWishes.filter(wish => wish.category ===  selectedFilter);
     }
     
     return sortedWishes;
@@ -79,12 +82,20 @@ const Homepage: FC  = () => {
 
   const wishesAmount = sortedAndFilteredWishes.reduce(
     function (sum, current) {
-      return sum + current.price;
+      return sum + +current.price;
     }, 0
   );
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  const createWish = async (formData: WishType) => {
+    let newWish = {...formData, userId: user?.uid}
+    await addDoc(wishesCollectionRef, newWish)
+      .then(message.success('Желание добавлено!'))
+      .catch(message.error('Ошибка. Желание не было добавлено.'))
+  }
+
+  const onFinish = (values: WishType) => {
+    createWish(values);
+    handleCancel();
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -105,18 +116,19 @@ const Homepage: FC  = () => {
     <section className='homepage'>
       <div className='homepage-nav'>
         <div className='homepage-nav-selects'>
-          <Select className='homepage-nav-select' onChange={filter => setSelectedFilter(filter)} placeholder="Категория" style={{ width: 160 }} allowClear >
+          {wishesDB.length > 0 && <Select className='homepage-nav-select' onChange={filter => setSelectedFilter(filter)} placeholder="Категория" style={{ width: 160 }} allowClear >
             {unicCategs.map((sort, index) => {
               return <Option key={index} value={sort}>{sort}</Option>
             })}
-          </Select>
-          <Select className='homepage-nav-select' onChange={sort => setSelectedSort(sort)} placeholder="Сортировка" style={{ width: 160 }} >{/*  allowClear */}
+          </Select>}
+          {wishesDB.length > 0 && <Select className='homepage-nav-select' onChange={sort => setSelectedSort(sort)} placeholder="Сортировка" style={{ width: 160 }} >{/*  allowClear */}
             {sorts.map((sort, index) => {
               return <Option key={index} value={sort}>{sort}</Option>
             })}
-          </Select>
+          </Select>}
         </div>
         <div className='homepage-nav-btns'>
+          {wishesDB.length === 0 && <span className='homepage-nav-btns-info'>Добавьте желание:</span>}
           <Tooltip title="Добавить желание">
             <Button className='homepage-nav-btn' icon={<PlusOutlined />} onClick={showModal} ></Button>
           </Tooltip>
@@ -199,12 +211,14 @@ const Homepage: FC  = () => {
         </Form>
       </Modal>
 
-      <CardsList wishesArr={sortedAndFilteredWishes}/>
+      {wishesDB.length === 0 && <p className="homepage-info">Пока записей нет!</p>}
 
-      <BorderWrapper>
+      {wishesDB.length > 0 && <CardsList wishesArr={sortedAndFilteredWishes}/>}
+
+      {wishesDB.length > 0 && <BorderWrapper>
         <span className='card-name'>Итого: </span>
         <span className='card-name'>{wishesAmount} ₽</span>
-      </BorderWrapper>
+      </BorderWrapper>}
       
     </section>
   );
