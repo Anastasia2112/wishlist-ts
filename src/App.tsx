@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import TestPage from '../src/pages/TestPage';
 import './default.scss';
 import logo from './logo.svg';
-import AuthRoute from './components/AuthRoute';
 import { FirebaseContext } from '../src/components/context/FirebaseContext';
 import CheckContextProvider from '../src/components/context/CheckContext';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -28,7 +27,7 @@ const App: FC = () => {
       <div className="App">
         <Header />
         <div className="main">
-        {user ?
+        {localStorage.getItem('user') ?
           <Routes>
             <Route path="/" element={
               <CheckContextProvider >
@@ -49,25 +48,7 @@ const App: FC = () => {
                 element={<Navigate to="/login" replace/>}
             />
           </Routes>
-        }
-          {/* <Routes>
-            <Route 
-              path="/" 
-              element={
-                <AuthRoute>
-                  <CheckContextProvider >
-                    <Homepage />
-                  </CheckContextProvider>
-                </AuthRoute>} 
-            />
-            <Route path="/registration" element={<Registration />} />
-            <Route path="/login" element={<Login />} />
-            <Route
-                path="*"
-                element={<Navigate to="/" replace/>}
-            />
-          </Routes> */}
-          
+        } 
         </div>
         <Footer />
       </div>

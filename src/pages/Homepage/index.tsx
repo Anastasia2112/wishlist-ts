@@ -4,7 +4,7 @@ import { Button, Form, Input, Select, Modal, Tooltip, message  } from 'antd';
 import CardsList from '../../components/CardsList';
 import { PlusOutlined, DeleteOutlined, HeartOutlined } from '@ant-design/icons';
 import BorderWrapper from '../../components/UI/BorderWrapper';
-// import mock from '../../mock.json';
+import mock from '../../mock.json';
 import { FirebaseContextType, WishType } from '../../models';
 import { CheckContext } from '../../components/context/CheckContext';
 import { CheckContextType } from '../../models';
@@ -23,17 +23,22 @@ const Homepage: FC  = () => {
 
   const [user] = useAuthState(auth);
 
-  const [wishesDB, setWishesDB] = useState<WishType[]>([]);
+  const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
   const wishesCollectionRef = collection(db, "wishes");
 
   useEffect(() => { 
     const getWishes = async () => {
-      const data = await getDocs(wishesCollectionRef);
-      setWishesDB(data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType));
+      try {
+        const data = await getDocs(wishesCollectionRef)
+        setWishesDB(data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType));
+      } catch (error) {
+        message.error(`Ошибка загрузки данных. ${error}`)
+        console.log(error);
+      }
     };
 
     getWishes();
-  }, [])
+  }, [wishesDB])
 
   const { wishCount } = useContext(CheckContext) as CheckContextType;
 

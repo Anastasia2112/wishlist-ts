@@ -31,6 +31,7 @@ const Header: FC = () => {
   
       case '2':
         signOut(auth);
+        localStorage.removeItem('user');
         navigate('/login');
         break;
     }

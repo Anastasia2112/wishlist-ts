@@ -24,6 +24,7 @@ const SignIn: FC = () => {
         signInWithPopup(auth, new GoogleAuthProvider())
         .then(response => {
             console.log(response.user.uid);
+            localStorage.setItem('user', JSON.stringify(response.user.uid));
             navigate('/');
         })
         .catch(error => {
