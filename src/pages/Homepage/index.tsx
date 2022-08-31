@@ -1,19 +1,18 @@
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { Space, Button, Checkbox, Form, Input, Select, Modal, Tooltip  } from 'antd';
+import { Button, Form, Input, Select, Modal, Tooltip  } from 'antd';
 
 import CardsList from '../../components/CardsList';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import BorderWrapper from '../../components/UI/BorderWrapper';
-import mock from '../../mock.json';
-import { FirebaseContextType, WishType } from '../../models';
+// import mock from '../../mock.json';
+import { WishType } from '../../models';
 import { CheckContext } from '../../components/context/CheckContext';
 import { CheckContextType } from '../../models';
 import { db } from '../../firebase/config';
-import { ref, onValue} from "firebase/database";
 
 import './styles.scss';
-import { FirebaseContext } from '../../components/context/FirebaseContext';
-import { collection, doc, getDocs } from 'firebase/firestore';
+// import { FirebaseContext } from '../../components/context/FirebaseContext';
+import { collection, getDocs } from 'firebase/firestore';
 
 const { Option } = Select;
 
@@ -31,7 +30,7 @@ const Homepage: FC  = () => {
     };
 
     getWishes();
-  }, [])
+  }, [wishesCollectionRef])
 
   const { wishCount } = useContext(CheckContext) as CheckContextType;
 
@@ -58,7 +57,7 @@ const Homepage: FC  = () => {
 
   const sortedAndFilteredWishes = useMemo(() => {
     if (selectedFilter) {
-      return sortedWishes.filter(wish => wish.category == selectedFilter);
+      return sortedWishes.filter(wish => wish.category === selectedFilter);
     }
     
     return sortedWishes;

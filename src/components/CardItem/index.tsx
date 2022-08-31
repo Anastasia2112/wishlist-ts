@@ -11,7 +11,7 @@ import { CheckContextType } from '../../models';
 
 const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
 
-  const { checkedWishes, updateCheck } = useContext(CheckContext) as CheckContextType;
+  const { updateCheck } = useContext(CheckContext) as CheckContextType;
   const [visible, setVisible] = useState(false);
 
   const test = (): void => {
@@ -26,8 +26,8 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
     setVisible(false);
   };
 
-  const onChange = (e: CheckboxChangeEvent, id: string) => {  // первое нажатие - id нет в массиве - добавить
-    updateCheck(id);                   // второе нажание - id есть в массиве - удалить
+  const onChange = (e: CheckboxChangeEvent, id: string) => {
+    updateCheck(id);
   };
 
   return (
@@ -37,7 +37,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
           <div className='card-img' onClick={showModal}></div>
           <div className='card-info'>
               <span className='card-name' onClick={showModal}>{wishItem.name}</span>
-              <a className='card-link' href={wishItem.link} target="_blank">{wishItem.link}</a>
+              <a className='card-link' href={wishItem.link} target="_blank" rel="noreferrer">{wishItem.link}</a>
               <span className='card-category'>{wishItem.category}</span>
           </div>
         </div>
@@ -69,7 +69,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
         <div className='card-about-img' >{wishItem.img}</div>
         <span className='card-category'>{wishItem.category}</span>
         <span className='card-about-name' >{wishItem.name}</span>
-        <a className='card-about-link' href={wishItem.link} target="_blank">{wishItem.link}</a>
+        <a className='card-about-link' href={wishItem.link} target="_blank" rel="noreferrer">{wishItem.link}</a>
         <span className='card-about-desc' >{wishItem.desc}</span>
       </Modal>
     </BorderWrapper>
