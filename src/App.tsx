@@ -1,4 +1,4 @@
-import { FC, useContext, ReactNode, createContext, useState } from 'react';
+import { FC, useContext, ReactNode, createContext, useState, useEffect } from 'react';
 import {Routes, Route, Navigate} from 'react-router-dom';
 
 import Header from './components/Header';
@@ -18,16 +18,26 @@ import Loader from './components/Loader';
 const App: FC = () => {
 
   // const auth = getAuth();
-  const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+  // const { auth } = useContext(FirebaseContext) as FirebaseContextType;
 
-  const [user, loading, error] = useAuthState(auth);
+  // const [user, loading, error] = useAuthState(auth);
+
+  const [isLSUser, setIsLSUser] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (localStorage.getItem('user')) {
+      setIsLSUser(true)
+    } else {
+      setIsLSUser(false)
+    }
+  }, [localStorage.getItem('user')])
   
   return (
 
       <div className="App">
         <Header />
         <div className="main">
-        {localStorage.getItem('user') ?
+        {isLSUser ?
           <Routes>
             <Route path="/" element={
               <CheckContextProvider >
@@ -48,7 +58,8 @@ const App: FC = () => {
                 element={<Navigate to="/login" replace/>}
             />
           </Routes>
-        } 
+        }
+ 
         </div>
         <Footer />
       </div>

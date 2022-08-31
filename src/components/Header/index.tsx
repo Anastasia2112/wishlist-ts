@@ -19,10 +19,6 @@ const Header: FC = () => {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
 
-  const signOutHandler = () => {
-    signOut(auth);
-  }
-
   const onClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
       case '1':
