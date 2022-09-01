@@ -7,7 +7,7 @@ import './styles.scss';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 // import { FirebaseContext } from '../context/FirebaseContext';
 // import { FirebaseContextType } from '../../models';
-import { auth } from '../../firebase/config'
+import { auth } from '../../../firebase/config'
 
 const SignIn: FC = () => {
 
@@ -80,7 +80,7 @@ const SignIn: FC = () => {
 
                 <Button block icon={<GoogleOutlined />} onClick={() => signInWithGoogle()} disabled={authing} >With Google Account</Button>
             </Form>
-            <span className='signin-signup-text'>Нет аккаунта? <Link to="/login" onClick={() => console.log('gg')}>Зарегистрируйтесь!</Link></span>
+            <span className='signin-signup-text'>Нет аккаунта? <Link to="/registration" onClick={() => console.log('gg')}>Зарегистрируйтесь!</Link></span>
         </section>
     );
 };

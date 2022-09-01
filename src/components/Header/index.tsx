@@ -6,17 +6,15 @@ import type { MenuProps } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from 'firebase/auth';
 import TestPage from '../../pages/TestPage';
-import { useAuthState } from 'react-firebase-hooks/auth';
-
-import './styles.scss';
 import { FirebaseContext } from '../context/FirebaseContext';
 import { FirebaseContextType } from '../../models';
 import { auth } from '../../firebase/config';
+import './styles.scss';
 
 const Header: FC = () => {
 
-  // const { auth } = useContext(FirebaseContext) as FirebaseContextType;
-  const [user] = useAuthState(auth);
+  const { user } = useContext(FirebaseContext) as FirebaseContextType;
+
   const navigate = useNavigate();
 
   const onClick: MenuProps['onClick'] = ({ key }) => {

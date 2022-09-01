@@ -1,52 +1,83 @@
-import { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { Button, Form, Input, Select, Modal, Tooltip, message  } from 'antd';
-
+import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { Button, Form, Input, Select, Modal, Tooltip, message, InputNumber, Result  } from 'antd';
+import { PlusOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import CardsList from '../../components/CardsList';
-import { PlusOutlined, DeleteOutlined, HeartOutlined } from '@ant-design/icons';
 import BorderWrapper from '../../components/UI/BorderWrapper';
 import mock from '../../mock.json';
 import { FirebaseContextType, WishType } from '../../models';
 import { CheckContext } from '../../components/context/CheckContext';
 import { CheckContextType } from '../../models';
 import { db } from '../../firebase/config';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 import './styles.scss';
 
 const { Option } = Select;
+const { confirm } = Modal;
 
 const Homepage: FC  = () => {
 
-  const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+  const { user } = useContext(FirebaseContext) as FirebaseContextType;
 
-  const [user] = useAuthState(auth);
-
-  const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
+  const [wishesDB, setWishesDB] = useState<WishType[]>([]);
+  // const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
+  const [isDBError, setIsDBError] = useState<boolean>(false);
   const wishesCollectionRef = collection(db, "wishes");
 
-  useEffect(() => { 
+
+  // Получение записей из БД
+  const getWishesFromDB = useCallback(() => {
     const getWishes = async () => {
       try {
         const data = await getDocs(wishesCollectionRef)
         setWishesDB(data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType));
+        setIsDBError(false);
       } catch (error) {
         message.error(`Ошибка загрузки данных. ${error}`)
         console.log(error);
+        setIsDBError(true);
       }
     };
 
     getWishes();
-  }, [wishesDB])
+  }, [])
 
-  const { wishCount } = useContext(CheckContext) as CheckContextType;
+  useEffect(() => { 
+    getWishesFromDB()
+  }, [getWishesFromDB]);
+
+  // Создание новой записи
+  const createWish = async (formData: WishType) => {
+    let newWish = {...formData, userId: user?.uid}
+    await addDoc(wishesCollectionRef, newWish)
+      .then(message.success('Желание добавлено!'))
+      .catch(message.error('Ошибка при добавлении записи.'))
+  };
+
+  // Удаление записи
+  const deleteWish = async (id: string) => {
+    console.log(`Удолить ${id}`);
+    const wishDoc = doc(db, "wishes", id);
+    await deleteDoc(wishDoc); 
+  }
+
+  // Удаление выбранных записей
+  const deleteCheckedWishes = (arrOfCheched: string[]) => {
+    arrOfCheched.forEach(id => {
+      deleteWish(id);
+    });
+  }
+
+  // Число отмеченных записей
+  const { wishCount, checkedWishes } = useContext(CheckContext) as CheckContextType;
 
   // const [wishesArr, setWishesArr] = useState<WishType[]>(mock.wishes);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>('');
   const [selectedFilter, setSelectedFilter] = useState<string>('');
 
+  // Сортировка записей
   const sortedWishes = useMemo(() => {
     if (selectedSort) {
       switch (selectedSort) {
@@ -63,6 +94,7 @@ const Homepage: FC  = () => {
     return wishesDB;
   }, [selectedSort, wishesDB]);
 
+  // Фильтрация отсортиованных записей
   const sortedAndFilteredWishes = useMemo(() => {
     if (selectedFilter) {
       return sortedWishes.filter(wish => wish.category ===  selectedFilter);
@@ -71,43 +103,14 @@ const Homepage: FC  = () => {
     return sortedWishes;
   }, [selectedFilter, sortedWishes]);
 
-  //------
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-  //------
-
+  // Рассчет суммы
   const wishesAmount = sortedAndFilteredWishes.reduce(
-    function (sum, current) {
+    function (sum, current): number {
       return sum + +current.price;
     }, 0
   );
 
-  const createWish = async (formData: WishType) => {
-    let newWish = {...formData, userId: user?.uid}
-    await addDoc(wishesCollectionRef, newWish)
-      .then(message.success('Желание добавлено!'))
-      .catch(message.error('Ошибка. Желание не было добавлено.'))
-  }
-
-  const onFinish = (values: WishType) => {
-    createWish(values);
-    console.log(values);
-    handleCancel();
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
-
+  // Добавление уникальных категорий в отдельный массив для выпадающего списка
   let categs: string[] = [];
 
   wishesDB.forEach((item) => {
@@ -117,6 +120,39 @@ const Homepage: FC  = () => {
   let unicCategs: string[] = categs.filter((val, ind, arr) => arr.indexOf(val) === ind);
 
   const sorts: string[] = ['Цена по возрастанию', 'Цена по убыванию', 'От "А" до "Я"', 'От "Я" до "А"'];
+
+  // Для формы добавления
+  const showAddModal = () => {
+    setIsAddModalVisible(true);
+  };
+
+  const handleAddCancel = () => {
+    setIsAddModalVisible(false);
+  };
+
+  const onAddFinish = (values: WishType) => {
+    createWish(values);
+    handleAddCancel();
+  };
+
+  const onAddFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  const showDeleteCheckedConfirm = () => {
+    confirm({
+      title: 'Удалить выбранные записи?',
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Удалить',
+      okType: 'danger',
+      cancelText: 'Отмена',
+      onOk() {
+        deleteCheckedWishes(checkedWishes)
+      },
+      onCancel() {
+      },
+    });
+  };
 
   return (
     <section className='homepage'>
@@ -134,23 +170,22 @@ const Homepage: FC  = () => {
           </Select>}
         </div>
         <div className='homepage-nav-btns'>
-          {wishesDB.length === 0 && <span className='homepage-nav-btns-info'>Добавьте желание:</span>}
-          <Tooltip title="Добавить желание">
-            <Button className='homepage-nav-btn' icon={<PlusOutlined />} onClick={showModal} ></Button>
-          </Tooltip>
+          {(wishesDB.length === 0 && !isDBError) && <span className='homepage-nav-btns-info'>Добавьте желание:</span>}
+          {!isDBError && <Tooltip title="Добавить желание">
+            <Button className='homepage-nav-btn' icon={<PlusOutlined />} onClick={showAddModal} ></Button>
+          </Tooltip>}
           { wishCount > 0 && 
           <Tooltip title="Удалить выбранные">
-            <Button className='homepage-nav-btn card-btn-delete' icon={<DeleteOutlined />}/>
+            <Button className='homepage-nav-btn card-btn-delete' icon={<DeleteOutlined />}  onClick={showDeleteCheckedConfirm} />
           </Tooltip>
           }
         </div>
       </div>
 
       <Modal
-        visible={isModalVisible}
+        visible={isAddModalVisible}
         title="Добавьте новое желание"
-        onOk={handleOk}
-        onCancel={handleCancel}
+        onCancel={handleAddCancel}
         footer={[<div className="homepage-add-form-footer"><HeartOutlined /></div>]}
       >
         <Form
@@ -161,8 +196,8 @@ const Homepage: FC  = () => {
              'link': "",
              'desc': "",
             }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
+          onFinish={onAddFinish}
+          onFinishFailed={onAddFinishFailed}
           autoComplete="off"
         >
           <Form.Item
@@ -185,7 +220,7 @@ const Homepage: FC  = () => {
             name="price"
             rules={[{ required: true, message: 'Введите цену!' }]}
           >
-            <Input />
+            <InputNumber prefix="₽" style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item
@@ -219,11 +254,18 @@ const Homepage: FC  = () => {
         </Form>
       </Modal>
 
-      {wishesDB.length === 0 && <p className="homepage-info">Пока записей нет!</p>}
+      {isDBError && 
+        <Result
+          status="warning"
+          title="Ошибка загрузки данных"
+        />
+      }
 
-      {wishesDB.length > 0 && <CardsList wishesArr={sortedAndFilteredWishes}/>}
+      {(wishesDB.length === 0 && !isDBError) && <p className="homepage-info">Пока записей нет!</p>}
 
-      {wishesDB.length > 0 && <BorderWrapper>
+      {(wishesDB.length > 0 && !isDBError) && <CardsList wishesArr={sortedAndFilteredWishes}/>}
+
+      {(wishesDB.length > 0 && !isDBError) && <BorderWrapper>
         <span className='card-name'>Итого: </span>
         <span className='card-name'>{wishesAmount} ₽</span>
       </BorderWrapper>}

@@ -22,11 +22,16 @@ export interface ICardItem  {
 
 export type FirebaseContextType = {
     auth : any
-    firestore: any
+    firestore: any,
+    user: any
 }
 
 export type CheckContextType = {
     checkedWishes: string[],
     wishCount: number,
     updateCheck : (id: string) => void
+}
+
+export type UserContextType = {
+
 }

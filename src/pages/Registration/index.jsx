@@ -1,14 +1,8 @@
-import { Component } from 'react';
+import { FC } from 'react';
 
-class Registration extends Component {
+import SignUp from '../../components/Auth/SignUp'
+// import './styles.scss'
 
-    render() {
-        return (
-            <div>
-                <h1>Registration page</h1>
-            </div>
-        )
-    }
-}
+const Registration: FC = () => ( <SignUp /> );
 
 export default Registration;
