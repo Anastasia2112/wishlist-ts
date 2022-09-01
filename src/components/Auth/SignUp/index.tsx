@@ -5,35 +5,24 @@ import { Button, Checkbox, Form, Input, Divider } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import './styles.scss';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
-// import { FirebaseContext } from '../context/FirebaseContext';
-// import { FirebaseContextType } from '../../models';
-import { auth } from '../../../firebase/config'
+import { FirebaseContext } from '../../context/FirebaseContext';
+import { FirebaseContextType, AuthFormValues } from '../../../models';
 
 const SignIn: FC = () => {
 
+    const { createUser } = useContext(FirebaseContext) as FirebaseContextType;
 
-    // const auth = getAuth();
-    // const { auth } = useContext(FirebaseContext) as FirebaseContextType;
-
-    const navigate = useNavigate();
-    const [authing, setAuthing] = useState<boolean>(false);
-
-    const signInWithGoogle = async () => {
-        setAuthing(true);
-
-        signInWithPopup(auth, new GoogleAuthProvider())
-        .then(response => {
-            console.log(response.user.uid);
-            localStorage.setItem('user', JSON.stringify(response.user.uid));
-            navigate('/');
-        })
-        .catch(error => {
+    const handleCreateUser = async (email: string, password: string) => {
+        try {
+            createUser(email, password);
+        } catch (error) {
             console.log(error);
-        })
+        }
     }
 
-    const onFinish = (values: any) => {
+    const onFinish = (values: AuthFormValues) => {
         console.log('Success:', values);
+        handleCreateUser(values.email, values.password);
     };
     
     const onFinishFailed = (errorInfo: any) => {
@@ -51,9 +40,9 @@ const SignIn: FC = () => {
                 autoComplete="off"
             >
                 <Form.Item
-                    label="Логин"
-                    name="username"
-                    rules={[{ required: true, message: 'Пожалуйста, введите логин!' }]}
+                    label="Email"
+                    name="email"
+                    rules={[{ required: true, message: 'Пожалуйста, введите email!' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -71,11 +60,12 @@ const SignIn: FC = () => {
                 </Form.Item>
 
                 <Form.Item >
-                    <Button block disabled htmlType="submit" icon={<LoginOutlined />}>
+                    <Button block htmlType="submit" icon={<LoginOutlined />}>
                         Зарегистрироваться
                     </Button>
                 </Form.Item>
             </Form>
+            <Divider plain></Divider>
             <span className='signin-signup-text'>Есть аккаунт? <Link to="/login">Авторизуйтесь!</Link></span>
         </section>
     );

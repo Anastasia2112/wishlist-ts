@@ -20,8 +20,8 @@ const Homepage: FC  = () => {
 
   const { user } = useContext(FirebaseContext) as FirebaseContextType;
 
-  const [wishesDB, setWishesDB] = useState<WishType[]>([]);
-  // const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
+  // const [wishesDB, setWishesDB] = useState<WishType[]>([]);
+  const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
   const [isDBError, setIsDBError] = useState<boolean>(false);
   const wishesCollectionRef = collection(db, "wishes");
 
@@ -40,7 +40,7 @@ const Homepage: FC  = () => {
       }
     };
 
-    getWishes();
+    // getWishes();
   }, [])
 
   useEffect(() => { 

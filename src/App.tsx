@@ -21,23 +21,13 @@ const App: FC = () => {
   // const { auth } = useContext(FirebaseContext) as FirebaseContextType;
 
   // const [user, loading, error] = useAuthState(auth);
-
-  const [isLSUser, setIsLSUser] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (localStorage.getItem('user')) {
-      setIsLSUser(true)
-    } else {
-      setIsLSUser(false)
-    }
-  }, [localStorage.getItem('user')])
   
   return (
 
       <div className="App">
         <Header />
         <div className="main">
-        {isLSUser ?
+
           <Routes>
             <Route path="/" element={
               <CheckContextProvider >
@@ -49,9 +39,7 @@ const App: FC = () => {
                 path="*"
                 element={<Navigate to="/" replace/>}
             />
-          </Routes>
-        :
-          <Routes>
+
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
             <Route
@@ -59,7 +47,6 @@ const App: FC = () => {
                 element={<Navigate to="/login" replace/>}
             />
           </Routes>
-        }
  
         </div>
         <Footer />

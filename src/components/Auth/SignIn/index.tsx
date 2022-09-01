@@ -1,39 +1,39 @@
 import { FC, useState, useContext } from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { Button, Checkbox, Form, Input, Divider } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import './styles.scss';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
-// import { FirebaseContext } from '../context/FirebaseContext';
-// import { FirebaseContextType } from '../../models';
-import { auth } from '../../../firebase/config'
+import { FirebaseContext } from '../../context/FirebaseContext';
+import { FirebaseContextType, AuthFormValues } from '../../../models';
 
 const SignIn: FC = () => {
 
 
     // const auth = getAuth();
-    // const { auth } = useContext(FirebaseContext) as FirebaseContextType;
+    const { signInWithGoogle, signIn } = useContext(FirebaseContext) as FirebaseContextType;
 
-    const navigate = useNavigate();
-    const [authing, setAuthing] = useState<boolean>(false);
-
-    const signInWithGoogle = async () => {
-        setAuthing(true);
-
-        signInWithPopup(auth, new GoogleAuthProvider())
-        .then(response => {
-            console.log(response.user.uid);
-            localStorage.setItem('user', JSON.stringify(response.user.uid));
-            navigate('/');
-        })
-        .catch(error => {
+    const handleSignInWithGoogle = async () => {
+        try {
+            signInWithGoogle();
+            // navigate('/');
+        } catch (error) {
             console.log(error);
-        })
+        }
     }
 
-    const onFinish = (values: any) => {
+    const handleSignIn = async (email: string, password: string) => {
+        try {
+            signIn(email, password);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const onFinish = (values: AuthFormValues) => {
         console.log('Success:', values);
+        handleSignIn(values.email, values.password);
     };
     
     const onFinishFailed = (errorInfo: any) => {
@@ -51,9 +51,9 @@ const SignIn: FC = () => {
                 autoComplete="off"
             >
                 <Form.Item
-                    label="Логин"
-                    name="username"
-                    rules={[{ required: true, message: 'Пожалуйста, введите логин!' }]}
+                    label="Email"
+                    name="email"
+                    rules={[{ required: true, message: 'Пожалуйста, введите email!' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -71,16 +71,16 @@ const SignIn: FC = () => {
                 </Form.Item>
 
                 <Form.Item >
-                    <Button block disabled htmlType="submit" icon={<LoginOutlined />}>
+                    <Button block htmlType="submit" icon={<LoginOutlined />}>
                         Войти
                     </Button>
                 </Form.Item>
                 
                 <Divider plain></Divider>
 
-                <Button block icon={<GoogleOutlined />} onClick={() => signInWithGoogle()} disabled={authing} >With Google Account</Button>
+                <Button block icon={<GoogleOutlined />} onClick={handleSignInWithGoogle} >With Google Account</Button>
             </Form>
-            <span className='signin-signup-text'>Нет аккаунта? <Link to="/registration" onClick={() => console.log('gg')}>Зарегистрируйтесь!</Link></span>
+            <span className='signin-signup-text'>Нет аккаунта? <Link to="/registration">Зарегистрируйтесь!</Link></span>
         </section>
     );
 };

@@ -13,7 +13,7 @@ import './styles.scss';
 
 const Header: FC = () => {
 
-  const { user } = useContext(FirebaseContext) as FirebaseContextType;
+  const { user, logout } = useContext(FirebaseContext) as FirebaseContextType;
 
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const Header: FC = () => {
         break;
   
       case '2':
-        signOut(auth);
+        logout();
         localStorage.removeItem('user');
         navigate('/login');
         break;
@@ -65,7 +65,7 @@ const Header: FC = () => {
                 </Space>
               </a>
             </Dropdown>
-          }
+          } 
           
         </Space>
       </div>

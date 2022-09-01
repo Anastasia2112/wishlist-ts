@@ -23,7 +23,11 @@ export interface ICardItem  {
 export type FirebaseContextType = {
     auth : any
     firestore: any,
-    user: any
+    user: any,
+    signInWithGoogle : () => void,
+    logout : () => void,
+    createUser : (email: string, password: string) => void,
+    signIn : (email: string, password: string) => void
 }
 
 export type CheckContextType = {
@@ -32,6 +36,8 @@ export type CheckContextType = {
     updateCheck : (id: string) => void
 }
 
-export type UserContextType = {
-
+export type AuthFormValues = {
+    password: string, 
+    remember: boolean, 
+    email: string
 }
