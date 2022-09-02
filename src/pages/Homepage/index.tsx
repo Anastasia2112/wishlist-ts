@@ -1,6 +1,7 @@
 import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Button, Form, Input, Select, Modal, Tooltip, message, InputNumber, Result  } from 'antd';
+import { Button, Form, Input, Select, Modal, Tooltip, message, InputNumber, Result, Radio, Space  } from 'antd';
 import { PlusOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import type { RadioChangeEvent } from 'antd';
 import CardsList from '../../components/CardsList';
 import BorderWrapper from '../../components/UI/BorderWrapper';
 import mock from '../../mock.json';
@@ -24,14 +25,17 @@ const Homepage: FC  = () => {
   const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
   const [isDBError, setIsDBError] = useState<boolean>(false);
   const wishesCollectionRef = collection(db, "wishes");
-
+  const [formCategory, setFormCategory] = useState<any>();
 
   // Получение записей из БД
   const getWishesFromDB = useCallback(() => {
     const getWishes = async () => {
       try {
         const data = await getDocs(wishesCollectionRef)
-        setWishesDB(data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType));
+        const arr = data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType);
+        const filteredArr = arr.filter(wish => wish.userId === user?.uid);
+        setWishesDB(filteredArr);
+        
         setIsDBError(false);
       } catch (error) {
         message.error(`Ошибка загрузки данных. ${error}`)
@@ -45,11 +49,13 @@ const Homepage: FC  = () => {
 
   useEffect(() => { 
     getWishesFromDB()
-  }, [getWishesFromDB]);
+  }, [wishesCollectionRef]);
 
   // Создание новой записи
   const createWish = async (formData: WishType) => {
-    let newWish = {...formData, userId: user?.uid}
+    let newWish = {...formData, userId: user?.uid, category: formCategory};
+    // console.log(newWish);
+    
     await addDoc(wishesCollectionRef, newWish)
       .then(message.success('Желание добавлено!'))
       .catch(message.error('Ошибка при добавлении записи.'))
@@ -59,7 +65,9 @@ const Homepage: FC  = () => {
   const deleteWish = async (id: string) => {
     console.log(`Удолить ${id}`);
     const wishDoc = doc(db, "wishes", id);
-    await deleteDoc(wishDoc); 
+    await deleteDoc(wishDoc)
+      .then(message.success('Желание удалено!'))
+      .catch(message.error('Ошибка при удалении записи.'))
   }
 
   // Удаление выбранных записей
@@ -76,7 +84,7 @@ const Homepage: FC  = () => {
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>('');
   const [selectedFilter, setSelectedFilter] = useState<string>('');
-
+  
   // Сортировка записей
   const sortedWishes = useMemo(() => {
     if (selectedSort) {
@@ -132,6 +140,7 @@ const Homepage: FC  = () => {
 
   const onAddFinish = (values: WishType) => {
     createWish(values);
+    
     handleAddCancel();
   };
 
@@ -152,6 +161,23 @@ const Homepage: FC  = () => {
       onCancel() {
       },
     });
+  };
+
+  // radio category
+  const [value, setValue] = useState(1);
+
+  const onChange = (e: RadioChangeEvent) => {
+    setValue(e.target.value);
+  };
+
+  // select category in add form
+  const handleChange = (value: string) => {
+    setFormCategory(value);
+  };
+
+  const inputChange = (value: string) => {
+    console.log(value);
+    setFormCategory(value);
   };
 
   return (
@@ -220,7 +246,7 @@ const Homepage: FC  = () => {
             name="price"
             rules={[{ required: true, message: 'Введите цену!' }]}
           >
-            <InputNumber prefix="₽" style={{ width: '100%' }} />
+            <InputNumber prefix="₽" min="0" style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item
@@ -233,10 +259,27 @@ const Homepage: FC  = () => {
 
           <Form.Item
             label="Категория"
-            name="category"
             rules={[{ required: true, message: 'Введите категорию!' }]}
           >
-            <Input />
+            <br/>
+            <Radio.Group onChange={onChange} value={value}>
+              <Space direction="vertical">
+                <Radio value={1}>
+                  Выбрать 
+                  {value === 1 &&
+                      <Select onChange={handleChange} style={{ width: 160, marginLeft: 18 }}  >
+                        {unicCategs.map((sort, index) => {
+                          return <Option key={index} value={sort}>{sort}</Option>
+                        })}
+                      </Select>
+                  }
+                </Radio>
+                <Radio value={2}>
+                  Добавить 
+                  {value === 2 ? <Input onChange={(e) => inputChange(e.target.value)} style={{ width: 160, marginLeft: 12 }} defaultValue={'Категория'}/> : null}
+                </Radio>
+              </Space>
+            </Radio.Group>
           </Form.Item>
 
           <Form.Item
@@ -246,7 +289,7 @@ const Homepage: FC  = () => {
             <Input placeholder="" />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 17, span: 2 }} style={{marginBottom: 0}}>
+          <Form.Item wrapperCol={{ offset: 17, span: 2 }} style={ {marginBottom: 0 }}>
             <Button type="primary" htmlType="submit">
               Добавить
             </Button>

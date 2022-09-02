@@ -33,7 +33,9 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
   const deleteWish = async (id: string) => {
     console.log(`Удолить ${id}`);
     const wishDoc = doc(db, "wishes", id);
-    await deleteDoc(wishDoc); 
+    await deleteDoc(wishDoc)
+      .then(message.success('Желание удалено!'))
+      .catch(message.error('Ошибка при удалении записи.'))
   }
 
   // Для окна с подробной информацией
@@ -168,7 +170,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
             name="price"
             rules={[{ required: true, message: 'Введите цену!' }]}
           >
-            <InputNumber prefix="₽" style={{ width: '100%' }} />
+            <InputNumber prefix="₽" min="0" style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item
@@ -186,7 +188,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
           >
             <Input />
           </Form.Item>
-
+          
           <Form.Item
             label="Описание"
             name="desc"
@@ -202,7 +204,6 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
         </Form>
       </Modal>
 
-      
     </BorderWrapper>
   );
 };
