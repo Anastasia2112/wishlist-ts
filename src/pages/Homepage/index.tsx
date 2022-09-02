@@ -53,9 +53,11 @@ const Homepage: FC  = () => {
   }, [wishesCollectionRef]);
 
   // Создание записи из формы
-  const createNewWish = (newWish: WishType) => {
+  const createNewWish = async (newWish: WishType) => {
     console.log(newWish);
-    
+    await addDoc(wishesCollectionRef, newWish)
+      .then(message.success('Желание добавлено!'))
+      .catch(message.error('Ошибка при добавлении записи.'))
   }
 
   // Создание новой записи
@@ -63,9 +65,9 @@ const Homepage: FC  = () => {
   //   let newWish = {...formData, userId: user?.uid};
   //   console.log(newWish);
     
-  //   // await addDoc(wishesCollectionRef, newWish)
-  //   //   .then(message.success('Желание добавлено!'))
-  //   //   .catch(message.error('Ошибка при добавлении записи.'))
+  // await addDoc(wishesCollectionRef, newWish)
+  //   .then(message.success('Желание добавлено!'))
+  //   .catch(message.error('Ошибка при добавлении записи.'))
   // };
 
   // Удаление записи
@@ -136,7 +138,7 @@ const Homepage: FC  = () => {
 
   const sorts: string[] = ['Цена по возрастанию', 'Цена по убыванию', 'От "А" до "Я"', 'От "Я" до "А"'];
 
-  // Для формы добавления
+  // Для окна с формой добавления
   const showAddModal = () => {
     setIsAddModalVisible(true);
   };
@@ -144,15 +146,6 @@ const Homepage: FC  = () => {
   const handleAddCancel = () => {
     setIsAddModalVisible(false);
   };
-
-  // const onAddFinish = (values: WishType) => {
-  //   createWish(values);
-  //   handleAddCancel();
-  // };
-
-  // const onAddFinishFailed = (errorInfo: any) => {
-  //   console.log('Failed:', errorInfo);
-  // };
 
   const showDeleteCheckedConfirm = () => {
     confirm({
@@ -167,23 +160,6 @@ const Homepage: FC  = () => {
       onCancel() {
       },
     });
-  };
-
-  // radio category
-  // const [value, setValue] = useState(1);
-
-  // const onChange = (e: RadioChangeEvent) => {
-  //   setValue(e.target.value);
-  // };
-
-  // select category in add form
-  const handleChange = (value: string) => {
-    setFormCategory(value);
-  };
-
-  const inputChange = (value: string) => {
-    console.log(value);
-    setFormCategory(value);
   };
 
   return (
