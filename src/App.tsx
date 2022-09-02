@@ -14,6 +14,7 @@ import CheckContextProvider from '../src/components/context/CheckContext';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FirebaseContextType } from './models';
 import Loader from './components/Loader';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App: FC = () => {
 
@@ -27,27 +28,22 @@ const App: FC = () => {
       <div className="App">
         <Header />
         <div className="main">
-
           <Routes>
-            <Route path="/" element={
-              <CheckContextProvider >
-                <Homepage />
-              </CheckContextProvider> } 
-            />
-            <Route path="/test" element={<TestPage />} />
-            <Route
-                path="*"
-                element={<Navigate to="/" replace/>}
-            />
-
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
+            <Route path="/" element={
+              <ProtectedRoute>
+                <CheckContextProvider >
+                  <Homepage />
+                </CheckContextProvider> 
+              </ProtectedRoute>} 
+            />
+            <Route path="/test" element={<TestPage />} />
             <Route
                 path="*"
                 element={<Navigate to="/login" replace/>}
             />
           </Routes>
- 
         </div>
         <Footer />
       </div>
