@@ -196,92 +196,7 @@ const Homepage: FC  = () => {
         onCancel={handleAddCancel}
         footer={[<div className="homepage-add-form-footer"><HeartOutlined /></div>]}
       >
-
-          <WishForm unicCategs={unicCategs} handleAddCancel={handleAddCancel} create={createNewWish}/>
-
-        {/* <Form
-          name="basic"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 16 }}
-          initialValues={{
-             'link': "",
-             'category': unicCategs[0],
-             'desc': "",
-            }}
-          onFinish={onAddFinish}
-          onFinishFailed={onAddFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="Название"
-            name="name"
-            rules={[{ required: true, message: 'Введите название!' }]}
-            >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Ссылка"
-            name="link"
-          >
-            <Input placeholder="" />
-          </Form.Item>
-
-          <Form.Item
-            label="Цена"
-            name="price"
-            rules={[{ required: true, message: 'Введите цену!' }]}
-          >
-            <InputNumber prefix="₽" min="0" style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item
-            label="Изображение"
-            name="img"
-            rules={[{ required: true, message: 'Добавьте изображение!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Radio.Group onChange={onChange} value={value} >
-            <Radio value={1}>Добавить категорию</Radio>
-            <Radio value={2}>Выбрать категорию</Radio>
-          </Radio.Group>
-          <br/><br/>
-
-          {value === 1 && <Form.Item
-            label="Категория"
-            name="category"
-            rules={[{ required: true, message: 'Введите категорию!' }]}
-          >
-            <Input />
-          </Form.Item>}
-
-          {value === 2 && <Form.Item
-            label="Категория"
-            name="category"
-            rules={[{ required: true, message: 'Выберите категорию!' }]}
-          >
-            <Select >
-              {unicCategs.map((sort, index) => {
-                return <Option key={index} value={sort}>{sort}</Option>
-              })}
-            </Select>
-          </Form.Item>}
-
-          <Form.Item
-            label="Описание"
-            name="desc"
-          >
-            <Input placeholder="" />
-          </Form.Item>
-
-          <Form.Item wrapperCol={{ offset: 17, span: 2 }} style={ {marginBottom: 0 }}>
-            <Button type="primary" htmlType="submit">
-              Добавить
-            </Button>
-          </Form.Item>
-        </Form> */}
+        <WishForm unicCategs={unicCategs} handleCancel={handleAddCancel} onFinishFunc={createNewWish} formType={'add'}/>
       </Modal>
 
       {isDBError && 
@@ -293,7 +208,7 @@ const Homepage: FC  = () => {
 
       {(wishesDB.length === 0 && !isDBError) && <p className="homepage-info">Пока записей нет!</p>}
 
-      {(wishesDB.length > 0 && !isDBError) && <CardsList wishesArr={sortedAndFilteredWishes}/>}
+      {(wishesDB.length > 0 && !isDBError) && <CardsList wishesArr={sortedAndFilteredWishes} unicCategs={unicCategs}/>}
 
       {(wishesDB.length > 0 && !isDBError) && <BorderWrapper>
         <span className='card-name'>Итого: </span>

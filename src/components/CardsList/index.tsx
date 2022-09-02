@@ -5,11 +5,7 @@ import { ICardList } from '../../models';
 
 // import './styles.scss';
 
-const CardsList: FC<ICardList> = ({ wishesArr }) => {
-
-  const func = (a: string): void => {
-    console.log(a);
-  }
+const CardsList: FC<ICardList> = ({ wishesArr, unicCategs }) => {
 
   const [checkedWishes, setCheckedWishes] = useState<any>([]);
 
@@ -20,7 +16,7 @@ const CardsList: FC<ICardList> = ({ wishesArr }) => {
   return (
     <section>
         {wishesArr.map((item, index) => 
-            <CardItem key={index} wishItem={item} func={func} />
+            <CardItem key={index} wishItem={item} unicCategs={unicCategs} />
         )}
     </section>
   );

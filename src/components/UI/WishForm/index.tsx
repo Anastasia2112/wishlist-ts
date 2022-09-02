@@ -7,13 +7,15 @@ const { Option } = Select;
 
 interface IWishForm {
     unicCategs : string[],
-    handleAddCancel : () => void,
-    create : (newWish: WishType) => void
+    handleCancel : () => void,
+    onFinishFunc : (newWish: WishType) => void,
+    formType : string,
+    wishItem? : WishType
     // onAddFinish : (values: WishType) => void,
     // onAddFinishFailed : (errorInfo: any) => void
 };
 
-const WishForm = ({ unicCategs, handleAddCancel, create }: IWishForm) => {
+const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}: IWishForm) => {
 
     const { user } = useContext(FirebaseContext) as FirebaseContextType;
 
@@ -21,16 +23,23 @@ const WishForm = ({ unicCategs, handleAddCancel, create }: IWishForm) => {
 
     const createWish = (formData: WishType) => {
         const newWish = {...formData, userId: user?.uid};
-        create(newWish);
+        onFinishFunc(newWish);
         // console.log(newWish);
     };
 
-    const onAddFinish = (values: WishType) => {
-        createWish(values);
-        handleAddCancel();
+    const editWish = (formData: WishType) => {
+        const editWish = {...formData};
+        onFinishFunc(editWish);
+        // console.log(newWish);
     };
 
-    const onAddFinishFailed = (errorInfo: any) => {
+    const onFinish = (values: WishType) => {
+        {formType === 'add' && createWish(values);}
+        {formType === 'edit' && editWish(values);}
+        handleCancel();
+    };
+
+    const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
 
@@ -38,18 +47,39 @@ const WishForm = ({ unicCategs, handleAddCancel, create }: IWishForm) => {
         setValue(e.target.value);
     };
 
+    let initialFormValues;
+    let btnLabel;
+
+    switch (formType) {
+        case 'add':
+            initialFormValues = {
+                'link': "",
+                'category': unicCategs[0],
+                'desc': ""
+            };
+            btnLabel = 'Добавить';
+            break;
+        case 'edit':
+            initialFormValues = {
+                'name': wishItem?.name,
+                'link': wishItem?.link,
+                'price': wishItem?.price,
+                'img': wishItem?.img,
+                'category': wishItem?.category,
+                'desc': wishItem?.desc,
+            };
+            btnLabel = 'Отправить';
+            break;
+    }
+
   return (
     <Form
         name="basic"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 16 }}
-        initialValues={{
-        'link': "",
-        'category': unicCategs[0],
-        'desc': "",
-        }}
-        onFinish={onAddFinish}
-        onFinishFailed={onAddFinishFailed}
+        initialValues={initialFormValues}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
         autoComplete="off"
     >
         <Form.Item
@@ -118,7 +148,7 @@ const WishForm = ({ unicCategs, handleAddCancel, create }: IWishForm) => {
 
         <Form.Item wrapperCol={{ offset: 17, span: 2 }} style={ {marginBottom: 0 }}>
         <Button type="primary" htmlType="submit">
-            Добавить
+            {btnLabel}
         </Button>
         </Form.Item>
     </Form>

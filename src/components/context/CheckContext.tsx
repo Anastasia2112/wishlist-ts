@@ -25,7 +25,7 @@ const CheckContextProvider = ({ children }: CheckContextProviderProps) => {
         } else addCheck(id);
     }
 
-    return <CheckContext.Provider value={{checkedWishes, wishCount, updateCheck}}>{ children }</CheckContext.Provider>
+    return <CheckContext.Provider value={{ checkedWishes, wishCount, updateCheck }}>{ children }</CheckContext.Provider>
 }
 
 export default CheckContextProvider;

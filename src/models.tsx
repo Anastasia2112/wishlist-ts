@@ -11,12 +11,13 @@ export type WishType = {
 }
 
 export interface ICardList {
-    wishesArr : WishType[]
+    wishesArr : WishType[],
+    unicCategs : string[]
 }
 
 export interface ICardItem  { 
     wishItem : WishType,
-    func : (a: string) => void,
+    unicCategs : string[],
     key? : number,
 }
 

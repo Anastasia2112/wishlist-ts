@@ -10,24 +10,26 @@ import { CheckContext } from '../context/CheckContext';
 import { CheckContextType, WishType } from '../../models';
 import { db } from '../../firebase/config';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import WishForm from '../UI/WishForm';
 
 const { confirm } = Modal;
 
-const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
+const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
 
   const { updateCheck } = useContext(CheckContext) as CheckContextType;
   const [visible, setVisible] = useState(false);
-  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);  
 
   // Изменение записи
-  const updateWish = async (id: string, values: WishType) => {
-    console.log('id: ', id);
-    console.log('values: ', values);
-    const wishDoc = doc(db, "wishes", id);
-    await updateDoc(wishDoc, values)
+  const updateWish = async (editWish: WishType) => {
+    console.log('id: ', wishItem.id);
+    console.log('values: ', editWish);
+    const wishDoc = doc(db, "wishes", wishItem.id);
+    await updateDoc(wishDoc, editWish)
       .then(message.success('Желание изменено!'))
       .catch(message.error('Ошибка при изменении записи.'))
   }
+
 
   // Удаление записи
   const deleteWish = async (id: string) => {
@@ -58,15 +60,6 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
 
   const handleUpdateCancel = () => {
     setIsUpdateModalVisible(false);
-  };
-
-  const onUpdateFinish = (values: WishType) => {
-    updateWish(wishItem.id ,values);
-    handleUpdateCancel();
-  };
-
-  const onUpdateFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
   };
 
   // Предупреждение об удалении
@@ -134,74 +127,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, func }) => {
         onCancel={handleUpdateCancel}
         footer={[<div className="homepage-add-form-footer"><HeartOutlined /></div>]}
       >
-        <Form
-          name="basic"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 16 }}
-          initialValues={{
-            'name': wishItem.name,
-            'link': wishItem.link,
-            'price': wishItem.price,
-            'img': wishItem.img,
-            'category': wishItem.category,
-            'desc': wishItem.desc,
-          }}
-          onFinish={onUpdateFinish}
-          onFinishFailed={onUpdateFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="Название"
-            name="name"
-            rules={[{ required: true, message: 'Введите название!' }]}
-            >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Ссылка"
-            name="link"
-          >
-            <Input placeholder="" />
-          </Form.Item>
-
-          <Form.Item
-            label="Цена"
-            name="price"
-            rules={[{ required: true, message: 'Введите цену!' }]}
-          >
-            <InputNumber prefix="₽" min="0" style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item
-            label="Изображение"
-            name="img"
-            rules={[{ required: true, message: 'Добавьте изображение!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Категория"
-            name="category"
-            rules={[{ required: true, message: 'Введите категорию!' }]}
-          >
-            <Input />
-          </Form.Item>
-          
-          <Form.Item
-            label="Описание"
-            name="desc"
-          >
-            <Input placeholder="" />
-          </Form.Item>
-
-          <Form.Item wrapperCol={{ offset: 17, span: 2 }} style={{marginBottom: 0}}>
-            <Button type="primary" htmlType="submit">
-              Отправить
-            </Button>
-          </Form.Item>
-        </Form>
+        <WishForm unicCategs={unicCategs} handleCancel={handleUpdateCancel} onFinishFunc={updateWish} formType={'edit'} wishItem={wishItem}/>
       </Modal>
 
     </BorderWrapper>
