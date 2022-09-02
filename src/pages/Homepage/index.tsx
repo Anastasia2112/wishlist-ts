@@ -11,6 +11,7 @@ import { CheckContextType } from '../../models';
 import { db } from '../../firebase/config';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
+import WishForm from '../../components/UI/WishForm';
 
 import './styles.scss';
 
@@ -51,15 +52,21 @@ const Homepage: FC  = () => {
     getWishesFromDB()
   }, [wishesCollectionRef]);
 
-  // Создание новой записи
-  const createWish = async (formData: WishType) => {
-    let newWish = {...formData, userId: user?.uid};
+  // Создание записи из формы
+  const createNewWish = (newWish: WishType) => {
     console.log(newWish);
     
-    // await addDoc(wishesCollectionRef, newWish)
-    //   .then(message.success('Желание добавлено!'))
-    //   .catch(message.error('Ошибка при добавлении записи.'))
-  };
+  }
+
+  // Создание новой записи
+  // const createWish = async (formData: WishType) => {
+  //   let newWish = {...formData, userId: user?.uid};
+  //   console.log(newWish);
+    
+  //   // await addDoc(wishesCollectionRef, newWish)
+  //   //   .then(message.success('Желание добавлено!'))
+  //   //   .catch(message.error('Ошибка при добавлении записи.'))
+  // };
 
   // Удаление записи
   const deleteWish = async (id: string) => {
@@ -138,14 +145,14 @@ const Homepage: FC  = () => {
     setIsAddModalVisible(false);
   };
 
-  const onAddFinish = (values: WishType) => {
-    createWish(values);
-    handleAddCancel();
-  };
+  // const onAddFinish = (values: WishType) => {
+  //   createWish(values);
+  //   handleAddCancel();
+  // };
 
-  const onAddFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
+  // const onAddFinishFailed = (errorInfo: any) => {
+  //   console.log('Failed:', errorInfo);
+  // };
 
   const showDeleteCheckedConfirm = () => {
     confirm({
@@ -163,11 +170,11 @@ const Homepage: FC  = () => {
   };
 
   // radio category
-  const [value, setValue] = useState(1);
+  // const [value, setValue] = useState(1);
 
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
-  };
+  // const onChange = (e: RadioChangeEvent) => {
+  //   setValue(e.target.value);
+  // };
 
   // select category in add form
   const handleChange = (value: string) => {
@@ -213,7 +220,10 @@ const Homepage: FC  = () => {
         onCancel={handleAddCancel}
         footer={[<div className="homepage-add-form-footer"><HeartOutlined /></div>]}
       >
-        <Form
+
+          <WishForm unicCategs={unicCategs} handleAddCancel={handleAddCancel} create={createNewWish}/>
+
+        {/* <Form
           name="basic"
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 16 }}
@@ -295,7 +305,7 @@ const Homepage: FC  = () => {
               Добавить
             </Button>
           </Form.Item>
-        </Form>
+        </Form> */}
       </Modal>
 
       {isDBError && 

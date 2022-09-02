@@ -9,7 +9,7 @@ import styles from './BorderWrapper.module.scss';
 interface ICardWrapper {
   children: ReactNode,
   clName?: string
-}
+};
 
 const BorderWrapper = ({ children, clName }: ICardWrapper) => (
   <div className={styles.cardWrapper + ' ' + clName}>
