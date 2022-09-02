@@ -53,12 +53,12 @@ const Homepage: FC  = () => {
 
   // Создание новой записи
   const createWish = async (formData: WishType) => {
-    let newWish = {...formData, userId: user?.uid, category: formCategory};
-    // console.log(newWish);
+    let newWish = {...formData, userId: user?.uid};
+    console.log(newWish);
     
-    await addDoc(wishesCollectionRef, newWish)
-      .then(message.success('Желание добавлено!'))
-      .catch(message.error('Ошибка при добавлении записи.'))
+    // await addDoc(wishesCollectionRef, newWish)
+    //   .then(message.success('Желание добавлено!'))
+    //   .catch(message.error('Ошибка при добавлении записи.'))
   };
 
   // Удаление записи
@@ -140,7 +140,6 @@ const Homepage: FC  = () => {
 
   const onAddFinish = (values: WishType) => {
     createWish(values);
-    
     handleAddCancel();
   };
 
@@ -220,6 +219,7 @@ const Homepage: FC  = () => {
           wrapperCol={{ span: 16 }}
           initialValues={{
              'link': "",
+             'category': unicCategs[0],
              'desc': "",
             }}
           onFinish={onAddFinish}
@@ -257,30 +257,31 @@ const Homepage: FC  = () => {
             <Input />
           </Form.Item>
 
-          <Form.Item
+          <Radio.Group onChange={onChange} value={value} >
+            <Radio value={1}>Добавить категорию</Radio>
+            <Radio value={2}>Выбрать категорию</Radio>
+          </Radio.Group>
+          <br/><br/>
+
+          {value === 1 && <Form.Item
             label="Категория"
+            name="category"
             rules={[{ required: true, message: 'Введите категорию!' }]}
           >
-            <br/>
-            <Radio.Group onChange={onChange} value={value}>
-              <Space direction="vertical">
-                <Radio value={1}>
-                  Выбрать 
-                  {value === 1 &&
-                      <Select onChange={handleChange} style={{ width: 160, marginLeft: 18 }}  >
-                        {unicCategs.map((sort, index) => {
-                          return <Option key={index} value={sort}>{sort}</Option>
-                        })}
-                      </Select>
-                  }
-                </Radio>
-                <Radio value={2}>
-                  Добавить 
-                  {value === 2 ? <Input onChange={(e) => inputChange(e.target.value)} style={{ width: 160, marginLeft: 12 }} defaultValue={'Категория'}/> : null}
-                </Radio>
-              </Space>
-            </Radio.Group>
-          </Form.Item>
+            <Input />
+          </Form.Item>}
+
+          {value === 2 && <Form.Item
+            label="Категория"
+            name="category"
+            rules={[{ required: true, message: 'Выберите категорию!' }]}
+          >
+            <Select >
+              {unicCategs.map((sort, index) => {
+                return <Option key={index} value={sort}>{sort}</Option>
+              })}
+            </Select>
+          </Form.Item>}
 
           <Form.Item
             label="Описание"
