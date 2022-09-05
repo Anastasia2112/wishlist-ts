@@ -1,10 +1,10 @@
 {
     "wishes" : [
-        { "id": "1", "name": "Беспроводной пылесос Tefal Air Force 360 Flex TY9471WO", "link": "https://shop.tefal.ru/product/pylesosy/besprovodnye-pylesosy/besprovodnoy-pylesos-tefal-air-force-360-flex-pro-ty9471", "price": 18999, "img": "допустим, картинка", "category": "Техника", "desc": "Можно будет докупить моющую насадку", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1" },
-        { "id": "2", "name": "Кроссовки", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 5000, "img": "допустим, картинка", "category": "Обувь", "desc": "Беговые для танцев", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1" },
-        { "id": "3", "name": "Машина", "link": "", "price": 350000, "img": "допустим, картинка", "category": "Авто", "desc": "Мазда 3/6", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1" },
-        { "id": "4", "name": "Ботинки", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 4000, "img": "допустим, картинка", "category": "Обувь", "desc": "На осень", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1" },
-        { "id": "5", "name": "Мультипекарь", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 8000, "img": "допустим, картинка", "category": "Техника", "desc": "Вафельница + гриль", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1" }
+        { "id": "1", "name": "Беспроводной пылесос Tefal Air Force 360 Flex TY9471WO", "link": "https://shop.tefal.ru/product/pylesosy/besprovodnye-pylesosy/besprovodnoy-pylesos-tefal-air-force-360-flex-pro-ty9471", "price": 18999, "img": "допустим, картинка", "category": "Техника", "desc": "Можно будет докупить моющую насадку", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1", "isCompleted": false },
+        { "id": "2", "name": "Кроссовки", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 5000, "img": "допустим, картинка", "category": "Обувь", "desc": "Беговые для танцев", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1", "isCompleted": false },
+        { "id": "3", "name": "Машина", "link": "", "price": 350000, "img": "допустим, картинка", "category": "Авто", "desc": "Мазда 3/6", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1", "isCompleted": false },
+        { "id": "4", "name": "Ботинки", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 4000, "img": "допустим, картинка", "category": "Обувь", "desc": "На осень", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1", "isCompleted": false },
+        { "id": "5", "name": "Мультипекарь", "link": "https://stackoverflow.com/questions/44439205/cant-resolve-module-not-found-in-react-js", "price": 8000, "img": "допустим, картинка", "category": "Техника", "desc": "Вафельница + гриль", "userId": "QXAhZjujmsVD64i6dShYbqlsEwu1", "isCompleted": true }
     ],
 
     "categories" : [

@@ -1,8 +1,8 @@
 import { FC, useContext, useState } from 'react';
 
-import { Button, Checkbox, Modal, Space, Tooltip, Form, Input, message, InputNumber } from 'antd';
-import { EditOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { ICardItem } from '../../models';
+import { Button, Checkbox, Modal, Space, Tooltip, message } from 'antd';
+import { EditOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { FirebaseContextType, ICardItem } from '../../models';
 import BorderWrapper from '../UI/BorderWrapper';
 import './styles.scss';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -11,34 +11,35 @@ import { CheckContextType, WishType } from '../../models';
 import { db } from '../../firebase/config';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import WishForm from '../UI/WishForm';
+import { FirebaseContext } from '../context/FirebaseContext';
 
 const { confirm } = Modal;
 
 const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
 
   const { updateCheck } = useContext(CheckContext) as CheckContextType;
+  const { deleteWish, updateWish } = useContext(FirebaseContext) as FirebaseContextType;
   const [visible, setVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);  
 
   // Изменение записи
-  const updateWish = async (editWish: WishType) => {
-    console.log('id: ', wishItem.id);
-    console.log('values: ', editWish);
-    const wishDoc = doc(db, "wishes", wishItem.id);
-    await updateDoc(wishDoc, editWish)
-      .then(message.success('Желание изменено!'))
-      .catch(message.error('Ошибка при изменении записи.'))
-  }
-
+  // const updateWish = async (editWish: WishType, id: string) => {
+  //   console.log('id: ', id);
+  //   console.log('values: ', editWish);
+  //   const wishDoc = doc(db, "wishes", id);
+  //   await updateDoc(wishDoc, editWish)
+  //     .then(message.success('Желание изменено!'))
+  //     .catch(message.error('Ошибка при изменении записи.'))
+  // }
 
   // Удаление записи
-  const deleteWish = async (id: string) => {
-    console.log(`Удолить ${id}`);
-    const wishDoc = doc(db, "wishes", id);
-    await deleteDoc(wishDoc)
-      .then(message.success('Желание удалено!'))
-      .catch(message.error('Ошибка при удалении записи.'))
-  }
+  // const deleteWish = async (id: string) => {
+  //   console.log(`Удолить ${id}`);
+  //   const wishDoc = doc(db, "wishes", id);
+  //   await deleteDoc(wishDoc)
+  //     .then(message.success('Желание удалено!'))
+  //     .catch(message.error('Ошибка при удалении записи.'))
+  // }
 
   // Для окна с подробной информацией
   const showModal = () => {
@@ -90,15 +91,25 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
           </div>
         </div>
         <div className='card-price-and-btns'>
-          <div  className='card-price-and-check'>
+          {wishItem.isCompleted
+          ?
             <span className='card-price'>{wishItem.price} ₽</span>
-            <Checkbox className='card-check' onChange={(e) => onChange(e, wishItem.id)}></Checkbox>
-          </div>
+          :
+            <div  className='card-price-and-check'>
+              <span className='card-price'>{wishItem.price} ₽</span>
+              <Checkbox className='card-check' onChange={(e) => onChange(e, wishItem.id)}></Checkbox>
+            </div>}
           <div className='card-btns'>
             <Space>
-              <Tooltip title="Изменить">
+              {wishItem.isCompleted && <Tooltip title="Убрать из архива">
+                <Button className='card-btn-delete' icon={<CloseOutlined />} onClick={() => console.log('из архива')}/>
+              </Tooltip>}
+              {!wishItem.isCompleted && <Tooltip title="В архив">
+                <Button className='card-btn-complete' icon={<CheckOutlined />} onClick={() => console.log('в архив')}/>
+              </Tooltip>}
+              {!wishItem.isCompleted && <Tooltip title="Изменить">
                 <Button icon={<EditOutlined />} onClick={showUpdateModal}/>
-              </Tooltip>
+              </Tooltip>}
               <Tooltip title="Удалить">
                 <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={showDeleteConfirm}/>
               </Tooltip>
@@ -127,7 +138,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
         onCancel={handleUpdateCancel}
         footer={[<div className="homepage-add-form-footer"><HeartOutlined /></div>]}
       >
-        <WishForm unicCategs={unicCategs} handleCancel={handleUpdateCancel} onFinishFunc={updateWish} formType={'edit'} wishItem={wishItem}/>
+        <WishForm unicCategs={unicCategs} handleCancel={handleUpdateCancel} onFinishFunc={(e) => updateWish(e, wishItem.id)} formType={'edit'} wishItem={wishItem}/>
       </Modal>
 
     </BorderWrapper>

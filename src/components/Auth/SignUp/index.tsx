@@ -42,7 +42,7 @@ const SignIn: FC = () => {
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, message: 'Пожалуйста, введите email!' }]}
+                    rules={[{ required: true, message: 'Пожалуйста, введите email!', type: "email" }]}
                 >
                     <Input />
                 </Form.Item>

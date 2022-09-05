@@ -1,11 +1,14 @@
 import { ReactNode, createContext, useState } from 'react';
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from 'firebase/auth';
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, updateDoc, deleteDoc, doc, collection, addDoc } from "firebase/firestore";
 import { config } from '../../firebase/config';
 import { initializeApp } from 'firebase/app';
 import { FirebaseContextType } from '../../models';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../../firebase/config';
+import { message } from 'antd';
+import { WishType } from '../../models';
 
 type FirebaseContextProviderProps = {
     children: ReactNode
@@ -19,6 +22,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
     const firestore = getFirestore(app);
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
+    const [authError, setAuthError] = useState<boolean>(false);
 
     const signInWithGoogle = () => {
         signInWithPopup(auth, new GoogleAuthProvider())        
@@ -51,6 +55,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
             })
             .catch((error) => {
                 console.log(error.message);
+                setAuthError(true);
             });
     }
 
@@ -58,7 +63,24 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         signOut(auth);
     };
 
-    return <FirebaseContext.Provider value={{ auth, firestore, user, signInWithGoogle, createUser, signIn, logout }}>
+    const updateWish = async (editWish: WishType, id: string) => {
+        console.log('id: ', id);
+        console.log('values: ', editWish);
+        const wishDoc = doc(db, "wishes", id);
+        await updateDoc(wishDoc, editWish)
+          .then(message.success('Желание изменено!'))
+          .catch(message.error('Ошибка при изменении записи.'))
+    }
+
+    const deleteWish = async (id: string) => {
+        console.log(`Удолить ${id}`);
+        const wishDoc = doc(db, "wishes", id);
+        await deleteDoc(wishDoc)
+          .then(message.success('Желание удалено!'))
+          .catch(message.error('Ошибка при удалении записи.'))
+    }
+
+    return <FirebaseContext.Provider value={{ auth, firestore, user, signInWithGoogle, createUser, signIn, logout, authError, deleteWish, updateWish }}>
         { children }
     </FirebaseContext.Provider>
 }

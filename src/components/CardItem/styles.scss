@@ -86,6 +86,11 @@
     white-space: nowrap;
 }
 
+.card-btn-complete:hover {
+    color: #73d13d !important;
+    border-color: #73d13d !important;
+}
+
 .card-btn-delete:hover {
     color: #ff4d4f !important;
     border-color: #ff4d4f !important;
@@ -147,9 +152,7 @@
     }
 
     .card-price-and-check {
-
         grid-template-columns: auto 56px;
-
     }
 
     .card-btns {
@@ -227,8 +230,13 @@
     .card-link {
         font-size: 1.2rem;
     }
+}
 
+@media (max-width: 350px) {
+    .card-price-and-check {
+        grid-template-columns: auto 24px;
+    }
     .card-price {
-        font-size: 2.4rem;
+        font-size: 2rem;
     }
 }

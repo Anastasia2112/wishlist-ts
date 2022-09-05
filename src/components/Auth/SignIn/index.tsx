@@ -1,18 +1,20 @@
 import { FC, useState, useContext } from 'react';
 import { Link } from "react-router-dom";
 
-import { Button, Checkbox, Form, Input, Divider } from 'antd';
+import { Button, Checkbox, Form, Input, Divider, Typography } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import './styles.scss';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { FirebaseContext } from '../../context/FirebaseContext';
 import { FirebaseContextType, AuthFormValues } from '../../../models';
 
+const { Text } = Typography;
+
 const SignIn: FC = () => {
 
-
     // const auth = getAuth();
-    const { signInWithGoogle, signIn } = useContext(FirebaseContext) as FirebaseContextType;
+    const { signInWithGoogle, signIn, authError } = useContext(FirebaseContext) as FirebaseContextType;
+    
 
     const handleSignInWithGoogle = async () => {
         try {
@@ -37,8 +39,11 @@ const SignIn: FC = () => {
     };
     
     const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
+        console.log('Faile:', errorInfo);
     };
+
+    console.log(authError);
+    
     
     return (
         <section className='signin-wrap' >
@@ -50,10 +55,11 @@ const SignIn: FC = () => {
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
+                {authError && <p><Text type="danger">Неверный логин или пароль!</Text></p>}
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, message: 'Пожалуйста, введите email!' }]}
+                    rules={[{ required: true, message: 'Пожалуйста, введите email!', type: "email" }]}
                 >
                     <Input />
                 </Form.Item>

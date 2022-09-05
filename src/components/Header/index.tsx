@@ -1,7 +1,7 @@
 
 import { FC, useContext, useState } from 'react';
 import { Button, Space, Menu, Dropdown, message } from 'antd';
-import { MenuOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { MenuOutlined, UserOutlined, LogoutOutlined, CheckSquareOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from 'firebase/auth';
@@ -20,12 +20,13 @@ const Header: FC = () => {
   const onClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
       case '1':
-        message.info(`Ссылка перейти в профиль`);
+        message.info(`Ссылка: перейти в профиль`);
         break;
-  
       case '2':
+        navigate('/archive');
+        break;
+      case '3':
         logout();
-        localStorage.removeItem('user');
         navigate('/login');
         break;
     }
@@ -41,8 +42,13 @@ const Header: FC = () => {
           icon: <UserOutlined />,
         },
         {
-          label: 'Выйти',
+          label: 'Архив',
           key: '2',
+          icon: <CheckSquareOutlined />,
+        },
+        {
+          label: 'Выйти',
+          key: '3',
           icon: <LogoutOutlined />,
         },
       ]}

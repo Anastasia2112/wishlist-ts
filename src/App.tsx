@@ -6,7 +6,7 @@ import Homepage from './pages/Homepage';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Footer from './components/Footer';
-import TestPage from '../src/pages/TestPage';
+import TestPage from './pages/TestPage';
 import './default.scss';
 import logo from './logo.svg';
 import { FirebaseContext } from '../src/components/context/FirebaseContext';
@@ -15,6 +15,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { FirebaseContextType } from './models';
 import Loader from './components/Loader';
 import ProtectedRoute from './components/ProtectedRoute';
+import Archive from './pages/Archive';
 
 const App: FC = () => {
 
@@ -38,10 +39,15 @@ const App: FC = () => {
                 </CheckContextProvider> 
               </ProtectedRoute>} 
             />
+            <Route path="/archive" element={
+              <ProtectedRoute>
+                <Archive />
+              </ProtectedRoute>} 
+            />
             <Route path="/test" element={<TestPage />} />
             <Route
                 path="*"
-                element={<Navigate to="/login" replace/>}
+                element={<Navigate to="/" replace/>}
             />
           </Routes>
         </div>

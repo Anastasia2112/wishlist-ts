@@ -7,7 +7,8 @@ export type WishType = {
     img: string,
     category: string,
     desc?: string,
-    userId: string
+    userId: string,
+    isCompleted: boolean
 }
 
 export interface ICardList {
@@ -28,7 +29,10 @@ export type FirebaseContextType = {
     signInWithGoogle : () => void,
     logout : () => void,
     createUser : (email: string, password: string) => void,
-    signIn : (email: string, password: string) => void
+    signIn : (email: string, password: string) => void,
+    authError: boolean,
+    deleteWish : (id: string) => void,
+    updateWish : (editWish: WishType, id: string) => void
 }
 
 export type CheckContextType = {
