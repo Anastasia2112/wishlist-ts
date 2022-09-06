@@ -4,7 +4,7 @@ export type WishType = {
     name: string,
     link?: string,
     price: number,
-    img: string,
+    img?: string,
     category: string,
     desc?: string,
     userId: string,

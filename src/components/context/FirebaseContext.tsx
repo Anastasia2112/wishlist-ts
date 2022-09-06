@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from 'react';
+import { ReactNode, createContext, useState, useEffect } from 'react';
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from 'firebase/auth';
 import { getFirestore, updateDoc, deleteDoc, doc, collection, addDoc } from "firebase/firestore";
 import { config } from '../../firebase/config';
@@ -21,13 +21,23 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
     const auth = getAuth();
     const firestore = getFirestore(app);
     const [user] = useAuthState(auth);
+    // const [user, setUser] = useState<any>(null);
     const navigate = useNavigate();
     const [authError, setAuthError] = useState<boolean>(false);
+
+    // useEffect(() => {
+    //     if (localStorage.getItem("user")) {
+    //         setUser(JSON.parse(localStorage.getItem("user")))
+    //     } else {
+    //         setUser(null);
+    //     }
+    // }, [localStorage.getItem("user")])
 
     const signInWithGoogle = () => {
         signInWithPopup(auth, new GoogleAuthProvider())        
             .then(response => {
                 console.log(response.user);
+                localStorage.setItem("user", JSON.stringify(response.user))
                 navigate('/');
             })
             .catch(error => {
@@ -40,6 +50,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         createUserWithEmailAndPassword(auth, email, password)
             .then(response => {
                 console.log(response.user);
+                localStorage.setItem("user", JSON.stringify(response.user));
                 navigate('/');
             })
             .catch(error => {
@@ -51,6 +62,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 console.log(userCredential.user);
+                localStorage.setItem("user", JSON.stringify(userCredential.user));
                 navigate('/');
             })
             .catch((error) => {
@@ -61,6 +73,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
 
     const logout = () => {
         signOut(auth);
+        localStorage.removeItem("user");
     };
 
     const updateWish = async (editWish: WishType, id: string) => {

@@ -83,7 +83,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
     <BorderWrapper clName={'cardHeight'}>
       <div className='card-wrapper'>
         <div className='card-img-and-text'>
-          <div className='card-img' onClick={showModal}></div>
+          <div className='card-img' onClick={showModal}>{wishItem.img}</div>
           <div className='card-info'>
               <span className='card-name' onClick={showModal}>{wishItem.name}</span>
               <a className='card-link' href={wishItem.link} target="_blank" rel="noreferrer">{wishItem.link}</a>

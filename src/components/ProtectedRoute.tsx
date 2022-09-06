@@ -10,12 +10,8 @@ interface IProtectedRoute {
 const ProtectedRoute: any = ({ children }: IProtectedRoute) => {
 
   const { user } = useContext(FirebaseContext) as FirebaseContextType;
-
-  if (!user) {
-    return <Navigate to='/login' />
-  }
-
-  return children;
+  
+  return user ? children : <Navigate to='/login' />;
 }
 
 export default ProtectedRoute;

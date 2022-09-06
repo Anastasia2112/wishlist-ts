@@ -22,9 +22,9 @@ const Homepage: FC  = () => {
 
   const { user, deleteWish, updateWish } = useContext(FirebaseContext) as FirebaseContextType;
 
-  // const [wishesDB, setWishesDB] = useState<WishType[]>([]);
+  const [wishesDB, setWishesDB] = useState<WishType[]>([]);
   const [fromDB, setFromDB] = useState<any>();
-  const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
+  // const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
   const [isDBError, setIsDBError] = useState<boolean>(false);
   const wishesCollectionRef = collection(db, "wishes");
   const [formCategory, setFormCategory] = useState<any>();
@@ -38,49 +38,40 @@ const Homepage: FC  = () => {
   }
 
   // Получение записей из БД
-  const getWishes = async () => {
-    // try {
-    //   const data = await getDocs(wishesCollectionRef)
-    //   const arr = data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType);
-    //   const filteredArr = arr.filter(wish => wish.userId === user?.uid);
-    //   setWishesDB(filteredArr);
+  // const getWishes = async () => {
+  //   try {
+  //     const data = await getDocs(wishesCollectionRef)
+  //     const arr = data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType);
+  //     const filteredArr = arr.filter(wish => wish.userId === user?.uid);
+  //     setWishesDB(filteredArr);
       
-    //   setIsDBError(false);
-    // } catch (error) {
-    //   message.error(`Ошибка загрузки данных. ${error}`)
-    //   console.log(error);
-    //   setIsDBError(true);
-    // }
-    console.log('вызвана getWishes()');
-  };
+  //     setIsDBError(false);
+  //   } catch (error) {
+  //     message.error(`Ошибка загрузки данных. ${error}`)
+  //     console.log(error);
+  //     setIsDBError(true);
+  //   }
+  //   console.log('вызвана getWishes()');
+  // };
 
-  useEffect(() => { 
-    getWishes();
-  }, [deleteWish, updateWish, createNewWish]);
+  // useEffect(() => { 
+  //   getWishes();
+  // }, [deleteWish, updateWish, createNewWish]);
 
   // как в видео
-  // useEffect(() => {
-  //   const q = query(collection(db, "wishes"));
-  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //     let wishesArray: WishType[] = [];
-  //     querySnapshot.forEach((doc) => {
-  //       wishesArray.push({...doc.data(), id: doc.id} as WishType)
-  //     });
-  //     const filteredArr = wishesArray.filter(wish => wish.userId === user?.uid);
-  //     setWishesDB(filteredArr);
-  //     console.log('unsubscribe() function worked');
-  //   })
-  //   return () => unsubscribe()
-  // }, [])
-
-  // Удаление записи
-  // const deleteWish = async (id: string) => {
-  //   console.log(`Удолить ${id}`);
-  //   const wishDoc = doc(db, "wishes", id);
-  //   await deleteDoc(wishDoc)
-  //     .then(message.success('Желание удалено!'))
-  //     .catch(message.error('Ошибка при удалении записи.'))
-  // }
+  useEffect(() => {
+    const q = query(collection(db, "wishes"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let wishesArray: WishType[] = [];
+      querySnapshot.forEach((doc) => {
+        wishesArray.push({...doc.data(), id: doc.id} as WishType)
+      });
+      const filteredArr = wishesArray.filter(wish => wish.userId === user?.uid);
+      setWishesDB(filteredArr);
+      console.log('unsubscribe() function worked');
+    })
+    return () => unsubscribe()
+  }, [])
 
   // Удаление выбранных записей
   const deleteCheckedWishes = (arrOfCheched: string[]) => {

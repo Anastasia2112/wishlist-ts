@@ -1,7 +1,13 @@
-import { Button, Form, Input, InputNumber, Radio, RadioChangeEvent, Select } from 'antd';
-import { useContext, useState } from 'react';
+import { Button, Form, Input, InputNumber, Radio, RadioChangeEvent, Select, Upload } from 'antd';
+import { useContext, useEffect, useState } from 'react';
 import { FirebaseContextType, WishType } from '../../../models';
 import { FirebaseContext } from '../../context/FirebaseContext';
+import { PlusOutlined } from '@ant-design/icons';
+import ImgCrop from 'antd-img-crop';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import { storage } from '../../../firebase/config';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { v4 } from 'uuid';
 
 const { Option } = Select;
 
@@ -20,22 +26,57 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
     const { user } = useContext(FirebaseContext) as FirebaseContextType;
 
     const [value, setValue] = useState(1);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [file, setFile] = useState<any>();
+    const [imgURL, setImgURL] = useState<string>();
 
     const createWish = (formData: WishType) => {
-        const newWish = {...formData, userId: user?.uid};
+        const newWish = {...formData, userId: user?.uid, img: imgURL};
         onFinishFunc(newWish);
-        // console.log(newWish);
+        console.log(newWish);
     };
 
     const editWish = (formData: WishType) => {
         const editWish = {...formData};
         onFinishFunc(editWish);
-        // console.log(newWish);
     };
+
+    useEffect(() => {
+        const uploadImage = () => {
+            // if (fileList.length === 0) return;
+            const storageRef = ref(storage, `images/${fileList[0].name + v4()}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+    
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                }, 
+                (error) => {
+                    console.log(error);
+                }, 
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        setImgURL(downloadURL);
+                    });
+                }
+            );
+        };
+        file && uploadImage()
+    }, [file])
 
     const onFinish = (values: WishType) => {
         {formType === 'add' && createWish(values);}
         {formType === 'edit' && editWish(values);}
+        console.log(values);
         handleCancel();
     };
 
@@ -64,13 +105,34 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
                 'name': wishItem?.name,
                 'link': wishItem?.link,
                 'price': wishItem?.price,
-                'img': wishItem?.img,
+                // 'img': wishItem?.img,
                 'category': wishItem?.category,
                 'desc': wishItem?.desc,
             };
             btnLabel = 'Отправить';
             break;
     }
+
+    // Для поля загрузки изображения
+    const onChangeUpload: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+        setFileList(newFileList);
+        setFile(newFileList[0].originFileObj);
+    };
+
+    const onPreview = async (file: UploadFile) => {
+        let src = file.url as string;
+        if (!src) {
+            src = await new Promise(resolve => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file.originFileObj as RcFile);
+            reader.onload = () => resolve(reader.result as string);
+            });
+        }
+        const image = new Image();
+        image.src = src;
+        const imgWindow = window.open(src);
+        imgWindow?.document.write(image.outerHTML);
+    };
 
   return (
     <Form
@@ -83,34 +145,48 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         autoComplete="off"
     >
         <Form.Item
-        label="Название"
-        name="name"
-        rules={[{ required: true, message: 'Введите название!' }]}
+            label="Название"
+            name="name"
+            rules={[{ required: true, message: 'Введите название!' }]}
         >
-        <Input />
+            <Input />
         </Form.Item>
 
         <Form.Item
-        label="Ссылка"
-        name="link"
+            label="Ссылка"
+            name="link"
         >
-        <Input placeholder="" />
+            <Input placeholder="" />
         </Form.Item>
 
         <Form.Item
-        label="Цена"
-        name="price"
-        rules={[{ required: true, message: 'Введите цену!' }]}
+            label="Цена"
+            name="price"
+            rules={[{ required: true, message: 'Введите цену!' }]}
         >
-        <InputNumber prefix="₽" min="0" style={{ width: '100%' }} />
+            <InputNumber prefix="₽" min="0" style={{ width: '100%' }} />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
         label="Изображение"
         name="img"
         rules={[{ required: true, message: 'Добавьте изображение!' }]}
         >
         <Input />
+        </Form.Item> */}
+
+        <Form.Item label="Upload" valuePropName="fileList">
+            <ImgCrop rotate>
+                <Upload
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    listType="picture-card"
+                    fileList={fileList}
+                    onChange={onChangeUpload}
+                    onPreview={onPreview}
+                >
+                    {fileList.length < 1 && '+ Upload'}
+                </Upload>
+            </ImgCrop>
         </Form.Item>
 
         <Radio.Group onChange={onChange} value={value} >

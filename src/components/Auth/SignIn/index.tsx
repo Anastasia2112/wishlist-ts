@@ -55,7 +55,7 @@ const SignIn: FC = () => {
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
-                {authError && <p><Text type="danger">Неверный логин или пароль!</Text></p>}
+                {authError && <p><Text type="danger">Неверный email или пароль!</Text></p>}
                 <Form.Item
                     label="Email"
                     name="email"
