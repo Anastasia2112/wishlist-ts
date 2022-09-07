@@ -30,8 +30,6 @@ const App: FC = () => {
         <Header />
         <div className="main">
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/registration" element={<Registration />} />
             <Route path="/" element={
               <ProtectedRoute>
                 <CheckContextProvider >
@@ -39,6 +37,8 @@ const App: FC = () => {
                 </CheckContextProvider> 
               </ProtectedRoute>} 
             />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registration" element={<Registration />} />
             <Route path="/archive" element={
               <ProtectedRoute>
                 <Archive />

@@ -12,6 +12,7 @@ import { db } from '../../firebase/config';
 import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, QuerySnapshot } from 'firebase/firestore';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
 import WishForm from '../../components/UI/WishForm';
+import Loader from '../../components/Loader';
 
 import './styles.scss';
 
@@ -28,6 +29,7 @@ const Homepage: FC  = () => {
   const [isDBError, setIsDBError] = useState<boolean>(false);
   const wishesCollectionRef = collection(db, "wishes");
   const [formCategory, setFormCategory] = useState<any>();
+  const [isWishesLoading, setIsWishesLoading] = useState<boolean>(false);
 
   // Создание записи с данными из формы
   const createNewWish = async (newWish: WishType) => {
@@ -60,6 +62,7 @@ const Homepage: FC  = () => {
 
   // как в видео
   useEffect(() => {
+    setIsWishesLoading(true);
     const q = query(collection(db, "wishes"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let wishesArray: WishType[] = [];
@@ -69,6 +72,7 @@ const Homepage: FC  = () => {
       const filteredArr = wishesArray.filter(wish => wish.userId === user?.uid);
       setWishesDB(filteredArr);
       console.log('unsubscribe() function worked');
+      setIsWishesLoading(false);
     })
     return () => unsubscribe()
   }, [])
@@ -158,6 +162,7 @@ const Homepage: FC  = () => {
 
   return (
     <section className='homepage'>
+      {isWishesLoading && <Loader />}
       <div className='homepage-nav'>
         <div className='homepage-nav-selects'>
           {(wishesDB.length > 0 && !isDBError ) && <Select className='homepage-nav-select' onChange={filter => setSelectedFilter(filter)} placeholder="Категория" style={{ width: 160 }} allowClear >
@@ -172,8 +177,8 @@ const Homepage: FC  = () => {
           </Select>}
         </div>
         <div className='homepage-nav-btns'>
-          {(wishesDB.length === 0 && !isDBError) && <span className='homepage-nav-btns-info'>Добавьте желание:</span>}
-          {!isDBError && <Tooltip title="Добавить желание">
+          {(wishesDB.length === 0 && !isDBError && !isWishesLoading) && <span className='homepage-nav-btns-info'>Добавьте желание:</span>}
+          {(!isDBError && !isWishesLoading) && <Tooltip title="Добавить желание">
             <Button className='homepage-nav-btn' icon={<PlusOutlined />} onClick={showAddModal} ></Button>
           </Tooltip>}
           { wishCount > 0 && 
@@ -200,7 +205,7 @@ const Homepage: FC  = () => {
         />
       }
 
-      {(wishesDB.length === 0 && !isDBError) && <p className="homepage-info">Пока записей нет!</p>}
+      {(wishesDB.length === 0 && !isDBError && !isWishesLoading) && <p className="homepage-info">Пока записей нет!</p>}
 
       {(wishesDB.length > 0 && !isDBError) && <CardsList wishesArr={sortedAndFilteredWishes} unicCategs={unicCategs}/>}
 

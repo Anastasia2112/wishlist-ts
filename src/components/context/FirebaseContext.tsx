@@ -21,24 +21,32 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
     const auth = getAuth();
     const firestore = getFirestore(app);
     const [user] = useAuthState(auth);
-    // const [user, setUser] = useState<any>(null);
+    // const [user, setUser] = useState<any>();
     const navigate = useNavigate();
     const [authError, setAuthError] = useState<boolean>(false);
 
     // useEffect(() => {
-    //     if (localStorage.getItem("user")) {
-    //         setUser(JSON.parse(localStorage.getItem("user")))
+    //     let val = localStorage.getItem("user");
+    //     if (val) {
+    //         setUser(JSON.parse(val))
     //     } else {
     //         setUser(null);
     //     }
-    // }, [localStorage.getItem("user")])
+    //     console.log('user: ', user);
+        
+    // }, [auth])
 
     const signInWithGoogle = () => {
         signInWithPopup(auth, new GoogleAuthProvider())        
             .then(response => {
-                console.log(response.user);
+                console.log('signInWithGoogle: ', response.user);
                 localStorage.setItem("user", JSON.stringify(response.user))
-                navigate('/');
+                // let val = localStorage.getItem("user");
+                // if (val) {
+                //     setUser(JSON.parse(val))
+                // }
+                // navigate('/');
+                // console.log('user: ', user);
             })
             .catch(error => {
                 console.log(error);
@@ -49,8 +57,14 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
     const createUser = (email: string, password: string) => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(response => {
-                console.log(response.user);
+                console.log('createUser: ', response.user);
                 localStorage.setItem("user", JSON.stringify(response.user));
+                // let val = localStorage.getItem("user");
+                // if (val) {
+                //     setUser(JSON.parse(val))
+                // }
+                // navigate('/');
+                // console.log('user: ', user);
                 navigate('/');
             })
             .catch(error => {
@@ -61,8 +75,14 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
     const signIn = (email: string, password: string) => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                console.log(userCredential.user);
+                console.log('signIn: ', userCredential.user);
                 localStorage.setItem("user", JSON.stringify(userCredential.user));
+                // let val = localStorage.getItem("user");
+                // if (val) {
+                //     setUser(JSON.parse(val))
+                // }
+                // navigate('/');
+                // console.log('user: ', user);
                 navigate('/');
             })
             .catch((error) => {

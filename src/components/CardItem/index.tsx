@@ -1,6 +1,6 @@
 import { FC, useContext, useState } from 'react';
 
-import { Button, Checkbox, Modal, Space, Tooltip, message } from 'antd';
+import { Button, Checkbox, Modal, Space, Tooltip, message, Image } from 'antd';
 import { EditOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { FirebaseContextType, ICardItem } from '../../models';
 import BorderWrapper from '../UI/BorderWrapper';
@@ -83,7 +83,11 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
     <BorderWrapper clName={'cardHeight'}>
       <div className='card-wrapper'>
         <div className='card-img-and-text'>
-          <div className='card-img' onClick={showModal}>{wishItem.img}</div>
+          {/* <div className='card-img' onClick={showModal}>{wishItem.img}</div> */}
+          <Image
+            className='card-img'
+            src={wishItem.img}
+          />
           <div className='card-info'>
               <span className='card-name' onClick={showModal}>{wishItem.name}</span>
               <a className='card-link' href={wishItem.link} target="_blank" rel="noreferrer">{wishItem.link}</a>
@@ -125,7 +129,10 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
           <span className='card-price'>{wishItem.price} ₽</span>
         ]}
       >
-        <div className='card-about-img' >{wishItem.img}</div>
+        <Image
+          className='card-about-img'
+            src={wishItem.img}
+          />
         <span className='card-category'>{wishItem.category}</span>
         <span className='card-about-name' >{wishItem.name}</span>
         <a className='card-about-link' href={wishItem.link} target="_blank" rel="noreferrer">{wishItem.link}</a>

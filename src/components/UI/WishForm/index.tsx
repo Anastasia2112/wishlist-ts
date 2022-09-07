@@ -41,10 +41,10 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         onFinishFunc(editWish);
     };
 
-    useEffect(() => {
+    // useEffect(() => {
         const uploadImage = () => {
             // if (fileList.length === 0) return;
-            const storageRef = ref(storage, `images/${fileList[0].name + v4()}`);
+            const storageRef = ref(storage, `images/${v4() + fileList[0].name}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
     
             uploadTask.on('state_changed', 
@@ -70,12 +70,16 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
                 }
             );
         };
-        file && uploadImage()
-    }, [file])
+    //     file && uploadImage()
+    // }, [file])
 
     const onFinish = (values: WishType) => {
-        {formType === 'add' && createWish(values);}
-        {formType === 'edit' && editWish(values);}
+        file && uploadImage()
+        if (formType === 'add') {
+            createWish(values);
+        } else if (formType === 'edit') {
+            editWish(values);
+        }
         console.log(values);
         handleCancel();
     };
@@ -95,7 +99,8 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         case 'add':
             initialFormValues = {
                 'link': "",
-                'category': unicCategs[0],
+                // 'category': unicCategs[0],
+                'category': "",
                 'desc': ""
             };
             btnLabel = 'Добавить';
@@ -117,6 +122,8 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
     const onChangeUpload: UploadProps['onChange'] = ({ fileList: newFileList }) => {
         setFileList(newFileList);
         setFile(newFileList[0].originFileObj);
+        console.log(newFileList);
+        
     };
 
     const onPreview = async (file: UploadFile) => {
@@ -201,18 +208,18 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
             rules={[{ required: true, message: 'Введите категорию!' }]}
         >
             <Input />
-            </Form.Item>}
+        </Form.Item>}
 
         {value === 2 && <Form.Item
             label="Категория"
             name="category"
             rules={[{ required: true, message: 'Выберите категорию!' }]}
         >
-        <Select >
-            {unicCategs.map((sort, index) => {
-                return <Option key={index} value={sort}>{sort}</Option>
-            })}
-        </Select>
+            <Select >
+                {unicCategs.map((sort, index) => {
+                    return <Option key={index} value={sort}>{sort}</Option>
+                })}
+            </Select>
         </Form.Item>}
 
         <Form.Item
