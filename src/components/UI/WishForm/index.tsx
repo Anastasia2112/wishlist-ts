@@ -27,13 +27,16 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
 
     const [value, setValue] = useState(1);
     const [fileList, setFileList] = useState<UploadFile[]>([]);
-    const [file, setFile] = useState<any>();
-    const [imgURL, setImgURL] = useState<string>();
+    const [file, setFile] = useState<Blob | Uint8Array | ArrayBuffer>();
 
     const createWish = (formData: WishType) => {
-        const newWish = {...formData, userId: user?.uid, img: imgURL};
+        const newWish = {...formData, userId: user?.uid, img: ""};
         onFinishFunc(newWish);
-        console.log(newWish);
+    };
+
+    const createWithImg = (formData: WishType, imgUp: string) => {
+        const newWish = {...formData, userId: user?.uid, img: imgUp};
+        onFinishFunc(newWish);
     };
 
     const editWish = (formData: WishType) => {
@@ -41,46 +44,57 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         onFinishFunc(editWish);
     };
 
-    // useEffect(() => {
-        const uploadImage = () => {
-            // if (fileList.length === 0) return;
-            const storageRef = ref(storage, `images/${v4() + fileList[0].name}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
+    const editWithImg = (formData: WishType) => {
+        const editWish = {...formData};
+        console.log();
+        onFinishFunc(editWish);
+    };
     
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');
-                    switch (snapshot.state) {
-                    case 'paused':
-                        console.log('Upload is paused');
-                        break;
-                    case 'running':
-                        console.log('Upload is running');
-                        break;
-                    }
-                }, 
-                (error) => {
-                    console.log(error);
-                }, 
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        setImgURL(downloadURL);
-                    });
+    const uploadImage = (callback: Function, values: WishType) => {
+        if (fileList.length === 0) return;
+        const storageRef = ref(storage, `images/${v4() + fileList[0].name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file!);
+
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                case 'paused':
+                    console.log('Upload is paused');
+                    break;
+                case 'running':
+                    console.log('Upload is running');
+                    break;
                 }
-            );
-        };
-    //     file && uploadImage()
-    // }, [file])
+            }, 
+            (error) => {
+                console.log(error);
+            }, 
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    // setImgURL(downloadURL);
+                    callback(values, downloadURL)
+                });
+            },
+        );
+    };
+
 
     const onFinish = (values: WishType) => {
-        file && uploadImage()
-        if (formType === 'add') {
-            createWish(values);
-        } else if (formType === 'edit') {
-            editWish(values);
+        // file ? uploadImage(createWithImg, values) : createWish(values);
+        if (file) {
+            uploadImage(createWithImg, values)
         }
-        console.log(values);
+        if (!file || fileList.length === 0) {
+            createWish(values)
+        }
+
+        // if (formType === 'add') {
+        //     createWish(values);
+        // } else if (formType === 'edit') {
+        //     editWish(values);
+        // }
         handleCancel();
     };
 
@@ -121,9 +135,7 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
     // Для поля загрузки изображения
     const onChangeUpload: UploadProps['onChange'] = ({ fileList: newFileList }) => {
         setFileList(newFileList);
-        setFile(newFileList[0].originFileObj);
-        console.log(newFileList);
-        
+        newFileList.length && setFile(newFileList[0].originFileObj);
     };
 
     const onPreview = async (file: UploadFile) => {

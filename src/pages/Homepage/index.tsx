@@ -33,7 +33,7 @@ const Homepage: FC  = () => {
 
   // Создание записи с данными из формы
   const createNewWish = async (newWish: WishType) => {
-    console.log(newWish);
+    console.log(`createNewWish`, newWish);
     await addDoc(wishesCollectionRef, newWish)
       .then(message.success('Желание добавлено!'))
       .catch(message.error('Ошибка при добавлении записи.'))
