@@ -28,9 +28,14 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
     const [value, setValue] = useState(1);
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [file, setFile] = useState<Blob | Uint8Array | ArrayBuffer>();
+    const [prevData, setPrevData] = useState<WishType | undefined>(wishItem);
+    const defaultImg = "https://firebasestorage.googleapis.com/v0/b/wishlist-8a38b.appspot.com/o/images%2Fe6403e96-ccbc-4171-bf83-3187ede329a5frame_gallery_image_images_photo_picture_pictures_icon_123209.png?alt=media&token=234e1228-a638-4c00-9620-d70d4562fa46";
+
+    console.log(prevData);
+    
 
     const createWish = (formData: WishType) => {
-        const newWish = {...formData, userId: user?.uid, img: ""};
+        const newWish = {...formData, userId: user?.uid, img: defaultImg};
         onFinishFunc(newWish);
     };
 
