@@ -23,7 +23,7 @@ interface IWishForm {
 
 const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}: IWishForm) => {
 
-    const { user, defaultImg } = useContext(FirebaseContext) as FirebaseContextType;
+    const { user, defaultImg, deleteImgFromStorage } = useContext(FirebaseContext) as FirebaseContextType;
     const prevData: WishType | undefined = wishItem;
     const [value, setValue] = useState(1);
     let initialFileList: any;
@@ -42,7 +42,7 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
     const [fileList, setFileList] = useState<UploadFile[]>(initialFileList);
     const [file, setFile] = useState<Blob | Uint8Array | ArrayBuffer>();
 
-    console.log(prevData);
+    // console.log(prevData);
     
     const createWish = (formData: WishType) => {
         const newWish = {...formData, userId: user?.uid, img: defaultImg};
@@ -126,12 +126,14 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         } else if (formType === 'edit') {
             if (file && fileList.length > 0) {
                 uploadImage(editWithImg, values)
+                prevData?.img && deleteImgFromStorage(prevData?.img)
             }
             if (prevData?.img === fileList[0]?.url) {
                 editWish(values);
             }
             if (fileList.length === 0) {
                 editWithImg(values, defaultImg!)
+                prevData?.img && deleteImgFromStorage(prevData?.img)
             }
         }
         handleCancel();

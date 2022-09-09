@@ -69,9 +69,9 @@ const SignIn: FC = () => {
                     <Input.Password />
                 </Form.Item>
 
-                <Form.Item name="remember" valuePropName="checked" >
+                {/* <Form.Item name="remember" valuePropName="checked" >
                     <Checkbox>Запомнить меня</Checkbox>
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item >
                     <Button block htmlType="submit" icon={<LoginOutlined />}>

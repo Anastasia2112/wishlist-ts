@@ -116,7 +116,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
     }
 
     const deleteImgFromStorage = async (imgUrl: string | undefined) => {
-        if (imgUrl) {
+        if (imgUrl && (imgUrl !== defaultImg)) {
             const imgName = imgUrl.substring(82, imgUrl.length-53);
             const desertRef = ref(storage, `images/${imgName}`);
             await deleteObject(desertRef).then(() => {
