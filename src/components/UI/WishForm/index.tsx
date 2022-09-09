@@ -1,14 +1,12 @@
 import { Button, Form, Input, InputNumber, Radio, RadioChangeEvent, Select, Upload } from 'antd';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { FirebaseContextType, WishType } from '../../../models';
 import { FirebaseContext } from '../../context/FirebaseContext';
-import { PlusOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
-
 const { Option } = Select;
 
 interface IWishForm {
@@ -17,8 +15,6 @@ interface IWishForm {
     onFinishFunc : (newWish: WishType) => void,
     formType : string,
     wishItem? : WishType
-    // onAddFinish : (values: WishType) => void,
-    // onAddFinishFailed : (errorInfo: any) => void
 };
 
 const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}: IWishForm) => {
@@ -41,8 +37,6 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
     }
     const [fileList, setFileList] = useState<UploadFile[]>(initialFileList);
     const [file, setFile] = useState<Blob | Uint8Array | ArrayBuffer>();
-
-    // console.log(prevData);
     
     const createWish = (formData: WishType) => {
         const newWish = {...formData, userId: user?.uid, img: defaultImg};
@@ -63,7 +57,6 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
                 changedFields = Object.assign(changedFields, obj)
             }
         });
-        // console.log('changedFields:', changedFields);
         onFinishFunc(changedFields);
     };
 
@@ -80,10 +73,6 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         console.log('changedFields:', changedFields);
         onFinishFunc(changedFields);
     };
-    
-    // console.log('prevData?.img: ', prevData?.img);
-    // console.log('fileList[0]: ', fileList);
-    // console.log('file: ', file);
 
     const uploadImage = (callback: Function, values: WishType) => {
         if (fileList.length === 0) return;
@@ -154,7 +143,6 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         case 'add':
             initialFormValues = {
                 'link': "",
-                // 'category': unicCategs[0],
                 'category': "",
                 'desc': ""
             };
@@ -165,7 +153,6 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
                 'name': wishItem?.name,
                 'link': wishItem?.link,
                 'price': wishItem?.price,
-                // 'img': wishItem?.img,
                 'category': wishItem?.category,
                 'desc': wishItem?.desc,
             };
@@ -226,14 +213,6 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         >
             <InputNumber prefix="₽" min="0" style={{ width: '100%' }} />
         </Form.Item>
-
-        {/* <Form.Item
-        label="Изображение"
-        name="img"
-        rules={[{ required: true, message: 'Добавьте изображение!' }]}
-        >
-        <Input />
-        </Form.Item> */}
 
         <Form.Item label="Изображение" valuePropName="fileList">
             <ImgCrop rotate>

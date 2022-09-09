@@ -1,6 +1,6 @@
-import { ReactNode, createContext, useState, useEffect } from 'react';
+import { ReactNode, createContext, useState } from 'react';
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from 'firebase/auth';
-import { getFirestore, updateDoc, deleteDoc, doc, collection, addDoc } from "firebase/firestore";
+import { getFirestore, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { config } from '../../firebase/config';
 import { initializeApp } from 'firebase/app';
 import { FirebaseContextType } from '../../models';
@@ -8,7 +8,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { db, storage } from '../../firebase/config';
 import { message } from 'antd';
-import { WishType } from '../../models';
 import { deleteObject, ref } from 'firebase/storage';
 
 type FirebaseContextProviderProps = {
@@ -22,33 +21,15 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
     const auth = getAuth();
     const firestore = getFirestore(app);
     const [user] = useAuthState(auth);
-    // const [user, setUser] = useState<any>();
     const navigate = useNavigate();
     const [authError, setAuthError] = useState<boolean>(false);
     const defaultImg = "https://firebasestorage.googleapis.com/v0/b/wishlist-8a38b.appspot.com/o/images%2Fe6403e96-ccbc-4171-bf83-3187ede329a5frame_gallery_image_images_photo_picture_pictures_icon_123209.png?alt=media&token=234e1228-a638-4c00-9620-d70d4562fa46";
-
-    // useEffect(() => {
-    //     let val = localStorage.getItem("user");
-    //     if (val) {
-    //         setUser(JSON.parse(val))
-    //     } else {
-    //         setUser(null);
-    //     }
-    //     console.log('user: ', user);
-        
-    // }, [auth])
 
     const signInWithGoogle = () => {
         signInWithPopup(auth, new GoogleAuthProvider())        
             .then(response => {
                 console.log('signInWithGoogle: ', response.user);
                 localStorage.setItem("user", JSON.stringify(response.user))
-                // let val = localStorage.getItem("user");
-                // if (val) {
-                //     setUser(JSON.parse(val))
-                // }
-                // navigate('/');
-                // console.log('user: ', user);
             })
             .catch(error => {
                 console.log(error);
@@ -60,12 +41,6 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
             .then(response => {
                 console.log('createUser: ', response.user);
                 localStorage.setItem("user", JSON.stringify(response.user));
-                // let val = localStorage.getItem("user");
-                // if (val) {
-                //     setUser(JSON.parse(val))
-                // }
-                // navigate('/');
-                // console.log('user: ', user);
                 navigate('/');
             })
             .catch(error => {
@@ -78,12 +53,6 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
             .then((userCredential) => {
                 console.log('signIn: ', userCredential.user);
                 localStorage.setItem("user", JSON.stringify(userCredential.user));
-                // let val = localStorage.getItem("user");
-                // if (val) {
-                //     setUser(JSON.parse(val))
-                // }
-                // navigate('/');
-                // console.log('user: ', user);
                 navigate('/');
             })
             .catch((error) => {
@@ -112,7 +81,6 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         await deleteDoc(wishDoc)
           .then(message.success('Желание удалено!'))
           .catch(message.error('Ошибка при удалении записи.'));
-          
     }
 
     const deleteImgFromStorage = async (imgUrl: string | undefined) => {
