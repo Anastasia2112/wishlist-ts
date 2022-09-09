@@ -28,39 +28,17 @@ const Homepage: FC  = () => {
   // const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
   const [isDBError, setIsDBError] = useState<boolean>(false);
   const wishesCollectionRef = collection(db, "wishes");
-  const [formCategory, setFormCategory] = useState<any>();
   const [isWishesLoading, setIsWishesLoading] = useState<boolean>(false);
 
   // Создание записи с данными из формы
   const createNewWish = async (newWish: WishType) => {
-    console.log(`createNewWish`, newWish);
+    // console.log(`createNewWish`, newWish);
     await addDoc(wishesCollectionRef, newWish)
       .then(message.success('Желание добавлено!'))
       .catch(message.error('Ошибка при добавлении записи.'))
   }
 
   // Получение записей из БД
-  // const getWishes = async () => {
-  //   try {
-  //     const data = await getDocs(wishesCollectionRef)
-  //     const arr = data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType);
-  //     const filteredArr = arr.filter(wish => wish.userId === user?.uid);
-  //     setWishesDB(filteredArr);
-      
-  //     setIsDBError(false);
-  //   } catch (error) {
-  //     message.error(`Ошибка загрузки данных. ${error}`)
-  //     console.log(error);
-  //     setIsDBError(true);
-  //   }
-  //   console.log('вызвана getWishes()');
-  // };
-
-  // useEffect(() => { 
-  //   getWishes();
-  // }, [deleteWish, updateWish, createNewWish]);
-
-  // как в видео
   useEffect(() => {
     setIsWishesLoading(true);
     const q = query(collection(db, "wishes"));

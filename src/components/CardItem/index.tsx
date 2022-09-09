@@ -18,7 +18,7 @@ const { confirm } = Modal;
 const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
 
   const { updateCheck } = useContext(CheckContext) as CheckContextType;
-  const { deleteWish, updateWish } = useContext(FirebaseContext) as FirebaseContextType;
+  const { deleteWish, updateWish, deleteImgFromStorage } = useContext(FirebaseContext) as FirebaseContextType;
   const [visible, setVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);  
 
@@ -73,6 +73,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
       cancelText: 'Отмена',
       onOk() {
         deleteWish(wishItem.id)
+        wishItem.img && deleteImgFromStorage(wishItem.img)
       },
       onCancel() {
       },
@@ -105,12 +106,12 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
             </div>}
           <div className='card-btns'>
             <Space>
-              {wishItem.isCompleted && <Tooltip title="Убрать из архива">
+              {/* {wishItem.isCompleted && <Tooltip title="Убрать из архива">
                 <Button className='card-btn-delete' icon={<CloseOutlined />} onClick={() => console.log('из архива')}/>
               </Tooltip>}
               {!wishItem.isCompleted && <Tooltip title="В архив">
                 <Button className='card-btn-complete' icon={<CheckOutlined />} onClick={() => console.log('в архив')}/>
-              </Tooltip>}
+              </Tooltip>} */}
               {!wishItem.isCompleted && <Tooltip title="Изменить">
                 <Button icon={<EditOutlined />} onClick={showUpdateModal}/>
               </Tooltip>}

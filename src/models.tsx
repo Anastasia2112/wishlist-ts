@@ -1,5 +1,4 @@
-
-export type WishType = {
+export interface WishType {
     id: string,
     name: string,
     link?: string,
@@ -32,7 +31,9 @@ export type FirebaseContextType = {
     signIn : (email: string, password: string) => void,
     authError: boolean,
     deleteWish : (id: string) => void,
-    updateWish : (editWish: WishType, id: string) => void
+    updateWish : (editWish: WishType, id: string) => void,
+    defaultImg: string | undefined,
+    deleteImgFromStorage : (imgName: string) => void
 }
 
 export type CheckContextType = {

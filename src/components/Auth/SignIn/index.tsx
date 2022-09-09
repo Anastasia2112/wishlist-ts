@@ -41,9 +41,6 @@ const SignIn: FC = () => {
     const onFinishFailed = (errorInfo: any) => {
         console.log('Faile:', errorInfo);
     };
-
-    console.log(authError);
-    
     
     return (
         <section className='signin-wrap' >

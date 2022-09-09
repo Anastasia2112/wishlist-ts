@@ -6,9 +6,10 @@ import { initializeApp } from 'firebase/app';
 import { FirebaseContextType } from '../../models';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../../firebase/config';
+import { db, storage } from '../../firebase/config';
 import { message } from 'antd';
 import { WishType } from '../../models';
+import { deleteObject, ref } from 'firebase/storage';
 
 type FirebaseContextProviderProps = {
     children: ReactNode
@@ -24,6 +25,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
     // const [user, setUser] = useState<any>();
     const navigate = useNavigate();
     const [authError, setAuthError] = useState<boolean>(false);
+    const defaultImg = "https://firebasestorage.googleapis.com/v0/b/wishlist-8a38b.appspot.com/o/images%2Fe6403e96-ccbc-4171-bf83-3187ede329a5frame_gallery_image_images_photo_picture_pictures_icon_123209.png?alt=media&token=234e1228-a638-4c00-9620-d70d4562fa46";
 
     // useEffect(() => {
     //     let val = localStorage.getItem("user");
@@ -53,7 +55,6 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
             })
     };
 
-    // const createUserWithEmailAndPassword
     const createUser = (email: string, password: string) => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(response => {
@@ -96,7 +97,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         localStorage.removeItem("user");
     };
 
-    const updateWish = async (editWish: WishType, id: string) => {
+    const updateWish = async (editWish: any, id: string) => {
         console.log('id: ', id);
         console.log('values: ', editWish);
         const wishDoc = doc(db, "wishes", id);
@@ -110,10 +111,24 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         const wishDoc = doc(db, "wishes", id);
         await deleteDoc(wishDoc)
           .then(message.success('Желание удалено!'))
-          .catch(message.error('Ошибка при удалении записи.'))
+          .catch(message.error('Ошибка при удалении записи.'));
+          
     }
 
-    return <FirebaseContext.Provider value={{ auth, firestore, user, signInWithGoogle, createUser, signIn, logout, authError, deleteWish, updateWish }}>
+    const deleteImgFromStorage = async (imgName: string | undefined) => {
+        // if (imgName) {
+        //     const desertRef = ref(storage, `images/${imgName}`);
+        // await deleteObject(desertRef).then(() => {
+        //     console.log('Img deleted successfully');
+        //   }).catch((error) => {
+        //     console.log(error);
+        //   });
+        // }
+        
+        
+    }
+
+    return <FirebaseContext.Provider value={{ auth, firestore, user, signInWithGoogle, createUser, signIn, logout, authError, deleteWish, updateWish, defaultImg, deleteImgFromStorage }}>
         { children }
     </FirebaseContext.Provider>
 }

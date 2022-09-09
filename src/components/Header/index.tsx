@@ -41,11 +41,11 @@ const Header: FC = () => {
           key: '1',
           icon: <UserOutlined />,
         },
-        {
-          label: 'Архив',
-          key: '2',
-          icon: <CheckSquareOutlined />,
-        },
+        // {
+        //   label: 'Архив',
+        //   key: '2',
+        //   icon: <CheckSquareOutlined />,
+        // },
         {
           label: 'Выйти',
           key: '3',

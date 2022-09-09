@@ -23,17 +23,27 @@ interface IWishForm {
 
 const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}: IWishForm) => {
 
-    const { user } = useContext(FirebaseContext) as FirebaseContextType;
-
+    const { user, defaultImg } = useContext(FirebaseContext) as FirebaseContextType;
+    const prevData: WishType | undefined = wishItem;
     const [value, setValue] = useState(1);
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    let initialFileList: any;
+    if (formType === "add") { 
+        initialFileList = []
+    } else if (formType === "edit") {
+        initialFileList = [
+            {
+                uid: '-1',
+                name: 'image.png',
+                status: 'done',
+                url: prevData?.img,
+            },
+        ]
+    }
+    const [fileList, setFileList] = useState<UploadFile[]>(initialFileList);
     const [file, setFile] = useState<Blob | Uint8Array | ArrayBuffer>();
-    const [prevData, setPrevData] = useState<WishType | undefined>(wishItem);
-    const defaultImg = "https://firebasestorage.googleapis.com/v0/b/wishlist-8a38b.appspot.com/o/images%2Fe6403e96-ccbc-4171-bf83-3187ede329a5frame_gallery_image_images_photo_picture_pictures_icon_123209.png?alt=media&token=234e1228-a638-4c00-9620-d70d4562fa46";
 
     console.log(prevData);
     
-
     const createWish = (formData: WishType) => {
         const newWish = {...formData, userId: user?.uid, img: defaultImg};
         onFinishFunc(newWish);
@@ -45,16 +55,36 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
     };
 
     const editWish = (formData: WishType) => {
-        const editWish = {...formData};
-        onFinishFunc(editWish);
+        let changedFields: any = {};
+        Object.keys(formData).forEach(element => {
+            const index = element as keyof WishType;
+            if (prevData && (formData[index] !== prevData[index])) {
+                let obj = {[index]: formData[index]}
+                changedFields = Object.assign(changedFields, obj)
+            }
+        });
+        // console.log('changedFields:', changedFields);
+        onFinishFunc(changedFields);
     };
 
-    const editWithImg = (formData: WishType) => {
-        const editWish = {...formData};
-        console.log();
-        onFinishFunc(editWish);
+    const editWithImg = (formData: WishType, imgUp: string) => {
+        let changedFields: any = {};
+        Object.keys(formData).forEach(element => {
+            const index = element as keyof WishType;
+            if (prevData && (formData[index] !== prevData[index])) {
+                let obj = {[index]: formData[index]}
+                changedFields = Object.assign(changedFields, obj)
+            }
+        });
+        changedFields = Object.assign(changedFields, {img: imgUp})
+        console.log('changedFields:', changedFields);
+        onFinishFunc(changedFields);
     };
     
+    // console.log('prevData?.img: ', prevData?.img);
+    // console.log('fileList[0]: ', fileList);
+    // console.log('file: ', file);
+
     const uploadImage = (callback: Function, values: WishType) => {
         if (fileList.length === 0) return;
         const storageRef = ref(storage, `images/${v4() + fileList[0].name}`);
@@ -85,21 +115,25 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         );
     };
 
-
     const onFinish = (values: WishType) => {
-        // file ? uploadImage(createWithImg, values) : createWish(values);
-        if (file) {
-            uploadImage(createWithImg, values)
+        if (formType === 'add') {
+            if (file) {
+                uploadImage(createWithImg, values)
+            }
+            if (!file || fileList.length === 0) {
+                createWish(values)
+            }
+        } else if (formType === 'edit') {
+            if (file && fileList.length > 0) {
+                uploadImage(editWithImg, values)
+            }
+            if (prevData?.img === fileList[0]?.url) {
+                editWish(values);
+            }
+            if (fileList.length === 0) {
+                editWithImg(values, defaultImg!)
+            }
         }
-        if (!file || fileList.length === 0) {
-            createWish(values)
-        }
-
-        // if (formType === 'add') {
-        //     createWish(values);
-        // } else if (formType === 'edit') {
-        //     editWish(values);
-        // }
         handleCancel();
     };
 
@@ -199,7 +233,7 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
         <Input />
         </Form.Item> */}
 
-        <Form.Item label="Upload" valuePropName="fileList">
+        <Form.Item label="Изображение" valuePropName="fileList">
             <ImgCrop rotate>
                 <Upload
                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -208,7 +242,7 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
                     onChange={onChangeUpload}
                     onPreview={onPreview}
                 >
-                    {fileList.length < 1 && '+ Upload'}
+                    {fileList.length < 1 && '+ Загрузить'}
                 </Upload>
             </ImgCrop>
         </Form.Item>
