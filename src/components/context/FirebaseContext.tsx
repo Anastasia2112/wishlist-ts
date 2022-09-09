@@ -115,17 +115,16 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
           
     }
 
-    const deleteImgFromStorage = async (imgName: string | undefined) => {
-        // if (imgName) {
-        //     const desertRef = ref(storage, `images/${imgName}`);
-        // await deleteObject(desertRef).then(() => {
-        //     console.log('Img deleted successfully');
-        //   }).catch((error) => {
-        //     console.log(error);
-        //   });
-        // }
-        
-        
+    const deleteImgFromStorage = async (imgUrl: string | undefined) => {
+        if (imgUrl) {
+            const imgName = imgUrl.substring(82, imgUrl.length-53);
+            const desertRef = ref(storage, `images/${imgName}`);
+            await deleteObject(desertRef).then(() => {
+                console.log('Img deleted successfully');
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
     }
 
     return <FirebaseContext.Provider value={{ auth, firestore, user, signInWithGoogle, createUser, signIn, logout, authError, deleteWish, updateWish, defaultImg, deleteImgFromStorage }}>
