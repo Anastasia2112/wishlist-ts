@@ -25,7 +25,7 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
 
     const { user, defaultImg, deleteImgFromStorage } = useContext(FirebaseContext) as FirebaseContextType;
     const prevData: WishType | undefined = wishItem;
-    const [value, setValue] = useState(1);
+    const [value, setValue] = useState(2);
     let initialFileList: any;
     if (formType === "add") { 
         initialFileList = []

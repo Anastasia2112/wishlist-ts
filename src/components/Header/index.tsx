@@ -20,14 +20,14 @@ const Header: FC = () => {
   const onClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
       case '1':
-        message.info(`Ссылка: перейти в профиль`);
+        logout();
+        navigate('/login');
         break;
       case '2':
         navigate('/archive');
         break;
       case '3':
-        logout();
-        navigate('/login');
+        message.info(`Ссылка: перейти в профиль`);
         break;
     }
   };
@@ -37,20 +37,20 @@ const Header: FC = () => {
       onClick={onClick}
       items={[
         {
-          label: 'Профиль',
+          label: 'Выйти',
           key: '1',
-          icon: <UserOutlined />,
+          icon: <LogoutOutlined />,
         },
         // {
         //   label: 'Архив',
         //   key: '2',
         //   icon: <CheckSquareOutlined />,
         // },
-        {
-          label: 'Выйти',
-          key: '3',
-          icon: <LogoutOutlined />,
-        },
+        // {
+        //   label: 'Профиль',
+        //   key: '3',
+        //   icon: <UserOutlined />,
+        // },
       ]}
     />
   );
