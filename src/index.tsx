@@ -8,18 +8,21 @@ import reportWebVitals from './reportWebVitals';
 
 import './index.css';
 import FirebaseContextProvider from './components/context/FirebaseContext';
+import AuthContextProvider from './components/context/AuthContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
-      <FirebaseContextProvider >
-        <App />
-      </FirebaseContextProvider>
+      <AuthContextProvider>
+        <FirebaseContextProvider >
+          <App />
+        </FirebaseContextProvider>
+      </AuthContextProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

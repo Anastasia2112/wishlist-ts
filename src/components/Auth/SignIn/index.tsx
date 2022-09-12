@@ -14,7 +14,6 @@ const SignIn: FC = () => {
 
     // const auth = getAuth();
     const { signInWithGoogle, signIn, authError } = useContext(FirebaseContext) as FirebaseContextType;
-    
 
     const handleSignInWithGoogle = async () => {
         try {

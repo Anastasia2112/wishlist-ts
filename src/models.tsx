@@ -48,3 +48,10 @@ export type AuthFormValues = {
     remember: boolean, 
     email: string
 }
+
+export type AuthContextType = {
+    isAuth: boolean,
+    updateAuth : (value: boolean) => void,
+    isLoading: boolean,
+    updateLoading : (value: boolean) => void
+}

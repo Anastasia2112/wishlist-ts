@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState, useMemo } from 'react';
+import { ReactNode, createContext, useState } from 'react';
 import { CheckContextType } from '../../models';
 
 type CheckContextProviderProps = {

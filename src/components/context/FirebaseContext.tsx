@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from 'react';
+import { ReactNode, createContext, useState, useContext } from 'react';
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from 'firebase/auth';
 import { getFirestore, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { config } from '../../firebase/config';
@@ -6,9 +6,10 @@ import { initializeApp } from 'firebase/app';
 import { FirebaseContextType } from '../../models';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { db, storage } from '../../firebase/config';
+import { app, db, storage } from '../../firebase/config';
 import { message } from 'antd';
 import { deleteObject, ref } from 'firebase/storage';
+// import { AuthContext } from './AuthContext';
 
 type FirebaseContextProviderProps = {
     children: ReactNode
@@ -17,7 +18,8 @@ type FirebaseContextProviderProps = {
 export const FirebaseContext = createContext<FirebaseContextType | null>(null);
 
 const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => {
-    const app = initializeApp(config.firebaseConfig);
+    // const app = initializeApp(config.firebaseConfig);
+    // const { isAuth, setIsAuth } = useContext(AuthContext);
     const auth = getAuth();
     const firestore = getFirestore(app);
     const [user] = useAuthState(auth);
@@ -29,7 +31,10 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         signInWithPopup(auth, new GoogleAuthProvider())        
             .then(response => {
                 console.log('signInWithGoogle: ', response.user);
-                localStorage.setItem("user", JSON.stringify(response.user))
+                // setIsAuth(true);
+                localStorage.setItem("user", JSON.stringify(response.user));
+                localStorage.setItem("auth", "true")
+                navigate('/');
             })
             .catch(error => {
                 console.log(error);
@@ -41,6 +46,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
             .then(response => {
                 console.log('createUser: ', response.user);
                 localStorage.setItem("user", JSON.stringify(response.user));
+                localStorage.setItem("auth", "true")
                 navigate('/');
             })
             .catch(error => {
@@ -53,6 +59,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
             .then((userCredential) => {
                 console.log('signIn: ', userCredential.user);
                 localStorage.setItem("user", JSON.stringify(userCredential.user));
+                localStorage.setItem("auth", "true")
                 navigate('/');
             })
             .catch((error) => {
@@ -63,7 +70,9 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
 
     const logout = () => {
         signOut(auth);
+        // setIsAuth(false);
         localStorage.removeItem("user");
+        localStorage.removeItem("auth");
     };
 
     const updateWish = async (editWish: any, id: string) => {
