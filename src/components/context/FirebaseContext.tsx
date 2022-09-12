@@ -71,16 +71,26 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         console.log('values: ', editWish);
         const wishDoc = doc(db, "wishes", id);
         await updateDoc(wishDoc, editWish)
-          .then(message.success('Желание изменено!'))
-          .catch(message.error('Ошибка при изменении записи.'))
+          .then(() => {
+            message.success('Желание изменено!')
+        })
+          .catch((error) => {
+            message.error('Ошибка при изменении записи.');
+            console.log(error);
+        })
     }
 
     const deleteWish = async (id: string) => {
         console.log(`Удолить ${id}`);
         const wishDoc = doc(db, "wishes", id);
         await deleteDoc(wishDoc)
-          .then(message.success('Желание удалено!'))
-          .catch(message.error('Ошибка при удалении записи.'));
+        .then(() => {
+          message.success('Желание удалено!')
+      })
+        .catch((error) => {
+          message.error('Ошибка при удалении записи.');
+          console.log(error);
+      });
     }
 
     const deleteImgFromStorage = async (imgUrl: string | undefined) => {
