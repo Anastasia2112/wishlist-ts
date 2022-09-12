@@ -39,12 +39,12 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
     const [file, setFile] = useState<Blob | Uint8Array | ArrayBuffer>();
     
     const createWish = (formData: WishType) => {
-        const newWish = {...formData, userId: user?.uid, img: defaultImg};
+        const newWish = {...formData, userId: user?.uid, created: Date.now(), img: defaultImg};
         onFinishFunc(newWish);
     };
 
     const createWithImg = (formData: WishType, imgUp: string) => {
-        const newWish = {...formData, userId: user?.uid, img: imgUp};
+        const newWish = {...formData, userId: user?.uid, created: Date.now(), img: imgUp};
         onFinishFunc(newWish);
     };
 
@@ -97,7 +97,6 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
             }, 
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    // setImgURL(downloadURL);
                     callback(values, downloadURL)
                 });
             },

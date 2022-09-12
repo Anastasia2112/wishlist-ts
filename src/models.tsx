@@ -7,7 +7,8 @@ export interface WishType {
     category: string,
     desc?: string,
     userId: string,
-    isCompleted: boolean
+    isCompleted: boolean,
+    created: number
 }
 
 export interface ICardList {

@@ -8,8 +8,6 @@ import './styles.scss';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { CheckContext } from '../context/CheckContext';
 import { CheckContextType, WishType } from '../../models';
-import { db } from '../../firebase/config';
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import WishForm from '../UI/WishForm';
 import { FirebaseContext } from '../context/FirebaseContext';
 
@@ -21,25 +19,6 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
   const { deleteWish, updateWish, deleteImgFromStorage } = useContext(FirebaseContext) as FirebaseContextType;
   const [visible, setVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);  
-
-  // Изменение записи
-  // const updateWish = async (editWish: WishType, id: string) => {
-  //   console.log('id: ', id);
-  //   console.log('values: ', editWish);
-  //   const wishDoc = doc(db, "wishes", id);
-  //   await updateDoc(wishDoc, editWish)
-  //     .then(message.success('Желание изменено!'))
-  //     .catch(message.error('Ошибка при изменении записи.'))
-  // }
-
-  // Удаление записи
-  // const deleteWish = async (id: string) => {
-  //   console.log(`Удолить ${id}`);
-  //   const wishDoc = doc(db, "wishes", id);
-  //   await deleteDoc(wishDoc)
-  //     .then(message.success('Желание удалено!'))
-  //     .catch(message.error('Ошибка при удалении записи.'))
-  // }
 
   // Для окна с подробной информацией
   const showModal = () => {
@@ -84,7 +63,6 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
     <BorderWrapper clName={'cardHeight'}>
       <div className='card-wrapper'>
         <div className='card-img-and-text'>
-          {/* <div className='card-img' onClick={showModal}>{wishItem.img}</div> */}
           <Image
             className='card-img'
             src={wishItem.img}

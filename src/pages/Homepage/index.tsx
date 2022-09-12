@@ -21,7 +21,7 @@ const { confirm } = Modal;
 
 const Homepage: FC  = () => {
 
-  const { user, deleteWish, updateWish } = useContext(FirebaseContext) as FirebaseContextType;
+  const { user, deleteWish } = useContext(FirebaseContext) as FirebaseContextType;
 
   const [wishesDB, setWishesDB] = useState<WishType[]>([]);
   const [fromDB, setFromDB] = useState<any>();
@@ -32,7 +32,6 @@ const Homepage: FC  = () => {
 
   // Создание записи с данными из формы
   const createNewWish = async (newWish: WishType) => {
-    // console.log(`createNewWish`, newWish);
     await addDoc(wishesCollectionRef, newWish)
       .then(message.success('Желание добавлено!'))
       .catch(message.error('Ошибка при добавлении записи.'))
@@ -67,7 +66,7 @@ const Homepage: FC  = () => {
 
   // const [wishesArr, setWishesArr] = useState<WishType[]>(mock.wishes);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-  const [selectedSort, setSelectedSort] = useState<string>('');
+  const [selectedSort, setSelectedSort] = useState<string>('Сначала новые');
   const [selectedFilter, setSelectedFilter] = useState<string>('');
   
   // Сортировка записей
@@ -82,6 +81,10 @@ const Homepage: FC  = () => {
           return [...wishesDB.sort((a, b) => a.name.localeCompare(b.name))]
         case 'От "Я" до "А"':
           return [...wishesDB.sort((a, b) => b.name.localeCompare(a.name))]
+        case 'Сначала старые':
+          return [...wishesDB.sort((a, b) => a.created - b.created)]
+        case 'Сначала новые':
+          return [...wishesDB.sort((a, b) => b.created - a.created)]
       }
     }
     return wishesDB;
@@ -112,7 +115,7 @@ const Homepage: FC  = () => {
 
   let unicCategs: string[] = categs.filter((val, ind, arr) => arr.indexOf(val) === ind);
 
-  const sorts: string[] = ['Цена по возрастанию', 'Цена по убыванию', 'От "А" до "Я"', 'От "Я" до "А"'];
+  const sorts: string[] = ['Сначала новые', 'Сначала старые', 'Цена по возрастанию', 'Цена по убыванию', 'От "А" до "Я"', 'От "Я" до "А"'];
 
   // Для окна с формой добавления
   const showAddModal = () => {
@@ -148,7 +151,7 @@ const Homepage: FC  = () => {
               return <Option key={index} value={sort}>{sort}</Option>
             })}
           </Select>}
-          {(wishesDB.length > 0 && !isDBError ) && <Select className='homepage-nav-select' onChange={sort => setSelectedSort(sort)} placeholder="Сортировка" style={{ width: 160 }} >{/*  allowClear */}
+          {(wishesDB.length > 0 && !isDBError ) && <Select className='homepage-nav-select' defaultValue={sorts[0]} onChange={sort => setSelectedSort(sort)} placeholder="Сортировка" style={{ width: 160 }} >{/*  allowClear */}
             {sorts.map((sort, index) => {
               return <Option key={index} value={sort}>{sort}</Option>
             })}
