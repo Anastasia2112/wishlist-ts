@@ -9,7 +9,7 @@ import { FirebaseContextType, WishType } from '../../models';
 import { CheckContext } from '../../components/context/CheckContext';
 import { CheckContextType } from '../../models';
 import { db } from '../../firebase/config';
-import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, QuerySnapshot } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, QuerySnapshot, where } from 'firebase/firestore';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
 import WishForm from '../../components/UI/WishForm';
 import Loader from '../../components/Loader';
@@ -40,14 +40,13 @@ const Homepage: FC  = () => {
   // Получение записей из БД
   useEffect(() => {
     setIsWishesLoading(true);
-    const q = query(collection(db, "wishes"));
+    const q = query(collection(db, "wishes"), where("userId", "==", user?.uid));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let wishesArray: WishType[] = [];
       querySnapshot.forEach((doc) => {
         wishesArray.push({...doc.data(), id: doc.id} as WishType)
       });
-      const filteredArr = wishesArray.filter(wish => wish.userId === user?.uid);
-      setWishesDB(filteredArr);
+      setWishesDB(wishesArray);
       console.log('unsubscribe() function worked');
       setIsWishesLoading(false);
     })
