@@ -45,7 +45,9 @@ const Homepage: FC  = () => {
   // Получение записей из БД
   useEffect(() => {
     setIsWishesLoading(true);
-    const q = query(collection(db, "wishes"), where("userId", "==", user?.uid));
+    // const q = query(collection(db, "wishes"), where("userId", "==", user?.uid));
+    const q = query(collection(db, "wishes"));
+
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let wishesArray: WishType[] = [];
       querySnapshot.forEach((doc) => {

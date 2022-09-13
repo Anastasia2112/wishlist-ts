@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { app, db, storage } from '../../firebase/config';
 import { message } from 'antd';
 import { deleteObject, ref } from 'firebase/storage';
+import store from '../../store/Store';
 // import { AuthContext } from './AuthContext';
 
 type FirebaseContextProviderProps = {
@@ -18,8 +19,6 @@ type FirebaseContextProviderProps = {
 export const FirebaseContext = createContext<FirebaseContextType | null>(null);
 
 const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => {
-    // const app = initializeApp(config.firebaseConfig);
-    // const { isAuth, setIsAuth } = useContext(AuthContext);
     const auth = getAuth();
     const firestore = getFirestore(app);
     const [user] = useAuthState(auth);
@@ -33,7 +32,8 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
                 console.log('signInWithGoogle: ', response.user);
                 // setIsAuth(true);
                 localStorage.setItem("user", JSON.stringify(response.user));
-                localStorage.setItem("auth", "true")
+                localStorage.setItem("auth", "true");
+                store.setIsAuth(true);
                 navigate('/');
             })
             .catch(error => {
@@ -46,7 +46,8 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
             .then(response => {
                 console.log('createUser: ', response.user);
                 localStorage.setItem("user", JSON.stringify(response.user));
-                localStorage.setItem("auth", "true")
+                localStorage.setItem("auth", "true");
+                store.setIsAuth(true);
                 navigate('/');
             })
             .catch(error => {
@@ -59,7 +60,8 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
             .then((userCredential) => {
                 console.log('signIn: ', userCredential.user);
                 localStorage.setItem("user", JSON.stringify(userCredential.user));
-                localStorage.setItem("auth", "true")
+                localStorage.setItem("auth", "true");
+                store.setIsAuth(true);
                 navigate('/');
             })
             .catch((error) => {
@@ -71,6 +73,8 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
     const logout = () => {
         signOut(auth);
         // setIsAuth(false);
+        store.setIsAuth(false);
+        navigate('/login');
         localStorage.removeItem("user");
         localStorage.removeItem("auth");
     };

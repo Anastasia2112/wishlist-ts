@@ -13,6 +13,8 @@
     "antd": "^4.22.6",
     "antd-img-crop": "^4.2.4",
     "firebase": "^9.9.3",
+    "mobx": "^6.6.2",
+    "mobx-react": "^7.5.3",
     "node-sass": "^7.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

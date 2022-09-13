@@ -8,94 +8,44 @@ import Footer from './components/Footer';
 import CheckContextProvider from '../src/components/context/CheckContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthRoute from './components/AuthRoute';
-import { AuthContext } from './components/context/AuthContext';
-import Loader from './components/Loader';
-import { AuthContextType } from './models';
 import './default.scss';
+import AppRouter from './components/AppRouter';
+import { observer } from 'mobx-react';
+import store from './store/Store';
+import { FirebaseContext } from './components/context/FirebaseContext';
+import { FirebaseContextType } from './models';
 
 
-interface ProtectRouteProps {
-  ({ auth, redirectPath } : { auth: boolean| undefined, redirectPath: string }): JSX.Element,
-}
+const App: FC = observer(() => {
 
-const App: FC = () => {
+const { user } = useContext(FirebaseContext) as FirebaseContextType;
 
-  const { isAuth, updateAuth, isLoading, updateLoading } = useContext(AuthContext) as AuthContextType;
+
+const userLS = JSON.parse(localStorage.getItem('user')!);
+
 
   useEffect(() => {
-    if (localStorage.getItem("auth")) {
-      updateAuth(true);
+    if (localStorage.getItem("auth") && localStorage.getItem('user')) {
+      store.setIsAuth(true);
+      store.setUser(userLS);
     }
-    updateLoading(false);
   }, [])
 
-  console.log("isAuth: ", isAuth);
+  const isAuth = store.isAuth;
+  const sUser = store.user;
 
-  const ProtectRoute: ProtectRouteProps = ({ auth, redirectPath = '/' }) => {
-    if (auth) {
-      return <Outlet />;
-    }
-
-    return <Navigate to={redirectPath} replace />;
-  }
-
-  if (isLoading) {
-    return <Loader />
-  }
+  console.log("aAuth: ", isAuth);
+  console.log("sUser: ", sUser);
 
   return (
       <div className="App">
           <Header />
           <div className="main">
-            <Routes>
-              <Route path="/" element={
-                <ProtectedRoute>
-                  <CheckContextProvider >
-                    <Homepage />
-                  </CheckContextProvider> 
-                </ProtectedRoute>} 
-              />
-              <Route path="/login" element={
-                <AuthRoute>
-                  <Login />
-                </AuthRoute>
-              } />
-              <Route path="/registration" element={
-                <AuthRoute>
-                  <Registration />
-                </AuthRoute>
-              } />
-              <Route
-                  path="*"
-                  element={<Navigate to="/" replace/>}
-              />
-            </Routes>
-            {/* <Routes>
-              <Route element={<ProtectRoute auth={isAuth} redirectPath='/' />}>
-                <Route path="/" element={
-                  <CheckContextProvider >
-                    <Homepage />
-                  </CheckContextProvider> 
-                } />
-              </Route>
-              <Route element={<ProtectRoute auth={!isAuth} redirectPath='/login' />}>
-
-                <Route path="/login" element={
-                    <Login />
-                } />
-                <Route path="/registration" element={
-                    <Registration />
-                } />
-              </Route>
-              <Route
-                  path="*"
-                  element={<Navigate to="/" replace/>}
-              />
-            </Routes> */}
+            <AppRouter />
           </div>
           <Footer />
       </div>
   );
-}
+});
 
 export default App;

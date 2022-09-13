@@ -10,8 +10,9 @@ import { FirebaseContext } from '../context/FirebaseContext';
 import { FirebaseContextType } from '../../models';
 import { auth } from '../../firebase/config';
 import './styles.scss';
+import { observer } from 'mobx-react';
 
-const Header: FC = () => {
+const Header: FC = observer(() => {
 
   const { user, logout } = useContext(FirebaseContext) as FirebaseContextType;
 
@@ -77,7 +78,7 @@ const Header: FC = () => {
       </div>
     </header>
   );
-};
+});
 
 export default Header;
 
