@@ -4,18 +4,17 @@ import { Button, Checkbox, Modal, Space, Tooltip, message, Image } from 'antd';
 import { EditOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { FirebaseContextType, ICardItem } from '../../models';
 import BorderWrapper from '../UI/BorderWrapper';
-import './styles.scss';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { CheckContext } from '../context/CheckContext';
-import { CheckContextType, WishType } from '../../models';
 import WishForm from '../UI/WishForm';
 import { FirebaseContext } from '../context/FirebaseContext';
+import { checkStore } from '../../store';
+import { observer } from 'mobx-react';
+import './styles.scss';
 
 const { confirm } = Modal;
 
-const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
+const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
 
-  const { updateCheck } = useContext(CheckContext) as CheckContextType;
   const { deleteWish, updateWish, deleteImgFromStorage } = useContext(FirebaseContext) as FirebaseContextType;
   const [visible, setVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);  
@@ -30,7 +29,8 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
   };
 
   const onChange = (e: CheckboxChangeEvent, id: string) => {
-    updateCheck(id);
+    console.log(e);
+    checkStore.updateCheck(id);
   };
 
   // Для формы изменения
@@ -119,6 +119,7 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
       </Modal>
 
       <Modal
+        key = {wishItem.id}
         visible={isUpdateModalVisible}
         title="Изменить желание"
         onCancel={handleUpdateCancel}
@@ -129,6 +130,6 @@ const CardItem: FC<ICardItem> = ({ wishItem, unicCategs }) => {
 
     </BorderWrapper>
   );
-};
+});
 
 export default CardItem;

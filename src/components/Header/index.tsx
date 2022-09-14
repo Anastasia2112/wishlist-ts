@@ -11,10 +11,12 @@ import { FirebaseContextType } from '../../models';
 import { auth } from '../../firebase/config';
 import './styles.scss';
 import { observer } from 'mobx-react';
+import { userStore } from '../../store';
 
 const Header: FC = observer(() => {
 
-  const { user, logout } = useContext(FirebaseContext) as FirebaseContextType;
+  const { logout } = useContext(FirebaseContext) as FirebaseContextType;
+  const user = JSON.parse(userStore.user!);
 
   const navigate = useNavigate();
 

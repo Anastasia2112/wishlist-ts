@@ -19,7 +19,7 @@ export interface ICardList {
 export interface ICardItem  { 
     wishItem : WishType,
     unicCategs : string[],
-    key? : number,
+    key? : string,
 }
 
 export type FirebaseContextType = {
@@ -40,18 +40,12 @@ export type FirebaseContextType = {
 export type CheckContextType = {
     checkedWishes: string[],
     wishCount: number,
-    updateCheck : (id: string) => void
+    updateCheck : (id: string) => void,
+    deleteCheck : (id: string) => void
 }
 
 export type AuthFormValues = {
     password: string, 
     remember: boolean, 
     email: string
-}
-
-export type AuthContextType = {
-    isAuth: boolean,
-    updateAuth : (value: boolean) => void,
-    isLoading: boolean,
-    updateLoading : (value: boolean) => void
 }

@@ -1,7 +1,6 @@
-import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Button, Form, Input, Select, Modal, Tooltip, message, InputNumber, Result, Radio, Space  } from 'antd';
+import { FC, useContext, useEffect, useMemo, useState } from 'react';
+import { Button, Select, Modal, Tooltip, message, InputNumber, Result, Radio, Space  } from 'antd';
 import { PlusOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import type { RadioChangeEvent } from 'antd';
 import CardsList from '../../components/CardsList';
 import BorderWrapper from '../../components/UI/BorderWrapper';
 import mock from '../../mock.json';
@@ -9,22 +8,24 @@ import { FirebaseContextType, WishType } from '../../models';
 import { CheckContext } from '../../components/context/CheckContext';
 import { CheckContextType } from '../../models';
 import { db } from '../../firebase/config';
-import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, QuerySnapshot, where } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, query, where } from 'firebase/firestore';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
 import WishForm from '../../components/UI/WishForm';
 import Loader from '../../components/Loader';
-
+import { userStore, checkStore } from '../../store';
+import { observer } from 'mobx-react-lite';
 import './styles.scss';
 
 const { Option } = Select;
 const { confirm } = Modal;
 
-const Homepage: FC  = () => {
+const Homepage: FC  = observer(() => {
 
-  const { user, deleteWish } = useContext(FirebaseContext) as FirebaseContextType;
+  const { deleteWish } = useContext(FirebaseContext) as FirebaseContextType;
+
+  const user = JSON.parse(userStore.user!);
 
   const [wishesDB, setWishesDB] = useState<WishType[]>([]);
-  const [fromDB, setFromDB] = useState<any>();
   // const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
   const [isDBError, setIsDBError] = useState<boolean>(false);
   const wishesCollectionRef = collection(db, "wishes");
@@ -45,30 +46,35 @@ const Homepage: FC  = () => {
   // Получение записей из БД
   useEffect(() => {
     setIsWishesLoading(true);
-    // const q = query(collection(db, "wishes"), where("userId", "==", user?.uid));
-    const q = query(collection(db, "wishes"));
-
+    const q = query(collection(db, "wishes"), where("userId", "==", user?.uid));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      let wishesArray: WishType[] = [];
-      querySnapshot.forEach((doc) => {
-        wishesArray.push({...doc.data(), id: doc.id} as WishType)
-      });
-      setWishesDB(wishesArray);
-      console.log('unsubscribe() function worked');
-      setIsWishesLoading(false);
+      try {
+        let wishesArray: WishType[] = [];
+        querySnapshot.forEach((doc) => {
+          wishesArray.push({...doc.data(), id: doc.id} as WishType)
+        });
+        setWishesDB(wishesArray);
+        console.log('unsubscribe() function worked');
+        setIsWishesLoading(false);
+      } catch (error) {
+        setIsDBError(true);
+        console.log(error);
+      }
     })
     return () => unsubscribe()
   }, [])
 
+  // Число отмеченных записей
+  const { wishCount, checkedWishes, deleteCheck } = useContext(CheckContext) as CheckContextType;
+
   // Удаление выбранных записей
   const deleteCheckedWishes = (arrOfCheched: string[]) => {
     arrOfCheched.forEach(id => {
+      // deleteCheck(id);
       deleteWish(id);
+      checkStore.deleteCheck(id);
     });
   }
-
-  // Число отмеченных записей
-  const { wishCount, checkedWishes } = useContext(CheckContext) as CheckContextType;
 
   // const [wishesArr, setWishesArr] = useState<WishType[]>(mock.wishes);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
@@ -140,7 +146,8 @@ const Homepage: FC  = () => {
       okType: 'danger',
       cancelText: 'Отмена',
       onOk() {
-        deleteCheckedWishes(checkedWishes)
+        // deleteCheckedWishes(checkedWishes)
+        deleteCheckedWishes(checkStore.checkedWishes)
       },
       onCancel() {
       },
@@ -168,7 +175,7 @@ const Homepage: FC  = () => {
           {(!isDBError && !isWishesLoading) && <Tooltip title="Добавить желание">
             <Button className='homepage-nav-btn' icon={<PlusOutlined />} onClick={showAddModal} ></Button>
           </Tooltip>}
-          { wishCount > 0 && 
+          { checkStore.checkedWishes.length > 0 && // wishCount > 0 && 
           <Tooltip title="Удалить выбранные">
             <Button className='homepage-nav-btn card-btn-delete' icon={<DeleteOutlined />}  onClick={showDeleteCheckedConfirm} />
           </Tooltip>
@@ -203,7 +210,7 @@ const Homepage: FC  = () => {
       
     </section>
   );
-};
+});
 
 export default Homepage;
 

@@ -7,17 +7,11 @@ import { ICardList } from '../../models';
 
 const CardsList: FC<ICardList> = ({ wishesArr, unicCategs }) => {
 
-  const [checkedWishes, setCheckedWishes] = useState<any>([]);
-
-  const addCheckedWish = (newCheck: any) => {
-    setCheckedWishes([...checkedWishes, newCheck]);
-  }
-
   return (
     <section>
-        {wishesArr.map((item, index) => 
-            <CardItem key={index} wishItem={item} unicCategs={unicCategs} />
-        )}
+      {wishesArr.map((item) => 
+        <CardItem key={item.id} wishItem={item} unicCategs={unicCategs} />
+      )}
     </section>
   );
 };

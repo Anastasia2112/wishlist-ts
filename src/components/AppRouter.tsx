@@ -3,7 +3,7 @@ import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import Homepage from '../pages/Homepage';
 import Login from '../pages/Login';
 import Registration from '../pages/Registration';
-import store from '../store/Store';
+import { userStore } from '../store';
 import CheckContextProvider from './context/CheckContext';
 
 interface ProtectRouteProps {
@@ -23,14 +23,14 @@ const AppRouter = observer(() => {
     return (
     <>
         <Routes>
-            <Route element={<ProtectRoute auth={store.isAuth} redirectPath='/login' />}>
+            <Route element={<ProtectRoute auth={userStore.isAuth} redirectPath='/login' />}>
                 <Route path="/" element={
                     <CheckContextProvider >
                         <Homepage />
                     </CheckContextProvider> 
                 } />
             </Route>
-            <Route element={<ProtectRoute auth={!store.isAuth} redirectPath='/' />}>
+            <Route element={<ProtectRoute auth={!userStore.isAuth} redirectPath='/' />}>
                 <Route path="/login" element={
                     <Login />
                 } />

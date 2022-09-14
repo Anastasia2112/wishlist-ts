@@ -7,6 +7,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
+import { userStore } from '../../../store';
 const { Option } = Select;
 
 interface IWishForm {
@@ -19,7 +20,8 @@ interface IWishForm {
 
 const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}: IWishForm) => {
 
-    const { user, defaultImg, deleteImgFromStorage } = useContext(FirebaseContext) as FirebaseContextType;
+    const { defaultImg, deleteImgFromStorage } = useContext(FirebaseContext) as FirebaseContextType;
+    const user = JSON.parse(userStore.user!);
     const prevData: WishType | undefined = wishItem;
     const [value, setValue] = useState(2);
     let initialFileList: any;

@@ -8,7 +8,6 @@ import reportWebVitals from './reportWebVitals';
 
 import './index.css';
 import FirebaseContextProvider from './components/context/FirebaseContext';
-import AuthContextProvider from './components/context/AuthContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,11 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
   // <React.StrictMode>
     <BrowserRouter>
-      <AuthContextProvider>
         <FirebaseContextProvider >
           <App />
         </FirebaseContextProvider>
-      </AuthContextProvider>
     </BrowserRouter>
   // </React.StrictMode>
 );
