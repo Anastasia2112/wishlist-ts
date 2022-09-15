@@ -5,6 +5,7 @@ import Login from '../pages/Login';
 import Registration from '../pages/Registration';
 import NotFound from '../pages/NotFound';
 import { userStore } from '../store';
+import ForgotPassword from './Auth/ForgotPassword';
 
 interface ProtectRouteProps {
     ({ auth, redirectPath } : { auth: boolean| undefined, redirectPath: string }): JSX.Element,
@@ -35,6 +36,10 @@ const AppRouter = observer(() => {
                 <Route path="/registration" element={
                     <Registration />
                 } />
+                <Route path="/forgot-password" element={
+                    <ForgotPassword />
+                }
+                />
             </Route>
             <Route
                 path="*"

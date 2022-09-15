@@ -1,10 +1,8 @@
-import { FC, useState, useContext } from 'react';
+import { FC, useContext } from 'react';
 import { Link } from "react-router-dom";
-
 import { Button, Checkbox, Form, Input, Divider, Typography } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import './styles.scss';
-import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { FirebaseContext } from '../../context/FirebaseContext';
 import { FirebaseContextType, AuthFormValues } from '../../../models';
 
@@ -12,13 +10,11 @@ const { Text } = Typography;
 
 const SignIn: FC = () => {
 
-    // const auth = getAuth();
     const { signInWithGoogle, signIn, authError } = useContext(FirebaseContext) as FirebaseContextType;
 
     const handleSignInWithGoogle = async () => {
         try {
             signInWithGoogle();
-            // navigate('/');
         } catch (error) {
             console.log(error);
         }
@@ -51,7 +47,10 @@ const SignIn: FC = () => {
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
-                {authError && <p><Text type="danger">Неверный email или пароль!</Text></p>}
+                {authError && <div className='signin-warning-wrapper'>
+                    <Text type="danger">Неверный email или пароль!</Text>
+                    <Link to="/forgot-password">Забыли пароль?</Link>
+                </div>}
                 <Form.Item
                     label="Email"
                     name="email"

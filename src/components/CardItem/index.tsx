@@ -1,7 +1,6 @@
 import { FC, useContext, useState } from 'react';
-
-import { Button, Checkbox, Modal, Space, Tooltip, message, Image } from 'antd';
-import { EditOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Modal, Space, Tooltip, Image } from 'antd';
+import { EditOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { FirebaseContextType, ICardItem } from '../../models';
 import BorderWrapper from '../UI/BorderWrapper';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -30,7 +29,6 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
   };
 
   const onChange = (e: CheckboxChangeEvent, id: string) => {
-    console.log(e);
     checkStore.updateCheck(id);
   };
 

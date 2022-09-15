@@ -1,17 +1,13 @@
-
-import { FC, useContext, useState } from 'react';
-import { Button, Space, Menu, Dropdown, message } from 'antd';
-import { MenuOutlined, UserOutlined, LogoutOutlined, CheckSquareOutlined } from '@ant-design/icons';
+import { FC, useContext } from 'react';
+import { Space, Menu, Dropdown, message } from 'antd';
+import { MenuOutlined, LogoutOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
-import { signOut } from 'firebase/auth';
-import TestPage from '../../pages/NotFound';
 import { FirebaseContext } from '../context/FirebaseContext';
 import { FirebaseContextType } from '../../models';
-import { auth } from '../../firebase/config';
-import './styles.scss';
 import { observer } from 'mobx-react';
 import { userStore } from '../../store';
+import './styles.scss';
 
 const Header: FC = observer(() => {
 
@@ -63,16 +59,12 @@ const Header: FC = observer(() => {
       <div className='wrap'>
         <Link to="/" className={'header-logo'}>Your Wishlist</Link>
         <Space>
-          {/* <Link to="/test">TestPage</Link> */}
-          {/* {user && <Link to="/login"><Button onClick={signOutHandler}>Выйти</Button></Link>} */}
           {user &&
-            <Dropdown overlay={menu}>
-              <a onClick={e => e.preventDefault()}>
+            <Dropdown overlay={menu} className='header-dropdown'>
                 <Space>
                   <span className='header-username'>{user?.email}</span>
                   <MenuOutlined />
                 </Space>
-              </a>
             </Dropdown>
           } 
           

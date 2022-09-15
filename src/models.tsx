@@ -33,7 +33,8 @@ export type FirebaseContextType = {
     deleteWish : (id: string) => void,
     updateWish : (editWish: WishType, id: string) => void,
     defaultImg: string | undefined,
-    deleteImgFromStorage : (imgName: string) => void
+    deleteImgFromStorage : (imgName: string) => void,
+    forgotPassword : (email: string) => void
 }
 
 export type CheckContextType = {

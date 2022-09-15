@@ -1,12 +1,10 @@
-import { ReactNode, createContext, useState, useContext } from 'react';
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from 'firebase/auth';
-import { getFirestore, updateDoc, deleteDoc, doc } from "firebase/firestore";
-import { config } from '../../firebase/config';
-import { initializeApp } from 'firebase/app';
+import { ReactNode, createContext, useState } from 'react';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, signOut} from 'firebase/auth';
+import { updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { FirebaseContextType } from '../../models';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { app, auth, db, storage } from '../../firebase/config';
+import { auth, db, storage } from '../../firebase/config';
 import { message } from 'antd';
 import { deleteObject, ref } from 'firebase/storage';
 import { userStore } from '../../store';
@@ -69,6 +67,18 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
             });
     }
 
+    const forgotPassword = (email: string) => {
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                message.success('Письмо с инструкцией по восстановлению пароля отправлено на указанный email.');
+                navigate('/login');
+            })
+            .catch((error) => {
+                console.log(error);
+                message.error(error.message);
+            });
+    };
+
     const logout = () => {
         signOut(auth);
         userStore.setIsAuth(false);
@@ -84,7 +94,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         const wishDoc = doc(db, "wishes", id);
         await updateDoc(wishDoc, editWish)
           .then(() => {
-            message.success('Желание изменено!')
+            message.success('Желание изменено!');
         })
           .catch((error) => {
             message.error('Ошибка при изменении записи.');
@@ -123,6 +133,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         signInWithGoogle, 
         createUser, 
         signIn, 
+        forgotPassword,
         logout, 
         authError, 
         deleteWish, 
