@@ -18,7 +18,6 @@ class CheckStore {
 
     updateCheck(id: string) {
         if (this.checkedWishes.includes(id)) {
-            console.log("include");
             this.deleteCheck(id);
         } else this.addCheck(id);
     }

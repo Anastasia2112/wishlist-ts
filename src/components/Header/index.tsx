@@ -5,7 +5,7 @@ import { MenuOutlined, UserOutlined, LogoutOutlined, CheckSquareOutlined } from 
 import type { MenuProps } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from 'firebase/auth';
-import TestPage from '../../pages/TestPage';
+import TestPage from '../../pages/NotFound';
 import { FirebaseContext } from '../context/FirebaseContext';
 import { FirebaseContextType } from '../../models';
 import { auth } from '../../firebase/config';

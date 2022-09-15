@@ -24,7 +24,6 @@ export interface ICardItem  {
 
 export type FirebaseContextType = {
     auth : any
-    firestore: any,
     user: any,
     signInWithGoogle : () => void,
     logout : () => void,

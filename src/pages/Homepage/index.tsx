@@ -5,8 +5,6 @@ import CardsList from '../../components/CardsList';
 import BorderWrapper from '../../components/UI/BorderWrapper';
 import mock from '../../mock.json';
 import { FirebaseContextType, WishType } from '../../models';
-import { CheckContext } from '../../components/context/CheckContext';
-import { CheckContextType } from '../../models';
 import { db } from '../../firebase/config';
 import { addDoc, collection, onSnapshot, query, where } from 'firebase/firestore';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
@@ -15,6 +13,7 @@ import Loader from '../../components/Loader';
 import { userStore, checkStore } from '../../store';
 import { observer } from 'mobx-react-lite';
 import './styles.scss';
+import { v4 } from 'uuid';
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -63,9 +62,6 @@ const Homepage: FC  = observer(() => {
     })
     return () => unsubscribe()
   }, [])
-
-  // Число отмеченных записей
-  const { wishCount, checkedWishes, deleteCheck } = useContext(CheckContext) as CheckContextType;
 
   // Удаление выбранных записей
   const deleteCheckedWishes = (arrOfCheched: string[]) => {
@@ -161,12 +157,12 @@ const Homepage: FC  = observer(() => {
         <div className='homepage-nav-selects'>
           {(wishesDB.length > 0 && !isDBError ) && <Select className='homepage-nav-select' onChange={filter => setSelectedFilter(filter)} placeholder="Категория" style={{ width: 160 }} allowClear >
             {unicCategs.map((sort, index) => {
-              return <Option key={index} value={sort}>{sort}</Option>
+              return <Option key={v4()} value={sort}>{sort}</Option>
             })}
           </Select>}
           {(wishesDB.length > 0 && !isDBError ) && <Select className='homepage-nav-select' defaultValue={sorts[0]} onChange={sort => setSelectedSort(sort)} placeholder="Сортировка" style={{ width: 160 }} >{/*  allowClear */}
             {sorts.map((sort, index) => {
-              return <Option key={index} value={sort}>{sort}</Option>
+              return <Option key={v4()} value={sort}>{sort}</Option>
             })}
           </Select>}
         </div>
@@ -184,6 +180,7 @@ const Homepage: FC  = observer(() => {
       </div>
 
       <Modal
+        key = {v4()}
         visible={isAddModalVisible}
         title="Добавьте новое желание"
         onCancel={handleAddCancel}

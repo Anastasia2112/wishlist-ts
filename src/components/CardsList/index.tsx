@@ -1,9 +1,6 @@
 import { FC, useState } from 'react';
-
 import CardItem from '../CardItem';
 import { ICardList } from '../../models';
-
-// import './styles.scss';
 
 const CardsList: FC<ICardList> = ({ wishesArr, unicCategs }) => {
 

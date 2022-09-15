@@ -6,7 +6,7 @@ import { initializeApp } from 'firebase/app';
 import { FirebaseContextType } from '../../models';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { app, db, storage } from '../../firebase/config';
+import { app, auth, db, storage } from '../../firebase/config';
 import { message } from 'antd';
 import { deleteObject, ref } from 'firebase/storage';
 import { userStore } from '../../store';
@@ -18,8 +18,6 @@ type FirebaseContextProviderProps = {
 export const FirebaseContext = createContext<FirebaseContextType | null>(null);
 
 const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => {
-    const auth = getAuth();
-    const firestore = getFirestore(app);
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
     const [authError, setAuthError] = useState<boolean>(false);
@@ -119,8 +117,19 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         }
     }
 
-    return <FirebaseContext.Provider value={{ auth, firestore, user, signInWithGoogle, createUser, signIn, logout, authError, deleteWish, updateWish, defaultImg, deleteImgFromStorage }}>
-        { children }
+    return <FirebaseContext.Provider value={{ 
+        auth, 
+        user, 
+        signInWithGoogle, 
+        createUser, 
+        signIn, 
+        logout, 
+        authError, 
+        deleteWish, 
+        updateWish, 
+        defaultImg, 
+        deleteImgFromStorage }}>
+            { children }
     </FirebaseContext.Provider>
 }
 

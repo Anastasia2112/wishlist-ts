@@ -3,8 +3,8 @@ import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import Homepage from '../pages/Homepage';
 import Login from '../pages/Login';
 import Registration from '../pages/Registration';
+import NotFound from '../pages/NotFound';
 import { userStore } from '../store';
-import CheckContextProvider from './context/CheckContext';
 
 interface ProtectRouteProps {
     ({ auth, redirectPath } : { auth: boolean| undefined, redirectPath: string }): JSX.Element,
@@ -25,9 +25,7 @@ const AppRouter = observer(() => {
         <Routes>
             <Route element={<ProtectRoute auth={userStore.isAuth} redirectPath='/login' />}>
                 <Route path="/" element={
-                    <CheckContextProvider >
-                        <Homepage />
-                    </CheckContextProvider> 
+                    <Homepage />
                 } />
             </Route>
             <Route element={<ProtectRoute auth={!userStore.isAuth} redirectPath='/' />}>
@@ -38,10 +36,12 @@ const AppRouter = observer(() => {
                     <Registration />
                 } />
             </Route>
-            {/* <Route
+            <Route
                 path="*"
-                element={<Navigate to="/" replace/>}
-            /> */}
+                element={
+                    <NotFound />
+                }
+            />
         </Routes> 
     </>
     )

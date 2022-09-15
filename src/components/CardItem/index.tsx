@@ -10,6 +10,7 @@ import { FirebaseContext } from '../context/FirebaseContext';
 import { checkStore } from '../../store';
 import { observer } from 'mobx-react';
 import './styles.scss';
+import { v4 } from 'uuid';
 
 const { confirm } = Modal;
 
@@ -101,6 +102,7 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
         </div>
       </div>
       <Modal
+        key = {wishItem.id + v4()}
         visible={visible}
         title="Детали"
         onCancel={handleCancel}
@@ -119,7 +121,7 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
       </Modal>
 
       <Modal
-        key = {wishItem.id}
+        key = {wishItem.id + v4()}
         visible={isUpdateModalVisible}
         title="Изменить желание"
         onCancel={handleUpdateCancel}

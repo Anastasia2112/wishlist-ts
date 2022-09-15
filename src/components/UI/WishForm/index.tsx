@@ -36,7 +36,8 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
                 url: prevData?.img,
             },
         ]
-    }
+    };
+    const [form] = Form.useForm(); 
     const [fileList, setFileList] = useState<UploadFile[]>(initialFileList);
     const [file, setFile] = useState<Blob | Uint8Array | ArrayBuffer>();
     
@@ -127,13 +128,14 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
             }
         }
         handleCancel();
+        form.resetFields();
     };
 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
 
-    const onChange = (e: RadioChangeEvent) => {
+    const onChangeRadio = (e: RadioChangeEvent) => {
         setValue(e.target.value);
     };
 
@@ -184,7 +186,8 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
 
   return (
     <Form
-        name="basic"
+        name="wish"
+        form={form}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 16 }}
         initialValues={initialFormValues}
@@ -229,7 +232,7 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
             </ImgCrop>
         </Form.Item>
 
-        <Radio.Group onChange={onChange} value={value} >
+        <Radio.Group onChange={onChangeRadio} value={value} >
             <Radio value={1}>Добавить категорию</Radio>
             <Radio value={2}>Выбрать категорию</Radio>
         </Radio.Group>
