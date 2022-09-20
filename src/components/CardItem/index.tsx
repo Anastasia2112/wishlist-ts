@@ -65,6 +65,7 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
           <Image
             className='card-img'
             src={wishItem.img}
+            width={120}
           />
           <div className='card-info'>
               <span className='card-name' onClick={showModal}>{wishItem.name}</span>
@@ -110,8 +111,8 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
       >
         <Image
           className='card-about-img'
-            src={wishItem.img}
-          />
+          src={wishItem.img}
+        />
         <span className='card-category'>{wishItem.category}</span>
         <span className='card-about-name' >{wishItem.name}</span>
         <a className='card-about-link' href={wishItem.link} target="_blank" rel="noreferrer">{wishItem.link}</a>
