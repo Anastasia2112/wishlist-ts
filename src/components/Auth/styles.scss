@@ -1,5 +1,5 @@
 .signin-wrap {
-    width: 500px;
+    max-width: 500px;
     margin: 0 auto;
     border: 1px solid rgba(0,0,0,.06);
     padding: 24px;
@@ -12,9 +12,21 @@
     font-size: 2.6rem;
 }
 
+.signin-warning-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
 .signin-signup-text {
     display: block;
     margin-top: 24px;
     font-size: 1.4rem;
     text-align: center;
+}
+
+@media (max-width: 400px) {
+    .signin-warning-wrapper, .signin-warning-wrapper * {
+        display: block;
+    }
 }

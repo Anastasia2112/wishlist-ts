@@ -4,7 +4,7 @@ import { Button, Form, Input, Divider } from 'antd';
 import { RollbackOutlined, MailOutlined } from '@ant-design/icons';
 import { FirebaseContext } from '../../context/FirebaseContext';
 import { FirebaseContextType, AuthFormValues } from '../../../models';
-import './styles.scss';
+import '../styles.scss';
 
 const ForgotPassword: FC = () => {
 

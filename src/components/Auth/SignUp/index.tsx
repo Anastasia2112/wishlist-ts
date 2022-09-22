@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 
 import { Button, Checkbox, Form, Input, Divider } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
-import './styles.scss';
+import '../styles.scss';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { FirebaseContext } from '../../context/FirebaseContext';
 import { FirebaseContextType, AuthFormValues } from '../../../models';

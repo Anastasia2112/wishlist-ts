@@ -2,7 +2,7 @@ import { FC, useContext } from 'react';
 import { Link } from "react-router-dom";
 import { Button, Checkbox, Form, Input, Divider, Typography } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
-import './styles.scss';
+import '../styles.scss';
 import { FirebaseContext } from '../../context/FirebaseContext';
 import { FirebaseContextType, AuthFormValues } from '../../../models';
 
@@ -42,7 +42,6 @@ const SignIn: FC = () => {
             <h2 className='signin-title'>Авторизация</h2>
             <Form
                 name="auth"
-                initialValues={{ remember: true }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
@@ -66,10 +65,6 @@ const SignIn: FC = () => {
                 >
                     <Input.Password />
                 </Form.Item>
-
-                {/* <Form.Item name="remember" valuePropName="checked" >
-                    <Checkbox>Запомнить меня</Checkbox>
-                </Form.Item> */}
 
                 <Form.Item >
                     <Button block htmlType="submit" icon={<LoginOutlined />}>

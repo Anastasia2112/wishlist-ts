@@ -69,7 +69,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
 
     const forgotPassword = (email: string) => {
         sendPasswordResetEmail(auth, email, {
-            url: 'http://localhost:3000/login',
+            url: 'https://wishlist-8a38b.web.app/login',
         })
             .then(() => {
                 message.success('Письмо с инструкцией по восстановлению пароля отправлено на указанный email.');
