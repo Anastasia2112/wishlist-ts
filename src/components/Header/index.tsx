@@ -38,12 +38,12 @@ const Header: FC = observer(() => {
         {
           label: 'Выйти',
           key: '1',
-          icon: <LogoutOutlined />,
+          icon: <LogoutOutlined className='header-dropdown-icon' />,
         },
         {
           label: 'Архив',
           key: '2',
-          icon: <CheckSquareOutlined />,
+          icon: <CheckSquareOutlined className='header-dropdown-icon' />,
         },
         // {
         //   label: 'Профиль',
@@ -63,7 +63,7 @@ const Header: FC = observer(() => {
             <Dropdown overlay={menu}>
                 <Space>
                   <span className='header-username'>{user?.email}</span>
-                  <MenuOutlined  className='header-menu-icon'/>
+                  <MenuOutlined />
                 </Space>
             </Dropdown>
           } 

@@ -48,8 +48,12 @@
         display: none;
     }
 
-    .header-menu-icon {
-        font-size: 2rem;
-        padding-left: 40px;
+    .header-dropdown-icon, .ant-dropdown-menu-title-content {
+        font-size: 1.6rem;
+    }
+
+    .ant-dropdown-menu-item {
+        // font-size: 1.6rem;
+        padding: 8px 28px 8px 12px;
     }
 }
