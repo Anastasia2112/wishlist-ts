@@ -1,0 +1,17 @@
+[debug] [2022-09-23T13:02:14.360Z] ----------------------------------------------------------------------
+[debug] [2022-09-23T13:02:14.362Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2022-09-23T13:02:14.363Z] CLI Version:   11.8.0
+[debug] [2022-09-23T13:02:14.363Z] Platform:      darwin
+[debug] [2022-09-23T13:02:14.363Z] Node Version:  v16.15.1
+[debug] [2022-09-23T13:02:14.371Z] Time:          Fri Sep 23 2022 16:02:14 GMT+0300 (Москва, стандартное время)
+[debug] [2022-09-23T13:02:14.371Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-09-23T13:02:14.425Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-09-23T13:02:14.425Z] > authorizing via signed-in user (nastia.ttn@gmail.com)
+[debug] [2022-09-23T13:02:14.425Z] [iam] checking project wishlist-8a38b for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-09-23T13:02:14.428Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/wishlist-8a38b:testIamPermissions [none]
+[debug] [2022-09-23T13:02:14.428Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/wishlist-8a38b:testIamPermissions x-goog-quota-user=projects/wishlist-8a38b
+[debug] [2022-09-23T13:02:14.428Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/wishlist-8a38b:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-09-23T13:02:14.723Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/wishlist-8a38b:testIamPermissions 200
+[debug] [2022-09-23T13:02:14.723Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/wishlist-8a38b:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-09-23T13:02:14.724Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/wishlist-8a38b [none]
