@@ -63,7 +63,7 @@ const Header: FC = observer(() => {
             <Dropdown overlay={menu}>
                 <Space>
                   <span className='header-username'>{user?.email}</span>
-                  <MenuOutlined />
+                  <MenuOutlined className='header-menu-icon'/>
                 </Space>
             </Dropdown>
           } 
