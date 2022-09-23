@@ -7,8 +7,12 @@ export interface WishType {
     category: string,
     desc?: string,
     userId: string,
-    isCompleted: boolean,
+    isGranted: boolean,
     created: number
+}
+
+export interface IHomepage {
+    isArchive: boolean
 }
 
 export interface ICardList {
@@ -30,8 +34,10 @@ export type FirebaseContextType = {
     createUser : (email: string, password: string) => void,
     signIn : (email: string, password: string) => void,
     authError: boolean,
+    createNewWish : (newWish: WishType) => void,
     deleteWish : (id: string) => void,
-    updateWish : (editWish: WishType, id: string) => void,
+    updateWish : (editWish: any, id: string) => void,
+    updateIsGranted : (value: boolean, id: string) => void,
     defaultImg: string | undefined,
     deleteImgFromStorage : (imgName: string) => void,
     forgotPassword : (email: string) => void

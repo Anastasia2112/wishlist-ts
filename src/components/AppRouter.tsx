@@ -26,7 +26,10 @@ const AppRouter = observer(() => {
         <Routes>
             <Route element={<ProtectRoute auth={userStore.isAuth} redirectPath='/login' />}>
                 <Route path="/" element={
-                    <Homepage />
+                    <Homepage isArchive={false}/>
+                } />
+                <Route path="/archive" element={
+                    <Homepage isArchive={true}/>
                 } />
             </Route>
             <Route element={<ProtectRoute auth={!userStore.isAuth} redirectPath='/' />}>

@@ -95,7 +95,6 @@
 
 .card-about-img {
     width: 100%;
-    background: rgba(0,0,0,.1);
     margin-bottom: 20px;
 }
 
@@ -124,6 +123,13 @@
     color: #000;
     display: block;
 } 
+
+.ant-modal-footer {
+    text-align: none;
+    display: flex ;
+    justify-content: space-between;
+    align-items: center;
+}
 
 @media (max-width: 840px) {
     .card-wrapper {

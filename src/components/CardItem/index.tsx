@@ -1,6 +1,6 @@
 import { FC, useContext, useState } from 'react';
 import { Button, Checkbox, Modal, Space, Tooltip, Image } from 'antd';
-import { EditOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined, CheckOutlined, RollbackOutlined } from '@ant-design/icons';
 import { FirebaseContextType, ICardItem } from '../../models';
 import BorderWrapper from '../UI/BorderWrapper';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -15,7 +15,7 @@ const { confirm } = Modal;
 
 const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
 
-  const { deleteWish, updateWish, deleteImgFromStorage } = useContext(FirebaseContext) as FirebaseContextType;
+  const { deleteWish, updateWish, deleteImgFromStorage, updateIsGranted } = useContext(FirebaseContext) as FirebaseContextType;
   const [visible, setVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);  
 
@@ -58,6 +58,15 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
     });
   };
 
+  const AboutModalFooter = () => {
+    return (
+      <>
+        <span className='card-price'>{wishItem.price} ₽</span>
+        {!checkStore.isGranted && <Button icon={<CheckOutlined />} onClick={() => updateIsGranted(true, wishItem.id)}>В архив</Button>}
+      </>
+    )
+  };
+
   return (
     <BorderWrapper clName={'cardHeight'}>
       <div className='card-wrapper'>
@@ -74,25 +83,21 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
           </div>
         </div>
         <div className='card-price-and-btns'>
-          {wishItem.isCompleted
-          ?
-            <span className='card-price'>{wishItem.price} ₽</span>
-          :
             <div  className='card-price-and-check'>
               <span className='card-price'>{wishItem.price} ₽</span>
               <Checkbox className='card-check' onChange={(e) => onChange(e, wishItem.id)}></Checkbox>
-            </div>}
+            </div>
           <div className='card-btns'>
             <Space>
-              {/* {wishItem.isCompleted && <Tooltip title="Убрать из архива">
-                <Button className='card-btn-delete' icon={<CloseOutlined />} onClick={() => console.log('из архива')}/>
-              </Tooltip>}
-              {!wishItem.isCompleted && <Tooltip title="В архив">
-                <Button className='card-btn-complete' icon={<CheckOutlined />} onClick={() => console.log('в архив')}/>
-              </Tooltip>} */}
-              {!wishItem.isCompleted && <Tooltip title="Изменить">
-                <Button icon={<EditOutlined />} onClick={showUpdateModal}/>
-              </Tooltip>}
+              {checkStore.isGranted 
+              ? <Tooltip title="Отменить">
+                  <Button icon={<RollbackOutlined />} onClick={() => updateIsGranted(false, wishItem.id)}></Button>
+                </Tooltip>
+              :
+                <Tooltip title="Изменить">
+                  <Button icon={<EditOutlined />} onClick={showUpdateModal}/>
+                </Tooltip>
+              }
               <Tooltip title="Удалить">
                 <Button className='card-btn-delete' icon={<DeleteOutlined />} onClick={showDeleteConfirm}/>
               </Tooltip>
@@ -106,13 +111,15 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
         title="Детали"
         onCancel={handleCancel}
         footer={[
-          <span className='card-price'>{wishItem.price} ₽</span>
+          <AboutModalFooter />
         ]}
       >
-        <Image
-          className='card-about-img'
-          src={wishItem.img}
-        />
+        <div className='card-about-img'>
+          <Image
+            width='100%'
+            src={wishItem.img}
+          />
+        </div>
         <span className='card-category'>{wishItem.category}</span>
         <span className='card-about-name' >{wishItem.name}</span>
         <a className='card-about-link' href={wishItem.link} target="_blank" rel="noreferrer">{wishItem.link}</a>
@@ -124,7 +131,9 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
         visible={isUpdateModalVisible}
         title="Изменить желание"
         onCancel={handleUpdateCancel}
-        footer={[<div className="homepage-add-form-footer"><HeartOutlined /></div>]}
+        footer={[
+          <div className="homepage-add-form-footer"><HeartOutlined /></div>
+        ]}
       >
         <WishForm unicCategs={unicCategs} handleCancel={handleUpdateCancel} onFinishFunc={(e) => updateWish(e, wishItem.id)} formType={'edit'} wishItem={wishItem}/>
       </Modal>

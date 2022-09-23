@@ -42,12 +42,12 @@ const WishForm = ({ unicCategs, handleCancel, onFinishFunc, formType, wishItem}:
     const [file, setFile] = useState<Blob | Uint8Array | ArrayBuffer>();
     
     const createWish = (formData: WishType) => {
-        const newWish = {...formData, userId: user?.uid, created: Date.now(), img: defaultImg};
+        const newWish = {...formData, userId: user?.uid, created: Date.now(), img: defaultImg, isGranted: false};
         onFinishFunc(newWish);
     };
 
     const createWithImg = (formData: WishType, imgUp: string) => {
-        const newWish = {...formData, userId: user?.uid, created: Date.now(), img: imgUp};
+        const newWish = {...formData, userId: user?.uid, created: Date.now(), img: imgUp, isGranted: false};
         onFinishFunc(newWish);
     };
 

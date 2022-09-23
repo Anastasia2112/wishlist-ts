@@ -1,12 +1,12 @@
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { Button, Select, Modal, Tooltip, message, Result } from 'antd';
-import { PlusOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, Select, Modal, Tooltip, Result } from 'antd';
+import { PlusOutlined, DeleteOutlined, HeartOutlined, ExclamationCircleOutlined, LeftOutlined, StarOutlined, CheckOutlined } from '@ant-design/icons';
 import CardsList from '../../components/CardsList';
 import BorderWrapper from '../../components/UI/BorderWrapper';
 import mock from '../../mock.json';
 import { FirebaseContextType, WishType } from '../../models';
 import { db } from '../../firebase/config';
-import { addDoc, collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
 import WishForm from '../../components/UI/WishForm';
 import Loader from '../../components/Loader';
@@ -14,38 +14,30 @@ import { userStore, checkStore } from '../../store';
 import { observer } from 'mobx-react-lite';
 import './styles.scss';
 import { v4 } from 'uuid';
+import { IHomepage } from '../../models';
+import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 const { confirm } = Modal;
 
-const Homepage: FC  = observer(() => {
+const Homepage: FC<IHomepage>  = observer(({ isArchive }) => {
 
-  const { deleteWish } = useContext(FirebaseContext) as FirebaseContextType;
+  const { deleteWish, createNewWish } = useContext(FirebaseContext) as FirebaseContextType;
+  const navigate = useNavigate();
 
   const user = JSON.parse(userStore.user!);
 
   const [wishesDB, setWishesDB] = useState<WishType[]>([]);
   // const [wishesDB, setWishesDB] = useState<WishType[]>(mock.wishes);
   const [isDBError, setIsDBError] = useState<boolean>(false);
-  const wishesCollectionRef = collection(db, "wishes");
   const [isWishesLoading, setIsWishesLoading] = useState<boolean>(false);
-
-  // Создание записи с данными из формы
-  const createNewWish = async (newWish: WishType) => {
-    await addDoc(wishesCollectionRef, newWish)
-      .then(() => {
-        message.success('Желание добавлено!')
-      })
-      .catch((error) => {
-        message.error('Ошибка при добавлении записи.');
-        console.log(error);
-      })
-  }
 
   // Получение записей из БД
   useEffect(() => {
     setIsWishesLoading(true);
-    const q = query(collection(db, "wishes"), where("userId", "==", user?.uid));
+    // setIsGranted(isArchive);
+    checkStore.setIsGranted(isArchive);
+    const q = query(collection(db, "wishes"), where("userId", "==", user?.uid), where("isGranted", "==", isArchive));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       try {
         let wishesArray: WishType[] = [];
@@ -61,7 +53,7 @@ const Homepage: FC  = observer(() => {
       }
     })
     return () => unsubscribe()
-  }, [])
+  }, [isArchive])
 
   // Удаление выбранных записей
   const deleteCheckedWishes = (arrOfCheched: string[]) => {
@@ -72,7 +64,6 @@ const Homepage: FC  = observer(() => {
     });
   }
 
-  // const [wishesArr, setWishesArr] = useState<WishType[]>(mock.wishes);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>('Сначала новые');
   const [selectedFilter, setSelectedFilter] = useState<string>('');
@@ -103,7 +94,6 @@ const Homepage: FC  = observer(() => {
     if (selectedFilter) {
       return sortedWishes.filter(wish => wish.category ===  selectedFilter);
     }
-    
     return sortedWishes;
   }, [selectedFilter, sortedWishes]);
 
@@ -142,7 +132,6 @@ const Homepage: FC  = observer(() => {
       okType: 'danger',
       cancelText: 'Отмена',
       onOk() {
-        // deleteCheckedWishes(checkedWishes)
         deleteCheckedWishes(checkStore.checkedWishes)
       },
       onCancel() {
@@ -150,31 +139,42 @@ const Homepage: FC  = observer(() => {
     });
   };
 
+  const ArchiveHeader = () => {
+    return (
+      <div className='homepage-archive-wrapper'>
+        <Button icon={<LeftOutlined />} onClick={() => navigate('/')}>Назад</Button>
+        <h1 className='homepage-archive-header'>Архив <StarOutlined /></h1>
+      </div>
+    )
+  }
+
+  if (isWishesLoading) return <Loader />;
+
   return (
     <section className='homepage'>
-      {isWishesLoading && <Loader />}
+      {checkStore.isGranted && <ArchiveHeader />}
       <div className='homepage-nav'>
         <div className='homepage-nav-selects'>
           {(wishesDB.length > 0 && !isDBError ) && <Select className='homepage-nav-select' onChange={filter => setSelectedFilter(filter)} placeholder="Категория" style={{ width: 160 }} allowClear >
-            {unicCategs.map((sort, index) => {
+            {unicCategs.map((sort) => {
               return <Option key={v4()} value={sort}>{sort}</Option>
             })}
           </Select>}
           {(wishesDB.length > 0 && !isDBError ) && <Select className='homepage-nav-select' defaultValue={sorts[0]} onChange={sort => setSelectedSort(sort)} placeholder="Сортировка" style={{ width: 160 }} >{/*  allowClear */}
-            {sorts.map((sort, index) => {
+            {sorts.map((sort) => {
               return <Option key={v4()} value={sort}>{sort}</Option>
             })}
           </Select>}
         </div>
         <div className='homepage-nav-btns'>
-          {(wishesDB.length === 0 && !isDBError && !isWishesLoading) && <span className='homepage-nav-btns-info'>Добавьте желание:</span>}
-          {(!isDBError && !isWishesLoading) && <Tooltip title="Добавить желание">
-            <Button className='homepage-nav-btn' icon={<PlusOutlined />} onClick={showAddModal} ></Button>
-          </Tooltip>}
+          {(wishesDB.length === 0 && !isDBError && !isWishesLoading && !isArchive) && <span className='homepage-nav-btns-info'>Добавьте желание:</span>}
+          {(!isDBError && !isWishesLoading && !isArchive) && <Tooltip title="Добавить желание">
+              <Button className='homepage-nav-btn' icon={<PlusOutlined />} onClick={showAddModal} ></Button>
+            </Tooltip>}
           { checkStore.checkedWishes.length > 0 && // wishCount > 0 && 
-          <Tooltip title="Удалить выбранные">
-            <Button className='homepage-nav-btn card-btn-delete' icon={<DeleteOutlined />}  onClick={showDeleteCheckedConfirm} />
-          </Tooltip>
+            <Tooltip title="Удалить выбранные">
+              <Button className='homepage-nav-btn card-btn-delete' icon={<DeleteOutlined />}  onClick={showDeleteCheckedConfirm} />
+            </Tooltip>
           }
         </div>
       </div>
@@ -196,7 +196,7 @@ const Homepage: FC  = observer(() => {
         />
       }
 
-      {(wishesDB.length === 0 && !isDBError && !isWishesLoading) && <p className="homepage-info">Пока записей нет!</p>}
+      {(wishesDB.length === 0 && !isDBError && !isWishesLoading) && <p className="homepage-info">Пока желаний нет!</p>}
 
       {(wishesDB.length > 0 && !isDBError) && <CardsList wishesArr={sortedAndFilteredWishes} unicCategs={unicCategs}/>}
 

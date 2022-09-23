@@ -1,12 +1,12 @@
 import { FC, useContext } from 'react';
 import { Space, Menu, Dropdown, message } from 'antd';
-import { MenuOutlined, LogoutOutlined } from '@ant-design/icons';
+import { MenuOutlined, LogoutOutlined, CheckSquareOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseContext } from '../context/FirebaseContext';
 import { FirebaseContextType } from '../../models';
 import { observer } from 'mobx-react';
-import { userStore } from '../../store';
+import { userStore, checkStore } from '../../store';
 import './styles.scss';
 
 const Header: FC = observer(() => {
@@ -40,11 +40,11 @@ const Header: FC = observer(() => {
           key: '1',
           icon: <LogoutOutlined />,
         },
-        // {
-        //   label: 'Архив',
-        //   key: '2',
-        //   icon: <CheckSquareOutlined />,
-        // },
+        {
+          label: 'Архив',
+          key: '2',
+          icon: <CheckSquareOutlined />,
+        },
         // {
         //   label: 'Профиль',
         //   key: '3',

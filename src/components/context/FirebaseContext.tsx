@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState } from 'react';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, signOut} from 'firebase/auth';
-import { updateDoc, deleteDoc, doc } from "firebase/firestore";
-import { FirebaseContextType } from '../../models';
+import { updateDoc, deleteDoc, doc, addDoc, collection } from "firebase/firestore";
+import { FirebaseContextType, WishType } from '../../models';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, db, storage } from '../../firebase/config';
@@ -91,6 +91,19 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         localStorage.removeItem("auth");
     };
 
+      // Создание записи с данными из формы
+    const createNewWish = async (newWish: WishType) => {
+        const wishesCollectionRef = collection(db, "wishes");
+        await addDoc(wishesCollectionRef, newWish)
+        .then(() => {
+            message.success('Желание добавлено!')
+        })
+        .catch((error) => {
+            message.error('Ошибка при добавлении записи.');
+            console.log(error);
+        })
+    }
+
     const updateWish = async (editWish: any, id: string) => {
         console.log('id: ', id);
         console.log('values: ', editWish);
@@ -101,6 +114,20 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         })
           .catch((error) => {
             message.error('Ошибка при изменении записи.');
+            console.log(error);
+        })
+    };
+
+    const updateIsGranted = async (value: boolean, id: string) => {
+        const wishDoc = doc(db, "wishes", id);
+        await updateDoc(wishDoc, {
+            isGranted: value
+        })
+          .then(() => {
+            message.success('Желание перенесено!');
+        })
+          .catch((error) => {
+            message.error('Ошибка при перенесении записи.');
             console.log(error);
         })
     }
@@ -116,7 +143,7 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
           message.error('Ошибка при удалении записи.');
           console.log(error);
       });
-    }
+    };
 
     const deleteImgFromStorage = async (imgUrl: string | undefined) => {
         if (imgUrl && (imgUrl !== defaultImg)) {
@@ -139,8 +166,10 @@ const FirebaseContextProvider = ({ children }: FirebaseContextProviderProps) => 
         forgotPassword,
         logout, 
         authError, 
+        createNewWish,
         deleteWish, 
         updateWish, 
+        updateIsGranted,
         defaultImg, 
         deleteImgFromStorage }}>
             { children }
