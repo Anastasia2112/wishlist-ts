@@ -58,12 +58,12 @@ const Header: FC = observer(() => {
     <header className='header'>
       <div className='wrap'>
         <Link to="/" className={'header-logo'}>Your Wishlist</Link>
-        <Space>
+        <Space className='header-dropdown'>
           {user &&
-            <Dropdown overlay={menu} className='header-dropdown'>
+            <Dropdown overlay={menu}>
                 <Space>
                   <span className='header-username'>{user?.email}</span>
-                  <MenuOutlined />
+                  <MenuOutlined  className='header-menu-icon'/>
                 </Space>
             </Dropdown>
           } 
