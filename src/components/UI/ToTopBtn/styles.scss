@@ -1,0 +1,12 @@
+.to-top-btn {
+    position: fixed;
+    bottom: 46px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    opacity: 0.1;
+}
+
+.to-top-btn:hover {
+    opacity: 1;
+}

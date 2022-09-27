@@ -9,6 +9,7 @@ import { db } from '../../firebase/config';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { FirebaseContext } from '../../components/context/FirebaseContext';
 import WishForm from '../../components/UI/WishForm';
+import ToTopBtn from '../../components/UI/ToTopBtn';
 import Loader from '../../components/Loader';
 import { userStore, checkStore } from '../../store';
 import { observer } from 'mobx-react-lite';
@@ -152,6 +153,7 @@ const Homepage: FC<IHomepage>  = observer(({ isArchive }) => {
 
   return (
     <section className='homepage'>
+      <ToTopBtn />
       {checkStore.isGranted && <ArchiveHeader />}
       <div className='homepage-nav'>
         <div className='homepage-nav-selects'>
