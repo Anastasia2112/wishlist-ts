@@ -131,9 +131,10 @@ const CardItem: FC<ICardItem> = observer(({ wishItem, unicCategs }) => {
         visible={isUpdateModalVisible}
         title="Изменить желание"
         onCancel={handleUpdateCancel}
-        footer={[
-          <div className="homepage-add-form-footer"><HeartOutlined /></div>
-        ]}
+        footer={
+          // [ <div className="homepage-add-form-footer"><HeartOutlined /></div> ]
+          null
+        }
       >
         <WishForm unicCategs={unicCategs} handleCancel={handleUpdateCancel} onFinishFunc={(e) => updateWish(e, wishItem.id)} formType={'edit'} wishItem={wishItem}/>
       </Modal>

@@ -186,7 +186,11 @@ const Homepage: FC<IHomepage>  = observer(({ isArchive }) => {
         visible={isAddModalVisible}
         title="Добавьте новое желание"
         onCancel={handleAddCancel}
-        footer={[<div className="homepage-add-form-footer"><HeartOutlined /></div>]}
+        // footer={[<div className="homepage-add-form-footer"><HeartOutlined /></div>]}
+        footer={
+          // [ <div className="homepage-add-form-footer"><HeartOutlined /></div> ]
+          null
+        }
       >
         <WishForm unicCategs={unicCategs} handleCancel={handleAddCancel} onFinishFunc={createNewWish} formType={'add'}/>
       </Modal>
@@ -212,28 +216,4 @@ const Homepage: FC<IHomepage>  = observer(({ isArchive }) => {
 });
 
 export default Homepage;
-
-  // // Получение записей из БД
-  // const getWishesFromDB = useCallback(() => {
-  //   const getWishes = async () => {
-  //     try {
-  //       const data = await getDocs(wishesCollectionRef)
-  //       const arr = data.docs.map(doc => ({...doc.data(), id: doc.id}) as WishType);
-  //       const filteredArr = arr.filter(wish => wish.userId === user?.uid);
-  //       setWishesDB(filteredArr);
-        
-  //       setIsDBError(false);
-  //     } catch (error) {
-  //       message.error(`Ошибка загрузки данных. ${error}`)
-  //       console.log(error);
-  //       setIsDBError(true);
-  //     }
-  //   };
-
-  //   // getWishes();
-  // }, [])
-
-  // useEffect(() => { 
-  //   getWishesFromDB()
-  // }, [wishesCollectionRef]);
 
